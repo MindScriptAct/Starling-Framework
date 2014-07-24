@@ -18,9 +18,9 @@ package starling.events
      *  <p>To be notified of keyboard events, add an event listener to any display object that
      *  is part of your display tree. Starling has no concept of a "Focus" like native Flash.</p>
      *  
-     *  @see starling.display.Stage
+     *  @see starling.display.StageStarling
      */
-    public class KeyboardEvent extends Event
+    public class KeyboardEventStarling extends EventStarling
     {
         /** Event type for a key that was released. */
         public static const KEY_UP:String = "keyUp";
@@ -37,7 +37,7 @@ package starling.events
         private var mIsDefaultPrevented:Boolean;
         
         /** Creates a new KeyboardEvent. */
-        public function KeyboardEvent(type:String, charCode:uint=0, keyCode:uint=0, 
+        public function KeyboardEventStarling(type:String, charCode:uint=0, keyCode:uint=0,
                                       keyLocation:uint=0, ctrlKey:Boolean=false, 
                                       altKey:Boolean=false, shiftKey:Boolean=false)
         {

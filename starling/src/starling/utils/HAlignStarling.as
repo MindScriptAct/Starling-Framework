@@ -10,13 +10,13 @@
 
 package starling.utils
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A class that provides constant values for horizontal alignment of objects. */
-    public final class HAlign
+    public final class HAlignStarling
     {
         /** @private */
-        public function HAlign() { throw new AbstractClassError(); }
+        public function HAlignStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Left alignment. */
         public static const LEFT:String   = "left";

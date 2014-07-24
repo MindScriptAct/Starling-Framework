@@ -2,19 +2,19 @@ package scenes
 {
     import flash.media.Sound;
     
-    import starling.core.Starling;
-    import starling.display.MovieClip;
-    import starling.events.Event;
-    import starling.textures.Texture;
+    import starling.core.StarlingStarling;
+    import starling.display.MovieClipStarling;
+    import starling.events.EventStarling;
+    import starling.textures.TextureStarling;
 
     public class MovieScene extends Scene
     {
-        private var mMovie:MovieClip;
+        private var mMovie:MovieClipStarling;
         
         public function MovieScene()
         {
-            var frames:Vector.<Texture> = Game.assets.getTextures("flight");
-            mMovie = new MovieClip(frames, 15);
+            var frames:Vector.<TextureStarling> = Game.assets.getTextures("flight");
+            mMovie = new MovieClipStarling(frames, 15);
             
             // add sounds
             var stepSound:Sound = Game.assets.getSound("wing_flap");
@@ -27,24 +27,24 @@ package scenes
             
             // like any animation, the movie needs to be added to the juggler!
             // this is the recommended way to do that.
-            addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-            addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+            addEventListener(EventStarling.ADDED_TO_STAGE, onAddedToStage);
+            addEventListener(EventStarling.REMOVED_FROM_STAGE, onRemovedFromStage);
         }
         
         private function onAddedToStage():void
         {
-            Starling.juggler.add(mMovie);
+            StarlingStarling.juggler.add(mMovie);
         }
         
         private function onRemovedFromStage():void
         {
-            Starling.juggler.remove(mMovie);
+            StarlingStarling.juggler.remove(mMovie);
         }
         
         public override function dispose():void
         {
-            removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-            removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+            removeEventListener(EventStarling.REMOVED_FROM_STAGE, onRemovedFromStage);
+            removeEventListener(EventStarling.ADDED_TO_STAGE, onAddedToStage);
             super.dispose();
         }
     }

@@ -8,13 +8,13 @@ package
     import flash.geom.Rectangle;
     import flash.system.Capabilities;
     
-    import starling.core.Starling;
-    import starling.events.Event;
-    import starling.textures.Texture;
-    import starling.utils.AssetManager;
-    import starling.utils.RectangleUtil;
-    import starling.utils.ScaleMode;
-    import starling.utils.formatString;
+    import starling.core.StarlingStarling;
+    import starling.events.EventStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.AssetManagerStarling;
+    import starling.utils.RectangleUtilStarling;
+    import starling.utils.ScaleModeStarling;
+    import starling.utils.formatStringStarling;
     
     [SWF(frameRate="30", backgroundColor="#000")]
     public class Scaffold_Mobile extends Sprite
@@ -31,7 +31,7 @@ package
         [Embed(source="/startupHD.jpg")]
         private static var BackgroundHD:Class;
         
-        private var mStarling:Starling;
+        private var mStarling:StarlingStarling;
         
         public function Scaffold_Mobile()
         {
@@ -41,8 +41,8 @@ package
             var stageHeight:int  = Constants.STAGE_HEIGHT;
             var iOS:Boolean = Capabilities.manufacturer.indexOf("iOS") != -1;
             
-            Starling.multitouchEnabled = true;  // useful on mobile devices
-            Starling.handleLostContext = !iOS;  // not necessary on iOS. Saves a lot of memory!
+            StarlingStarling.multitouchEnabled = true;  // useful on mobile devices
+            StarlingStarling.handleLostContext = !iOS;  // not necessary on iOS. Saves a lot of memory!
             
             // create a suitable viewport for the screen size
             // 
@@ -50,22 +50,22 @@ package
             // then run on a device with a different resolution; for that case, we zoom the 
             // viewPort to the optimal size for any display and load the optimal textures.
             
-            var viewPort:Rectangle = RectangleUtil.fit(
+            var viewPort:Rectangle = RectangleUtilStarling.fit(
                 new Rectangle(0, 0, stageWidth, stageHeight), 
                 new Rectangle(0, 0, stage.fullScreenWidth, stage.fullScreenHeight), 
-                ScaleMode.SHOW_ALL);
+                ScaleModeStarling.SHOW_ALL);
             
             // create the AssetManager, which handles all required assets for this resolution
             
             var scaleFactor:int = viewPort.width < 480 ? 1 : 2; // midway between 320 and 640
             var appDir:File = File.applicationDirectory;
-            var assets:AssetManager = new AssetManager(scaleFactor);
+            var assets:AssetManagerStarling = new AssetManagerStarling(scaleFactor);
             
             assets.verbose = Capabilities.isDebugger;
             assets.enqueue(
                 appDir.resolvePath("audio"),
-                appDir.resolvePath(formatString("fonts/{0}x", scaleFactor)),
-                appDir.resolvePath(formatString("textures/{0}x", scaleFactor))
+                appDir.resolvePath(formatStringStarling("fonts/{0}x", scaleFactor)),
+                appDir.resolvePath(formatStringStarling("textures/{0}x", scaleFactor))
             );
             
             // While Stage3D is initializing, the screen will be blank. To avoid any flickering, 
@@ -92,20 +92,20 @@ package
             
             // launch Starling
             
-            mStarling = new Starling(Root, stage, viewPort);
+            mStarling = new StarlingStarling(Root, stage, viewPort);
             mStarling.stage.stageWidth  = stageWidth;  // <- same size on all devices!
             mStarling.stage.stageHeight = stageHeight; // <- same size on all devices!
             mStarling.simulateMultitouch  = false;
             mStarling.enableErrorChecking = Capabilities.isDebugger;
             
-            mStarling.addEventListener(starling.events.Event.ROOT_CREATED, 
+            mStarling.addEventListener(starling.events.EventStarling.ROOT_CREATED,
                 function(event:Object, app:Root):void
                 {
-                    mStarling.removeEventListener(starling.events.Event.ROOT_CREATED, arguments.callee);
+                    mStarling.removeEventListener(starling.events.EventStarling.ROOT_CREATED, arguments.callee);
                     removeChild(background);
                     background = null;
                     
-                    var bgTexture:Texture = Texture.fromEmbeddedAsset(
+                    var bgTexture:TextureStarling = TextureStarling.fromEmbeddedAsset(
                         backgroundClass, false, false, scaleFactor);
                     
                     app.start(bgTexture, assets);

@@ -14,25 +14,25 @@ package starling.events
     import flash.display.Shape;
     import flash.geom.Point;
     
-    import starling.core.Starling;
-    import starling.display.Image;
-    import starling.display.Sprite;
-    import starling.textures.Texture;
+    import starling.core.StarlingStarling;
+    import starling.display.ImageStarling;
+    import starling.display.SpriteStarling;
+    import starling.textures.TextureStarling;
     
     /** The TouchMarker is used internally to mark touches created through "simulateMultitouch". */
-    internal class TouchMarker extends Sprite
+    internal class TouchMarkerStarling extends SpriteStarling
     {
         private var mCenter:Point;
-        private var mTexture:Texture;
+        private var mTexture:TextureStarling;
         
-        public function TouchMarker()
+        public function TouchMarkerStarling()
         {
             mCenter = new Point();
             mTexture = createTexture();
             
             for (var i:int=0; i<2; ++i)
             {
-                var marker:Image = new Image(mTexture);
+                var marker:ImageStarling = new ImageStarling(mTexture);
                 marker.pivotX = mTexture.width / 2;
                 marker.pivotY = mTexture.height / 2;
                 marker.touchable = false;
@@ -67,9 +67,9 @@ package starling.events
             moveMarker(realX, realY); // reset mock position
         }
         
-        private function createTexture():Texture
+        private function createTexture():TextureStarling
         {
-            var scale:Number = Starling.contentScaleFactor;
+            var scale:Number = StarlingStarling.contentScaleFactor;
             var radius:Number = 12 * scale;
             var width:int = 32 * scale;
             var height:int = 32 * scale;
@@ -89,11 +89,11 @@ package starling.events
             var bmpData:BitmapData = new BitmapData(width, height, true, 0x0);
             bmpData.draw(shape);
             
-            return Texture.fromBitmapData(bmpData, false, false, scale);
+            return TextureStarling.fromBitmapData(bmpData, false, false, scale);
         }
         
-        private function get realMarker():Image { return getChildAt(0) as Image; }
-        private function get mockMarker():Image { return getChildAt(1) as Image; }
+        private function get realMarker():ImageStarling { return getChildAt(0) as ImageStarling; }
+        private function get mockMarker():ImageStarling { return getChildAt(1) as ImageStarling; }
         
         public function get realX():Number { return realMarker.x; }
         public function get realY():Number { return realMarker.y; }

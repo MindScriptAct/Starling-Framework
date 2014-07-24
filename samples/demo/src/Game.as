@@ -6,18 +6,18 @@ package
     
     import scenes.Scene;
     
-    import starling.core.Starling;
-    import starling.display.Button;
-    import starling.display.Image;
-    import starling.display.Sprite;
-    import starling.events.Event;
-    import starling.events.KeyboardEvent;
-    import starling.textures.Texture;
-    import starling.utils.AssetManager;
+    import starling.core.StarlingStarling;
+    import starling.display.ButtonStarling;
+    import starling.display.ImageStarling;
+    import starling.display.SpriteStarling;
+    import starling.events.EventStarling;
+    import starling.events.KeyboardEventStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.AssetManagerStarling;
     
     import utils.ProgressBar;
 
-    public class Game extends Sprite
+    public class Game extends SpriteStarling
     {
         // Embed the Ubuntu Font. Beware: the 'embedAsCFF'-part IS REQUIRED!!!
         [Embed(source="../../demo/assets/fonts/Ubuntu-R.ttf", embedAsCFF="false", fontFamily="Ubuntu")]
@@ -26,16 +26,16 @@ package
         private var mLoadingProgress:ProgressBar;
         private var mMainMenu:MainMenu;
         private var mCurrentScene:Scene;
-        private var _container:Sprite;
+        private var _container:SpriteStarling;
         
-        private static var sAssets:AssetManager;
+        private static var sAssets:AssetManagerStarling;
         
         public function Game()
         {
             // nothing to do here -- Startup will call "start" immediately.
         }
         
-        public function start(background:Texture, assets:AssetManager):void
+        public function start(background:TextureStarling, assets:AssetManagerStarling):void
         {
             sAssets = assets;
             
@@ -44,7 +44,7 @@ package
             // 1) we need it right away, otherwise we have an empty frame
             // 2) the Startup class can decide on the right image, depending on the device.
             
-            addChild(new Image(background));
+            addChild(new ImageStarling(background));
             
             // The AssetManager contains all the raw asset data, but has not created the textures
             // yet. This takes some time (the assets might be loaded from disk or even via the
@@ -63,7 +63,7 @@ package
                 // so we show the main menu only after a short delay. 
                 
                 if (ratio == 1)
-                    Starling.juggler.delayCall(function():void
+                    StarlingStarling.juggler.delayCall(function():void
                     {
                         mLoadingProgress.removeFromParent(true);
                         mLoadingProgress = null;
@@ -71,8 +71,8 @@ package
                     }, 0.15);
             });
             
-            addEventListener(Event.TRIGGERED, onButtonTriggered);
-            stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
+            addEventListener(EventStarling.TRIGGERED, onButtonTriggered);
+            stage.addEventListener(KeyboardEventStarling.KEY_DOWN, onKey);
         }
         
         private function showMainMenu():void
@@ -87,17 +87,17 @@ package
             addChild(mMainMenu);
         }
         
-        private function onKey(event:KeyboardEvent):void
+        private function onKey(event:KeyboardEventStarling):void
         {
             if (event.keyCode == Keyboard.SPACE)
-                Starling.current.showStats = !Starling.current.showStats;
+                StarlingStarling.current.showStats = !StarlingStarling.current.showStats;
             else if (event.keyCode == Keyboard.X)
-                Starling.context.dispose();
+                StarlingStarling.context.dispose();
         }
         
-        private function onButtonTriggered(event:Event):void
+        private function onButtonTriggered(event:EventStarling):void
         {
-            var button:Button = event.target as Button;
+            var button:ButtonStarling = event.target as ButtonStarling;
             
             if (button.name == "backButton")
                 closeScene();
@@ -122,6 +122,6 @@ package
             addChild(mCurrentScene);
         }
         
-        public static function get assets():AssetManager { return sAssets; }
+        public static function get assets():AssetManagerStarling { return sAssets; }
     }
 }

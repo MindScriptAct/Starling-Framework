@@ -21,16 +21,16 @@ package starling.core
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-    import starling.display.BlendMode;
-    import starling.display.DisplayObject;
-    import starling.display.Quad;
-    import starling.display.QuadBatch;
-    import starling.errors.MissingContextError;
-    import starling.textures.Texture;
-    import starling.textures.TextureSmoothing;
-    import starling.utils.Color;
-    import starling.utils.MatrixUtil;
-    import starling.utils.RectangleUtil;
+    import starling.display.BlendModeStarling;
+    import starling.display.DisplayObjectStarling;
+    import starling.display.QuadStarling;
+    import starling.display.QuadBatchStarling;
+    import starling.errors.MissingContextErrorStarling;
+    import starling.textures.TextureStarling;
+    import starling.textures.TextureSmoothingStarling;
+    import starling.utils.ColorStarling;
+    import starling.utils.MatrixUtilStarling;
+    import starling.utils.RectangleUtilStarling;
 
     /** A class that contains helper methods simplifying Stage3D rendering.
      *
@@ -38,7 +38,7 @@ package starling.core
      *  It allows manipulation of the current transformation matrix (similar to the matrix 
      *  manipulation methods of OpenGL 1.x) and other helper methods.
      */
-    public class RenderSupport
+    public class RenderSupportStarling
     {
         // members
         
@@ -51,12 +51,12 @@ package starling.core
         
         private var mDrawCount:int;
         private var mBlendMode:String;
-        private var mRenderTarget:Texture;
+        private var mRenderTarget:TextureStarling;
         
         private var mClipRectStack:Vector.<Rectangle>;
         private var mClipRectStackSize:int;
         
-        private var mQuadBatches:Vector.<QuadBatch>;
+        private var mQuadBatches:Vector.<QuadBatchStarling>;
         private var mCurrentQuadBatchID:int;
         
         /** helper objects */
@@ -69,7 +69,7 @@ package starling.core
         // construction
         
         /** Creates a new RenderSupport object with an empty matrix stack. */
-        public function RenderSupport()
+        public function RenderSupportStarling()
         {
             mProjectionMatrix = new Matrix();
             mModelViewMatrix = new Matrix();
@@ -79,11 +79,11 @@ package starling.core
             mMatrixStackSize = 0;
             mDrawCount = 0;
             mRenderTarget = null;
-            mBlendMode = BlendMode.NORMAL;
+            mBlendMode = BlendModeStarling.NORMAL;
             mClipRectStack = new <Rectangle>[];
             
             mCurrentQuadBatchID = 0;
-            mQuadBatches = new <QuadBatch>[new QuadBatch()];
+            mQuadBatches = new <QuadBatchStarling>[new QuadBatchStarling()];
             
             loadIdentity();
             setOrthographicProjection(0, 0, 400, 300);
@@ -92,7 +92,7 @@ package starling.core
         /** Disposes all quad batches. */
         public function dispose():void
         {
-            for each (var quadBatch:QuadBatch in mQuadBatches)
+            for each (var quadBatch:QuadBatchStarling in mQuadBatches)
                 quadBatch.dispose();
         }
         
@@ -116,31 +116,31 @@ package starling.core
         /** Prepends a translation to the modelview matrix. */
         public function translateMatrix(dx:Number, dy:Number):void
         {
-            MatrixUtil.prependTranslation(mModelViewMatrix, dx, dy);
+            MatrixUtilStarling.prependTranslation(mModelViewMatrix, dx, dy);
         }
         
         /** Prepends a rotation (angle in radians) to the modelview matrix. */
         public function rotateMatrix(angle:Number):void
         {
-            MatrixUtil.prependRotation(mModelViewMatrix, angle);
+            MatrixUtilStarling.prependRotation(mModelViewMatrix, angle);
         }
         
         /** Prepends an incremental scale change to the modelview matrix. */
         public function scaleMatrix(sx:Number, sy:Number):void
         {
-            MatrixUtil.prependScale(mModelViewMatrix, sx, sy);
+            MatrixUtilStarling.prependScale(mModelViewMatrix, sx, sy);
         }
         
         /** Prepends a matrix to the modelview matrix by multiplying it with another matrix. */
         public function prependMatrix(matrix:Matrix):void
         {
-            MatrixUtil.prependMatrix(mModelViewMatrix, matrix);
+            MatrixUtilStarling.prependMatrix(mModelViewMatrix, matrix);
         }
         
         /** Prepends translation, scale and rotation of an object to the modelview matrix. */
-        public function transformMatrix(object:DisplayObject):void
+        public function transformMatrix(object:DisplayObjectStarling):void
         {
-            MatrixUtil.prependMatrix(mModelViewMatrix, object.transformationMatrix);
+            MatrixUtilStarling.prependMatrix(mModelViewMatrix, object.transformationMatrix);
         }
         
         /** Pushes the current modelview matrix to a stack from which it can be restored later. */
@@ -166,9 +166,9 @@ package starling.core
         }
         
         /** Prepends translation, scale and rotation of an object to a custom matrix. */
-        public static function transformMatrixForObject(matrix:Matrix, object:DisplayObject):void
+        public static function transformMatrixForObject(matrix:Matrix, object:DisplayObjectStarling):void
         {
-            MatrixUtil.prependMatrix(matrix, object.transformationMatrix);
+            MatrixUtilStarling.prependMatrix(matrix, object.transformationMatrix);
         }
         
         /** Calculates the product of modelview and projection matrix. 
@@ -184,7 +184,7 @@ package starling.core
          *  CAUTION: Use with care! Each call returns the same instance. */
         public function get mvpMatrix3D():Matrix3D
         {
-            return MatrixUtil.convertTo3D(mvpMatrix, mMvpMatrix3D);
+            return MatrixUtilStarling.convertTo3D(mvpMatrix, mMvpMatrix3D);
         }
         
         /** Returns the current modelview matrix.
@@ -213,15 +213,15 @@ package starling.core
         public function get blendMode():String { return mBlendMode; }
         public function set blendMode(value:String):void
         {
-            if (value != BlendMode.AUTO) mBlendMode = value;
+            if (value != BlendModeStarling.AUTO) mBlendMode = value;
         }
         
         // render targets
         
         /** The texture that is currently being rendered into, or 'null' to render into the 
          *  back buffer. If you set a new target, it is immediately activated. */
-        public function get renderTarget():Texture { return mRenderTarget; }
-        public function set renderTarget(target:Texture):void 
+        public function get renderTarget():TextureStarling { return mRenderTarget; }
+        public function set renderTarget(target:TextureStarling):void
         {
             setRenderTarget(target);
         }
@@ -231,13 +231,13 @@ package starling.core
          *  @param antiAliasing Only supported for textures, beginning with AIR 13, and only on
          *                      Desktop. Values range from 0 (no antialiasing) to 4 (best quality).
          */
-        public function setRenderTarget(target:Texture, antiAliasing:int=0):void
+        public function setRenderTarget(target:TextureStarling, antiAliasing:int=0):void
         {
             mRenderTarget = target;
             applyClipRect();
             
-            if (target) Starling.context.setRenderToTexture(target.base, false, antiAliasing);
-            else        Starling.context.setRenderToBackBuffer();
+            if (target) StarlingStarling.context.setRenderToTexture(target.base, false, antiAliasing);
+            else        StarlingStarling.context.setRenderToBackBuffer();
         }
         
         // clipping
@@ -257,7 +257,7 @@ package starling.core
             
             // intersect with the last pushed clip rect
             if (mClipRectStackSize > 0)
-                RectangleUtil.intersect(rectangle, mClipRectStack[mClipRectStackSize-1], 
+                RectangleUtilStarling.intersect(rectangle, mClipRectStack[mClipRectStackSize-1],
                                         rectangle);
             
             ++mClipRectStackSize;
@@ -284,7 +284,7 @@ package starling.core
         {
             finishQuadBatch();
             
-            var context:Context3D = Starling.context;
+            var context:Context3D = StarlingStarling.context;
             if (context == null) return;
             
             if (mClipRectStackSize > 0)
@@ -299,21 +299,21 @@ package starling.core
                 }
                 else
                 {
-                    width  = Starling.current.backBufferWidth;
-                    height = Starling.current.backBufferHeight;
+                    width  = StarlingStarling.current.backBufferWidth;
+                    height = StarlingStarling.current.backBufferHeight;
                 }
                 
                 // convert to pixel coordinates (matrix transformation ends up in range [-1, 1])
-                MatrixUtil.transformCoords(mProjectionMatrix, rect.x, rect.y, sPoint);
+                MatrixUtilStarling.transformCoords(mProjectionMatrix, rect.x, rect.y, sPoint);
                 sClipRect.x = (sPoint.x * 0.5 + 0.5) * width;
                 sClipRect.y = (0.5 - sPoint.y * 0.5) * height;
                 
-                MatrixUtil.transformCoords(mProjectionMatrix, rect.right, rect.bottom, sPoint);
+                MatrixUtilStarling.transformCoords(mProjectionMatrix, rect.right, rect.bottom, sPoint);
                 sClipRect.right  = (sPoint.x * 0.5 + 0.5) * width;
                 sClipRect.bottom = (0.5 - sPoint.y * 0.5) * height;
                 
                 sBufferRect.setTo(0, 0, width, height);
-                RectangleUtil.intersect(sClipRect, sBufferRect, sScissorRect);
+                RectangleUtilStarling.intersect(sClipRect, sBufferRect, sScissorRect);
                 
                 // an empty rectangle is not allowed, so we set it to the smallest possible size
                 if (sScissorRect.width < 1 || sScissorRect.height < 1)
@@ -331,8 +331,8 @@ package starling.core
         
         /** Adds a quad to the current batch of unrendered quads. If there is a state change,
          *  all previous quads are rendered at once, and the batch is reset. */
-        public function batchQuad(quad:Quad, parentAlpha:Number, 
-                                  texture:Texture=null, smoothing:String=null):void
+        public function batchQuad(quad:QuadStarling, parentAlpha:Number,
+                                  texture:TextureStarling=null, smoothing:String=null):void
         {
             if (mQuadBatches[mCurrentQuadBatchID].isStateChange(quad.tinted, parentAlpha, texture, 
                                                                 smoothing, mBlendMode))
@@ -350,7 +350,7 @@ package starling.core
          *  <p>Note that you should call this method only for objects with a small number of quads 
          *  (we recommend no more than 16). Otherwise, the additional CPU effort will be more
          *  expensive than what you save by avoiding the draw call.</p> */
-        public function batchQuadBatch(quadBatch:QuadBatch, parentAlpha:Number):void
+        public function batchQuadBatch(quadBatch:QuadBatchStarling, parentAlpha:Number):void
         {
             if (mQuadBatches[mCurrentQuadBatchID].isStateChange(
                 quadBatch.tinted, parentAlpha, quadBatch.texture, quadBatch.smoothing, mBlendMode))
@@ -365,7 +365,7 @@ package starling.core
         /** Renders the current quad batch and resets it. */
         public function finishQuadBatch():void
         {
-            var currentBatch:QuadBatch = mQuadBatches[mCurrentQuadBatchID];
+            var currentBatch:QuadBatchStarling = mQuadBatches[mCurrentQuadBatchID];
             
             if (currentBatch.numQuads != 0)
             {
@@ -376,7 +376,7 @@ package starling.core
                 ++mDrawCount;
                 
                 if (mQuadBatches.length <= mCurrentQuadBatchID)
-                    mQuadBatches.push(new QuadBatch());
+                    mQuadBatches.push(new QuadBatchStarling());
             }
         }
         
@@ -387,7 +387,7 @@ package starling.core
             trimQuadBatches();
             
             mCurrentQuadBatchID = 0;
-            mBlendMode = BlendMode.NORMAL;
+            mBlendMode = BlendModeStarling.NORMAL;
             mDrawCount = 0;
         }
 
@@ -417,24 +417,24 @@ package starling.core
         /** Sets up the blending factors that correspond with a certain blend mode. */
         public static function setBlendFactors(premultipliedAlpha:Boolean, blendMode:String="normal"):void
         {
-            var blendFactors:Array = BlendMode.getBlendFactors(blendMode, premultipliedAlpha); 
-            Starling.context.setBlendFactors(blendFactors[0], blendFactors[1]);
+            var blendFactors:Array = BlendModeStarling.getBlendFactors(blendMode, premultipliedAlpha);
+            StarlingStarling.context.setBlendFactors(blendFactors[0], blendFactors[1]);
         }
         
         /** Clears the render context with a certain color and alpha value. */
         public static function clear(rgb:uint=0, alpha:Number=0.0):void
         {
-            Starling.context.clear(
-                Color.getRed(rgb)   / 255.0, 
-                Color.getGreen(rgb) / 255.0, 
-                Color.getBlue(rgb)  / 255.0,
+            StarlingStarling.context.clear(
+                ColorStarling.getRed(rgb)   / 255.0,
+                ColorStarling.getGreen(rgb) / 255.0,
+                ColorStarling.getBlue(rgb)  / 255.0,
                 alpha);
         }
         
         /** Clears the render context with a certain color and alpha value. */
         public function clear(rgb:uint=0, alpha:Number=0.0):void
         {
-            RenderSupport.clear(rgb, alpha);
+            RenderSupportStarling.clear(rgb, alpha);
         }
         
         /** Assembles fragment- and vertex-shaders, passed as Strings, to a Program3D. If you
@@ -445,8 +445,8 @@ package starling.core
         {
             if (resultProgram == null) 
             {
-                var context:Context3D = Starling.context;
-                if (context == null) throw new MissingContextError();
+                var context:Context3D = StarlingStarling.context;
+                if (context == null) throw new MissingContextErrorStarling();
                 resultProgram = context.createProgram();
             }
             
@@ -470,9 +470,9 @@ package starling.core
             else if (format == "compressedAlpha")
                 options.push("dxt5");
             
-            if (smoothing == TextureSmoothing.NONE)
+            if (smoothing == TextureSmoothingStarling.NONE)
                 options.push("nearest", mipMapping ? "mipnearest" : "mipnone");
-            else if (smoothing == TextureSmoothing.BILINEAR)
+            else if (smoothing == TextureSmoothingStarling.BILINEAR)
                 options.push("linear", mipMapping ? "mipnearest" : "mipnone");
             else
                 options.push("linear", mipMapping ? "miplinear" : "mipnone");

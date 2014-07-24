@@ -14,16 +14,16 @@ package starling.filters
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Program3D;
     
-    import starling.core.Starling;
-    import starling.textures.Texture;
-    import starling.utils.Color;
+    import starling.core.StarlingStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.ColorStarling;
 
     /** The BlurFilter applies a Gaussian blur to an object. The strength of the blur can be
      *  set for x- and y-axis separately (always relative to the stage).
      *  A blur filter can also be set up as a drop shadow or glow filter. Use the respective
      *  static methods to create such a filter.
      */
-    public class BlurFilter extends FragmentFilter
+    public class BlurFilterStarling extends FragmentFilterStarling
     {
         private static const NORMAL_PROGRAM_NAME:String = "BF_n";
         private static const TINTED_PROGRAM_NAME:String = "BF_t";
@@ -57,7 +57,7 @@ package starling.filters
          *  A lower resolution will result in a blurrier image, while reducing the rendering
          *  cost.</p>
          */
-        public function BlurFilter(blurX:Number=1, blurY:Number=1, resolution:Number=1)
+        public function BlurFilterStarling(blurX:Number=1, blurY:Number=1, resolution:Number=1)
         {
             super(1, resolution);
             mBlurX = blurX;
@@ -68,22 +68,22 @@ package starling.filters
         /** Creates a blur filter that is set up for a drop shadow effect. */
         public static function createDropShadow(distance:Number=4.0, angle:Number=0.785, 
                                                 color:uint=0x0, alpha:Number=0.5, blur:Number=1.0, 
-                                                resolution:Number=0.5):BlurFilter
+                                                resolution:Number=0.5):BlurFilterStarling
         {
-            var dropShadow:BlurFilter = new BlurFilter(blur, blur, resolution);
+            var dropShadow:BlurFilterStarling = new BlurFilterStarling(blur, blur, resolution);
             dropShadow.offsetX = Math.cos(angle) * distance;
             dropShadow.offsetY = Math.sin(angle) * distance;
-            dropShadow.mode = FragmentFilterMode.BELOW;
+            dropShadow.mode = FragmentFilterModeStarling.BELOW;
             dropShadow.setUniformColor(true, color, alpha);
             return dropShadow;
         }
         
         /** Creates a blur filter that is set up for a glow effect. */
         public static function createGlow(color:uint=0xffff00, alpha:Number=1.0, blur:Number=1.0,
-                                          resolution:Number=0.5):BlurFilter
+                                          resolution:Number=0.5):BlurFilterStarling
         {
-            var glow:BlurFilter = new BlurFilter(blur, blur, resolution);
-            glow.mode = FragmentFilterMode.BELOW;
+            var glow:BlurFilterStarling = new BlurFilterStarling(blur, blur, resolution);
+            glow.mode = FragmentFilterModeStarling.BELOW;
             glow.setUniformColor(true, color, alpha);
             return glow;
         }
@@ -98,7 +98,7 @@ package starling.filters
         private function createProgram(tinted:Boolean):Program3D
         {
             var programName:String = tinted ? TINTED_PROGRAM_NAME : NORMAL_PROGRAM_NAME;
-            var target:Starling = Starling.current;
+            var target:StarlingStarling = StarlingStarling.current;
             
             if (target.hasProgram(programName))
                 return target.getProgram(programName);
@@ -154,7 +154,7 @@ package starling.filters
         }
         
         /** @private */
-        protected override function activate(pass:int, context:Context3D, texture:Texture):void
+        protected override function activate(pass:int, context:Context3D, texture:TextureStarling):void
         {
             // already set by super class:
             // 
@@ -261,9 +261,9 @@ package starling.filters
          *  first parameter to deactivate the uniform color. */
         public function setUniformColor(enable:Boolean, color:uint=0x0, alpha:Number=1.0):void
         {
-            mColor[0] = Color.getRed(color)   / 255.0;
-            mColor[1] = Color.getGreen(color) / 255.0;
-            mColor[2] = Color.getBlue(color)  / 255.0;
+            mColor[0] = ColorStarling.getRed(color)   / 255.0;
+            mColor[1] = ColorStarling.getGreen(color) / 255.0;
+            mColor[2] = ColorStarling.getBlue(color)  / 255.0;
             mColor[3] = alpha;
             mUniformColor = enable;
         }

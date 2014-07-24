@@ -40,7 +40,7 @@ package starling.utils
      *  values should be handled via the <code>premultipliedAlpha</code> property.</p>
      * 
      */ 
-    public class VertexData 
+    public class VertexDataStarling
     {
         /** The total number of elements (Numbers) stored per vertex. */
         public static const ELEMENTS_PER_VERTEX:int = 8;
@@ -62,7 +62,7 @@ package starling.utils
         private static var sHelperPoint:Point = new Point();
         
         /** Create a new VertexData object with a specified number of vertices. */
-        public function VertexData(numVertices:int, premultipliedAlpha:Boolean=false)
+        public function VertexDataStarling(numVertices:int, premultipliedAlpha:Boolean=false)
         {
             mRawData = new <Number>[];
             mPremultipliedAlpha = premultipliedAlpha;
@@ -71,12 +71,12 @@ package starling.utils
 
         /** Creates a duplicate of either the complete vertex data object, or of a subset. 
          *  To clone all vertices, set 'numVertices' to '-1'. */
-        public function clone(vertexID:int=0, numVertices:int=-1):VertexData
+        public function clone(vertexID:int=0, numVertices:int=-1):VertexDataStarling
         {
             if (numVertices < 0 || vertexID + numVertices > mNumVertices)
                 numVertices = mNumVertices - vertexID;
             
-            var clone:VertexData = new VertexData(0, mPremultipliedAlpha);
+            var clone:VertexDataStarling = new VertexDataStarling(0, mPremultipliedAlpha);
             clone.mNumVertices = numVertices;
             clone.mRawData = mRawData.slice(vertexID * ELEMENTS_PER_VERTEX,
                                          numVertices * ELEMENTS_PER_VERTEX);
@@ -86,7 +86,7 @@ package starling.utils
         
         /** Copies the vertex data (or a range of it, defined by 'vertexID' and 'numVertices') 
          *  of this instance to another vertex data object, starting at a certain index. */
-        public function copyTo(targetData:VertexData, targetVertexID:int=0,
+        public function copyTo(targetData:VertexDataStarling, targetVertexID:int=0,
                                vertexID:int=0, numVertices:int=-1):void
         {
             copyTransformedTo(targetData, targetVertexID, null, vertexID, numVertices);
@@ -95,7 +95,7 @@ package starling.utils
         /** Transforms the vertex position of this instance by a certain matrix and copies the
          *  result to another VertexData instance. Limit the operation to a range of vertices
          *  via the 'vertexID' and 'numVertices' parameters. */
-        public function copyTransformedTo(targetData:VertexData, targetVertexID:int=0,
+        public function copyTransformedTo(targetData:VertexDataStarling, targetVertexID:int=0,
                                           matrix:Matrix=null,
                                           vertexID:int=0, numVertices:int=-1):void
         {
@@ -133,7 +133,7 @@ package starling.utils
         }
         
         /** Appends the vertices from another VertexData object. */
-        public function append(data:VertexData):void
+        public function append(data:VertexDataStarling):void
         {
             mRawData.fixed = false;
             
@@ -323,7 +323,7 @@ package starling.utils
                     resultRect.setEmpty();
                 else
                 {
-                    MatrixUtil.transformCoords(transformationMatrix, 0, 0, sHelperPoint);
+                    MatrixUtilStarling.transformCoords(transformationMatrix, 0, 0, sHelperPoint);
                     resultRect.setTo(sHelperPoint.x, sHelperPoint.y, 0, 0);
                 }
             }
@@ -356,7 +356,7 @@ package starling.utils
                         y = mRawData[int(offset+1)];
                         offset += ELEMENTS_PER_VERTEX;
                         
-                        MatrixUtil.transformCoords(transformationMatrix, x, y, sHelperPoint);
+                        MatrixUtilStarling.transformCoords(transformationMatrix, x, y, sHelperPoint);
                         
                         if (minX > sHelperPoint.x) minX = sHelperPoint.x;
                         if (maxX < sHelperPoint.x) maxX = sHelperPoint.x;

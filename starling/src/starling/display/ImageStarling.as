@@ -15,10 +15,10 @@ package starling.display
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-    import starling.core.RenderSupport;
-    import starling.textures.Texture;
-    import starling.textures.TextureSmoothing;
-    import starling.utils.VertexData;
+    import starling.core.RenderSupportStarling;
+    import starling.textures.TextureStarling;
+    import starling.textures.TextureSmoothingStarling;
+    import starling.utils.VertexDataStarling;
     
     /** An Image is a quad with a texture mapped onto it.
      *  
@@ -33,19 +33,19 @@ package starling.display
      *  image without changing any vertex coordinates of the quad. You can also use this feature
      *  as a very efficient way to create a rectangular mask.</p> 
      *  
-     *  @see starling.textures.Texture
-     *  @see Quad
+     *  @see starling.textures.TextureStarling
+     *  @see QuadStarling
      */ 
-    public class Image extends Quad
+    public class ImageStarling extends QuadStarling
     {
-        private var mTexture:Texture;
+        private var mTexture:TextureStarling;
         private var mSmoothing:String;
         
-        private var mVertexDataCache:VertexData;
+        private var mVertexDataCache:VertexDataStarling;
         private var mVertexDataCacheInvalid:Boolean;
         
         /** Creates a quad with a texture mapped onto it. */
-        public function Image(texture:Texture)
+        public function ImageStarling(texture:TextureStarling)
         {
             if (texture)
             {
@@ -62,8 +62,8 @@ package starling.display
                 mVertexData.setTexCoords(3, 1.0, 1.0);
                 
                 mTexture = texture;
-                mSmoothing = TextureSmoothing.BILINEAR;
-                mVertexDataCache = new VertexData(4, pma);
+                mSmoothing = TextureSmoothingStarling.BILINEAR;
+                mVertexDataCache = new VertexDataStarling(4, pma);
                 mVertexDataCacheInvalid = true;
             }
             else
@@ -74,9 +74,9 @@ package starling.display
         
         /** Creates an Image with a texture that is created from a bitmap object. */
         public static function fromBitmap(bitmap:Bitmap, generateMipMaps:Boolean=true, 
-                                          scale:Number=1):Image
+                                          scale:Number=1):ImageStarling
         {
-            return new Image(Texture.fromBitmap(bitmap, generateMipMaps, false, scale));
+            return new ImageStarling(TextureStarling.fromBitmap(bitmap, generateMipMaps, false, scale));
         }
         
         /** @inheritDoc */
@@ -127,7 +127,7 @@ package starling.display
         
         /** Copies the raw vertex data to a VertexData instance.
          *  The texture coordinates are already in the format required for rendering. */ 
-        public override function copyVertexDataTo(targetData:VertexData, targetVertexID:int=0):void
+        public override function copyVertexDataTo(targetData:VertexDataStarling, targetVertexID:int=0):void
         {
             copyVertexDataTransformedTo(targetData, targetVertexID, null);
         }
@@ -135,7 +135,7 @@ package starling.display
         /** Transforms the vertex positions of the raw vertex data by a certain matrix
          *  and copies the result to another VertexData instance.
          *  The texture coordinates are already in the format required for rendering. */
-        public override function copyVertexDataTransformedTo(targetData:VertexData,
+        public override function copyVertexDataTransformedTo(targetData:VertexDataStarling,
                                                              targetVertexID:int=0,
                                                              matrix:Matrix=null):void
         {
@@ -150,8 +150,8 @@ package starling.display
         }
         
         /** The texture that is displayed on the quad. */
-        public function get texture():Texture { return mTexture; }
-        public function set texture(value:Texture):void 
+        public function get texture():TextureStarling { return mTexture; }
+        public function set texture(value:TextureStarling):void
         { 
             if (value == null)
             {
@@ -168,18 +168,18 @@ package starling.display
         
         /** The smoothing filter that is used for the texture. 
         *   @default bilinear
-        *   @see starling.textures.TextureSmoothing */ 
+        *   @see starling.textures.TextureSmoothingStarling */
         public function get smoothing():String { return mSmoothing; }
         public function set smoothing(value:String):void 
         {
-            if (TextureSmoothing.isValid(value))
+            if (TextureSmoothingStarling.isValid(value))
                 mSmoothing = value;
             else
                 throw new ArgumentError("Invalid smoothing mode: " + value);
         }
         
         /** @inheritDoc */
-        public override function render(support:RenderSupport, parentAlpha:Number):void
+        public override function render(support:RenderSupportStarling, parentAlpha:Number):void
         {
             support.batchQuad(this, parentAlpha, mTexture, mSmoothing);
         }

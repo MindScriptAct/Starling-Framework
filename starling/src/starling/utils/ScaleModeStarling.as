@@ -1,12 +1,12 @@
 package starling.utils
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A class that provides constant values for the 'RectangleUtil.fit' method. */
-    public class ScaleMode
+    public class ScaleModeStarling
     {
         /** @private */
-        public function ScaleMode() { throw new AbstractClassError(); }
+        public function ScaleModeStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Specifies that the rectangle is not scaled, but simply centered within the 
          *  specified area. */

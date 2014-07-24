@@ -16,14 +16,14 @@ package starling.textures
     import flash.geom.Matrix;
     import flash.geom.Rectangle;
     
-    import starling.core.RenderSupport;
-    import starling.core.Starling;
-    import starling.display.BlendMode;
-    import starling.display.DisplayObject;
-    import starling.display.Image;
-    import starling.errors.MissingContextError;
-    import starling.utils.execute;
-    import starling.utils.getNextPowerOfTwo;
+    import starling.core.RenderSupportStarling;
+    import starling.core.StarlingStarling;
+    import starling.display.BlendModeStarling;
+    import starling.display.DisplayObjectStarling;
+    import starling.display.ImageStarling;
+    import starling.errors.MissingContextErrorStarling;
+    import starling.utils.executeStarling;
+    import starling.utils.getNextPowerOfTwoStarling;
 
     /** A RenderTexture is a dynamic texture onto which you can draw any display object.
      * 
@@ -57,17 +57,17 @@ package starling.textures
      *  </p>
      *     
      */
-    public class RenderTexture extends SubTexture
+    public class RenderTextureStarling extends SubTextureStarling
     {
         private const CONTEXT_POT_SUPPORT_KEY:String = "RenderTexture.supportsNonPotDimensions";
         private const PMA:Boolean = true;
         
-        private var mActiveTexture:Texture;
-        private var mBufferTexture:Texture;
-        private var mHelperImage:Image;
+        private var mActiveTexture:TextureStarling;
+        private var mBufferTexture:TextureStarling;
+        private var mHelperImage:ImageStarling;
         private var mDrawing:Boolean;
         private var mBufferReady:Boolean;
-        private var mSupport:RenderSupport;
+        private var mSupport:RenderSupportStarling;
         
         /** helper object */
         private static var sClipRect:Rectangle = new Rectangle();
@@ -77,27 +77,27 @@ package starling.textures
          *  you to use the texture just like a canvas. If it is not, it will be cleared before each
          *  draw call. Persistancy doubles the required graphics memory! Thus, if you need the
          *  texture only for one draw (or drawBundled) call, you should deactivate it. */
-        public function RenderTexture(width:int, height:int, persistent:Boolean=true, scale:Number=-1)
+        public function RenderTextureStarling(width:int, height:int, persistent:Boolean=true, scale:Number=-1)
         {
             // TODO: when Adobe has fixed this bug on the iPad 1 (see 'supportsNonPotDimensions'),
             //       we can remove 'legalWidth/Height' and just pass on the original values.
             //
             // [Workaround]
 
-            if (scale <= 0) scale = Starling.contentScaleFactor;
+            if (scale <= 0) scale = StarlingStarling.contentScaleFactor;
 
             var legalWidth:Number  = width;
             var legalHeight:Number = height;
 
             if (!supportsNonPotDimensions)
             {
-                legalWidth  = getNextPowerOfTwo(width  * scale) / scale;
-                legalHeight = getNextPowerOfTwo(height * scale) / scale;
+                legalWidth  = getNextPowerOfTwoStarling(width  * scale) / scale;
+                legalHeight = getNextPowerOfTwoStarling(height * scale) / scale;
             }
 
             // [/Workaround]
 
-            mActiveTexture = Texture.empty(legalWidth, legalHeight, PMA, false, true, scale);
+            mActiveTexture = TextureStarling.empty(legalWidth, legalHeight, PMA, false, true, scale);
             mActiveTexture.root.onRestore = mActiveTexture.root.clear;
             
             super(mActiveTexture, new Rectangle(0, 0, width, height), true, null, false);
@@ -105,15 +105,15 @@ package starling.textures
             var rootWidth:Number  = mActiveTexture.root.width;
             var rootHeight:Number = mActiveTexture.root.height;
             
-            mSupport = new RenderSupport();
+            mSupport = new RenderSupportStarling();
             mSupport.setOrthographicProjection(0, 0, rootWidth, rootHeight);
             
             if (persistent)
             {
-                mBufferTexture = Texture.empty(legalWidth, legalHeight, PMA, false, true, scale);
+                mBufferTexture = TextureStarling.empty(legalWidth, legalHeight, PMA, false, true, scale);
                 mBufferTexture.root.onRestore = mBufferTexture.root.clear;
-                mHelperImage = new Image(mBufferTexture);
-                mHelperImage.smoothing = TextureSmoothing.NONE; // solves some antialias-issues
+                mHelperImage = new ImageStarling(mBufferTexture);
+                mHelperImage.smoothing = TextureSmoothingStarling.NONE; // solves some antialias-issues
             }
         }
         
@@ -143,7 +143,7 @@ package starling.textures
          *  @param antiAliasing Only supported beginning with AIR 13, and only on Desktop.
          *                      Values range from 0 (no antialiasing) to 4 (best quality).
          */
-        public function draw(object:DisplayObject, matrix:Matrix=null, alpha:Number=1.0,
+        public function draw(object:DisplayObjectStarling, matrix:Matrix=null, alpha:Number=1.0,
                              antiAliasing:int=0):void
         {
             if (object == null) return;
@@ -167,11 +167,11 @@ package starling.textures
             renderBundled(drawingBlock, null, null, 1.0, antiAliasing);
         }
         
-        private function render(object:DisplayObject, matrix:Matrix=null, alpha:Number=1.0):void
+        private function render(object:DisplayObjectStarling, matrix:Matrix=null, alpha:Number=1.0):void
         {
             mSupport.loadIdentity();
-            mSupport.blendMode = object.blendMode == BlendMode.AUTO ?
-                BlendMode.NORMAL : object.blendMode;
+            mSupport.blendMode = object.blendMode == BlendModeStarling.AUTO ?
+                BlendModeStarling.NORMAL : object.blendMode;
             
             if (matrix) mSupport.prependMatrix(matrix);
             else        mSupport.transformMatrix(object);
@@ -179,12 +179,12 @@ package starling.textures
             object.render(mSupport, alpha);
         }
         
-        private function renderBundled(renderBlock:Function, object:DisplayObject=null,
+        private function renderBundled(renderBlock:Function, object:DisplayObjectStarling=null,
                                        matrix:Matrix=null, alpha:Number=1.0,
                                        antiAliasing:int=0):void
         {
-            var context:Context3D = Starling.context;
-            if (context == null) throw new MissingContextError();
+            var context:Context3D = StarlingStarling.context;
+            if (context == null) throw new MissingContextErrorStarling();
             
             // persistent drawing uses double buffering, as Molehill forces us to call 'clear'
             // on every render target once per update.
@@ -192,7 +192,7 @@ package starling.textures
             // switch buffers
             if (isPersistent)
             {
-                var tmpTexture:Texture = mActiveTexture;
+                var tmpTexture:TextureStarling = mActiveTexture;
                 mActiveTexture = mBufferTexture;
                 mBufferTexture = tmpTexture;
                 mHelperImage.texture = mBufferTexture;
@@ -214,7 +214,7 @@ package starling.textures
             try
             {
                 mDrawing = true;
-                execute(renderBlock, object, matrix, alpha);
+                executeStarling(renderBlock, object, matrix, alpha);
             }
             finally
             {
@@ -230,8 +230,8 @@ package starling.textures
          *  arguments to restore full transparency. */
         public function clear(rgb:uint=0, alpha:Number=0.0):void
         {
-            var context:Context3D = Starling.context;
-            if (context == null) throw new MissingContextError();
+            var context:Context3D = StarlingStarling.context;
+            if (context == null) throw new MissingContextErrorStarling();
             
             mSupport.renderTarget = mActiveTexture;
             mSupport.clear(rgb, alpha);
@@ -245,8 +245,8 @@ package starling.textures
          *  really ... elegant check here. */
         private function get supportsNonPotDimensions():Boolean
         {
-            var target:Starling = Starling.current;
-            var context:Context3D = Starling.context;
+            var target:StarlingStarling = StarlingStarling.current;
+            var context:Context3D = StarlingStarling.context;
             var support:Object = target.contextData[CONTEXT_POT_SUPPORT_KEY];
 
             if (support == null)
@@ -295,6 +295,6 @@ package starling.textures
         public override function get base():TextureBase { return mActiveTexture.base; }
         
         /** @inheritDoc */
-        public override function get root():ConcreteTexture { return mActiveTexture.root; }
+        public override function get root():ConcreteTextureStarling { return mActiveTexture.root; }
     }
 }

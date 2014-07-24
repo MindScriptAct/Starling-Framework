@@ -12,24 +12,24 @@ package starling.core
 {
     import flash.system.System;
     
-    import starling.display.BlendMode;
-    import starling.display.Quad;
-    import starling.display.Sprite;
-    import starling.events.EnterFrameEvent;
-    import starling.events.Event;
-    import starling.text.BitmapFont;
-    import starling.text.TextField;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
+    import starling.display.BlendModeStarling;
+    import starling.display.QuadStarling;
+    import starling.display.SpriteStarling;
+    import starling.events.EnterFrameEventStarling;
+    import starling.events.EventStarling;
+    import starling.text.BitmapFontStarling;
+    import starling.text.TextFieldStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.VAlignStarling;
     
     /** A small, lightweight box that displays the current framerate, memory consumption and
      *  the number of draw calls per frame. The display is updated automatically once per frame. */
-    internal class StatsDisplay extends Sprite
+    internal class StatsDisplayStarling extends SpriteStarling
     {
         private const UPDATE_INTERVAL:Number = 0.5;
         
-        private var mBackground:Quad;
-        private var mTextField:TextField;
+        private var mBackground:QuadStarling;
+        private var mTextField:TextFieldStarling;
         
         private var mFrameCount:int = 0;
         private var mTotalTime:Number = 0;
@@ -39,36 +39,36 @@ package starling.core
         private var mDrawCount:int = 0;
         
         /** Creates a new Statistics Box. */
-        public function StatsDisplay()
+        public function StatsDisplayStarling()
         {
-            mBackground = new Quad(50, 25, 0x0);
-            mTextField = new TextField(48, 25, "", BitmapFont.MINI, BitmapFont.NATIVE_SIZE, 0xffffff);
+            mBackground = new QuadStarling(50, 25, 0x0);
+            mTextField = new TextFieldStarling(48, 25, "", BitmapFontStarling.MINI, BitmapFontStarling.NATIVE_SIZE, 0xffffff);
             mTextField.x = 2;
-            mTextField.hAlign = HAlign.LEFT;
-            mTextField.vAlign = VAlign.TOP;
+            mTextField.hAlign = HAlignStarling.LEFT;
+            mTextField.vAlign = VAlignStarling.TOP;
             
             addChild(mBackground);
             addChild(mTextField);
             
-            blendMode = BlendMode.NONE;
+            blendMode = BlendModeStarling.NONE;
             
-            addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-            addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+            addEventListener(EventStarling.ADDED_TO_STAGE, onAddedToStage);
+            addEventListener(EventStarling.REMOVED_FROM_STAGE, onRemovedFromStage);
         }
         
         private function onAddedToStage():void
         {
-            addEventListener(Event.ENTER_FRAME, onEnterFrame);
+            addEventListener(EventStarling.ENTER_FRAME, onEnterFrame);
             mTotalTime = mFrameCount = 0;
             update();
         }
         
         private function onRemovedFromStage():void
         {
-            removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+            removeEventListener(EventStarling.ENTER_FRAME, onEnterFrame);
         }
         
-        private function onEnterFrame(event:EnterFrameEvent):void
+        private function onEnterFrame(event:EnterFrameEventStarling):void
         {
             mTotalTime += event.passedTime;
             mFrameCount++;
@@ -91,7 +91,7 @@ package starling.core
                             "\nDRW: " + (mTotalTime > 0 ? mDrawCount-2 : mDrawCount); // ignore self 
         }
         
-        public override function render(support:RenderSupport, parentAlpha:Number):void
+        public override function render(support:RenderSupportStarling, parentAlpha:Number):void
         {
             // The display should always be rendered with two draw calls, so that we can
             // always reduce the draw count by that number to get the number produced by the 

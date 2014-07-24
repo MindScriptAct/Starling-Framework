@@ -16,7 +16,7 @@ package starling.animation
 {
     import flash.utils.Dictionary;
     
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
     
     /** The Transitions class contains static methods that define easing functions. 
      *  Those functions are used by the Tween class to execute animations.
@@ -30,7 +30,7 @@ package starling.animation
      *  
      *  <pre>function myTransition(ratio:Number):Number</pre>
      */
-    public class Transitions
+    public class TransitionsStarling
     {        
         public static const LINEAR:String = "linear";
         public static const EASE_IN:String = "easeIn";
@@ -53,7 +53,7 @@ package starling.animation
         private static var sTransitions:Dictionary;
         
         /** @private */
-        public function Transitions() { throw new AbstractClassError(); }
+        public function TransitionsStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Returns the transition function that was registered under a certain name. */ 
         public static function getTransition(name:String):Function

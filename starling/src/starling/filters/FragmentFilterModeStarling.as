@@ -10,15 +10,15 @@
 
 package starling.filters
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A class that provides constant values for filter modes. The values are used in the
      *  FragmentFilter.mode property and define how a filter result is combined with the 
      *  original object. */
-    public class FragmentFilterMode
+    public class FragmentFilterModeStarling
     {
         /** @private */
-        public function FragmentFilterMode() { throw new AbstractClassError(); }
+        public function FragmentFilterModeStarling() { throw new AbstractClassErrorStarling(); }
         
         /** The filter is displayed below the filtered object. */
         public static const BELOW:String = "below";

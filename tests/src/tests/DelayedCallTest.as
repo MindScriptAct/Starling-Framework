@@ -14,7 +14,7 @@ package tests
     import org.flexunit.asserts.assertFalse;
     import org.flexunit.asserts.assertTrue;
     
-    import starling.animation.DelayedCall;
+    import starling.animation.DelayedCallStarling;
     
     public class DelayedCallTest
     {		
@@ -22,7 +22,7 @@ package tests
         public function testSimple():void
         {
             var sum:int = 0;
-            var dc:DelayedCall = new DelayedCall(raiseSum, 1.0, [5]);
+            var dc:DelayedCallStarling = new DelayedCallStarling(raiseSum, 1.0, [5]);
             
             dc.advanceTime(0.5);
             assertEquals(0, sum);
@@ -46,7 +46,7 @@ package tests
         public function testRepeated():void
         {
             var sum:int = 0;
-            var dc:DelayedCall = new DelayedCall(raiseSum, 1.0, [5]);
+            var dc:DelayedCallStarling = new DelayedCallStarling(raiseSum, 1.0, [5]);
             dc.repeatCount = 3;
             
             dc.advanceTime(0.5);
@@ -78,7 +78,7 @@ package tests
         public function testIndefinitive():void
         {
             var sum:int = 0;
-            var dc:DelayedCall = new DelayedCall(raiseSum, 1.0, [5]);
+            var dc:DelayedCallStarling = new DelayedCallStarling(raiseSum, 1.0, [5]);
             dc.repeatCount = 0;
             
             dc.advanceTime(1.5);

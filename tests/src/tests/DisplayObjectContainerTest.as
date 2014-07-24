@@ -17,11 +17,11 @@ package tests
     import org.flexunit.assertThat;
     import org.hamcrest.number.closeTo;
     
-    import starling.display.DisplayObject;
-    import starling.display.Quad;
-    import starling.display.Sprite;
-    import starling.display.Stage;
-    import starling.events.Event;
+    import starling.display.DisplayObjectStarling;
+    import starling.display.QuadStarling;
+    import starling.display.SpriteStarling;
+    import starling.display.StageStarling;
+    import starling.events.EventStarling;
     
     public class DisplayObjectContainerTest
     {
@@ -47,10 +47,10 @@ package tests
         [Test]
         public function testChildParentHandling():void
         {
-            var parent:Sprite = new Sprite();
-            var child1:Sprite = new Sprite();
-            var child2:Sprite = new Sprite();
-            var returnValue:DisplayObject;
+            var parent:SpriteStarling = new SpriteStarling();
+            var child1:SpriteStarling = new SpriteStarling();
+            var child2:SpriteStarling = new SpriteStarling();
+            var returnValue:DisplayObjectStarling;
             
             Assert.assertEquals(0, parent.numChildren);
             Assert.assertNull(child1.parent);
@@ -95,7 +95,7 @@ package tests
         [Test]
         public function testRemoveChildren():void
         {
-            var parent:Sprite;
+            var parent:SpriteStarling;
             var numChildren:int = 10;
             
             // removing all children
@@ -121,12 +121,12 @@ package tests
             Assert.assertEquals(5, parent.numChildren);
             Assert.assertEquals("4", parent.getChildAt(4).name);
             
-            function createSprite(numChildren:int):Sprite
+            function createSprite(numChildren:int):SpriteStarling
             {
-                var sprite:Sprite = new Sprite();                
+                var sprite:SpriteStarling = new SpriteStarling();
                 for (var i:int=0; i<numChildren; ++i)
                 {
-                    var child:Sprite = new Sprite();
+                    var child:SpriteStarling = new SpriteStarling();
                     child.name = i.toString();
                     sprite.addChild(child);
                 }
@@ -137,10 +137,10 @@ package tests
         [Test]
         public function testGetChildByName():void
         {
-            var parent:Sprite = new Sprite();
-            var child1:Sprite = new Sprite();
-            var child2:Sprite = new Sprite();
-            var child3:Sprite = new Sprite();
+            var parent:SpriteStarling = new SpriteStarling();
+            var child1:SpriteStarling = new SpriteStarling();
+            var child2:SpriteStarling = new SpriteStarling();
+            var child3:SpriteStarling = new SpriteStarling();
             
             parent.addChild(child1);
             parent.addChild(child2);
@@ -162,10 +162,10 @@ package tests
         [Test]
         public function testSetChildIndex():void
         {
-            var parent:Sprite = new Sprite();
-            var childA:Sprite = new Sprite();
-            var childB:Sprite = new Sprite();
-            var childC:Sprite = new Sprite();
+            var parent:SpriteStarling = new SpriteStarling();
+            var childA:SpriteStarling = new SpriteStarling();
+            var childB:SpriteStarling = new SpriteStarling();
+            var childC:SpriteStarling = new SpriteStarling();
             
             parent.addChild(childA);
             parent.addChild(childB);
@@ -192,10 +192,10 @@ package tests
         [Test]
         public function testSwapChildren():void
         {
-            var parent:Sprite = new Sprite();
-            var childA:Sprite = new Sprite();
-            var childB:Sprite = new Sprite();
-            var childC:Sprite = new Sprite();
+            var parent:SpriteStarling = new SpriteStarling();
+            var childA:SpriteStarling = new SpriteStarling();
+            var childB:SpriteStarling = new SpriteStarling();
+            var childC:SpriteStarling = new SpriteStarling();
             
             parent.addChild(childA);
             parent.addChild(childB);
@@ -217,13 +217,13 @@ package tests
         [Test]
         public function testWidthAndHeight():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             
-            var quad1:Quad = new Quad(10, 20);
+            var quad1:QuadStarling = new QuadStarling(10, 20);
             quad1.x = -10;
             quad1.y = -15;
             
-            var quad2:Quad = new Quad(15, 25);
+            var quad2:QuadStarling = new QuadStarling(15, 25);
             quad2.x = 30;
             quad2.y = 25;
             
@@ -245,12 +245,12 @@ package tests
         [Test]
         public function testBounds():void
         {
-            var quad:Quad = new Quad(10, 20);
+            var quad:QuadStarling = new QuadStarling(10, 20);
             quad.x = -10;
             quad.y = 10;
             quad.rotation = Math.PI / 2;
             
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             sprite.addChild(quad);
             
             var bounds:Rectangle = sprite.bounds;
@@ -269,36 +269,36 @@ package tests
         [Test]
         public function testBoundsInSpace():void
         {
-            var root:Sprite = new Sprite();
+            var root:SpriteStarling = new SpriteStarling();
             
-            var spriteA:Sprite = new Sprite();
+            var spriteA:SpriteStarling = new SpriteStarling();
             spriteA.x = 50;
             spriteA.y = 50;
             addQuadToSprite(spriteA);
             root.addChild(spriteA);
             
-            var spriteA1:Sprite = new Sprite();
+            var spriteA1:SpriteStarling = new SpriteStarling();
             spriteA1.x = 150;
             spriteA1.y = 50;
             spriteA1.scaleX = spriteA1.scaleY = 0.5;
             addQuadToSprite(spriteA1);
             spriteA.addChild(spriteA1);
             
-            var spriteA11:Sprite = new Sprite();
+            var spriteA11:SpriteStarling = new SpriteStarling();
             spriteA11.x = 25;
             spriteA11.y = 50;
             spriteA11.scaleX = spriteA11.scaleY = 0.5;
             addQuadToSprite(spriteA11);
             spriteA1.addChild(spriteA11);
             
-            var spriteA2:Sprite = new Sprite();
+            var spriteA2:SpriteStarling = new SpriteStarling();
             spriteA2.x = 50;
             spriteA2.y = 150;
             spriteA2.scaleX = spriteA2.scaleY = 0.5;
             addQuadToSprite(spriteA2);
             spriteA.addChild(spriteA2);
             
-            var spriteA21:Sprite = new Sprite();
+            var spriteA21:SpriteStarling = new SpriteStarling();
             spriteA21.x = 50;
             spriteA21.y = 25;
             spriteA21.scaleX = spriteA21.scaleY = 0.5;
@@ -320,16 +320,16 @@ package tests
             expectedBounds = new Rectangle(0, 394.974762, 100, 100);
             Helpers.compareRectangles(bounds, expectedBounds);
             
-            function addQuadToSprite(sprite:Sprite):void
+            function addQuadToSprite(sprite:SpriteStarling):void
             {
-                sprite.addChild(new Quad(100, 100));
+                sprite.addChild(new QuadStarling(100, 100));
             }
         }
         
         [Test]
         public function testBoundsOfEmptyContainer():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             sprite.x = 100;
             sprite.y = 200;
             
@@ -343,12 +343,12 @@ package tests
         [Test]
         public function testSize():void
         {
-            var quad1:Quad = new Quad(100, 100);
-            var quad2:Quad = new Quad(100, 100);
+            var quad1:QuadStarling = new QuadStarling(100, 100);
+            var quad2:QuadStarling = new QuadStarling(100, 100);
             quad2.x = quad2.y = 100;
             
-            var sprite:Sprite = new Sprite();
-            var childSprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
+            var childSprite:SpriteStarling = new SpriteStarling();
             
             sprite.addChild(childSprite);
             childSprite.addChild(quad1);
@@ -367,12 +367,12 @@ package tests
         [Test]
         public function testSort():void
         {
-            var s1:Sprite = new Sprite(); s1.y = 8;
-            var s2:Sprite = new Sprite(); s2.y = 3;
-            var s3:Sprite = new Sprite(); s3.y = 6;
-            var s4:Sprite = new Sprite(); s4.y = 1;
+            var s1:SpriteStarling = new SpriteStarling(); s1.y = 8;
+            var s2:SpriteStarling = new SpriteStarling(); s2.y = 3;
+            var s3:SpriteStarling = new SpriteStarling(); s3.y = 6;
+            var s4:SpriteStarling = new SpriteStarling(); s4.y = 1;
             
-            var parent:Sprite = new Sprite();
+            var parent:SpriteStarling = new SpriteStarling();
             parent.addChild(s1);
             parent.addChild(s2);
             parent.addChild(s3);
@@ -383,7 +383,7 @@ package tests
             Assert.assertEquals(s3, parent.getChildAt(2));
             Assert.assertEquals(s4, parent.getChildAt(3));
             
-            parent.sortChildren(function(child1:DisplayObject, child2:DisplayObject):int
+            parent.sortChildren(function(child1:DisplayObjectStarling, child2:DisplayObjectStarling):int
             {
                 if (child1.y < child2.y) return -1;
                 else if (child1.y > child2.y) return 1;
@@ -399,13 +399,13 @@ package tests
         [Test]
         public function testAddExistingChild():void
         {
-            var stage:Stage = new Stage(400, 300);
-            var sprite:Sprite = new Sprite();
-            var quad:Quad = new Quad(100, 100);
-            quad.addEventListener(Event.ADDED, onAdded);
-            quad.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-            quad.addEventListener(Event.REMOVED, onRemoved);
-            quad.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+            var stage:StageStarling = new StageStarling(400, 300);
+            var sprite:SpriteStarling = new SpriteStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            quad.addEventListener(EventStarling.ADDED, onAdded);
+            quad.addEventListener(EventStarling.ADDED_TO_STAGE, onAddedToStage);
+            quad.addEventListener(EventStarling.REMOVED, onRemoved);
+            quad.addEventListener(EventStarling.REMOVED_FROM_STAGE, onRemovedFromStage);
             
             stage.addChild(sprite);
             sprite.addChild(quad);
@@ -429,10 +429,10 @@ package tests
         [Test]
         public function testRemoveWithEventHandler():void
         {
-            var parent:Sprite = new Sprite();
-            var child0:Sprite = new Sprite();
-            var child1:Sprite = new Sprite();
-            var child2:Sprite = new Sprite();
+            var parent:SpriteStarling = new SpriteStarling();
+            var child0:SpriteStarling = new SpriteStarling();
+            var child1:SpriteStarling = new SpriteStarling();
+            var child2:SpriteStarling = new SpriteStarling();
             
             parent.addChild(child0);
             parent.addChild(child1);
@@ -441,7 +441,7 @@ package tests
             // Remove last child, and in its event listener remove first child.
             // That must work, even though the child changes its index in the event handler.
             
-            child2.addEventListener(Event.REMOVED, function():void
+            child2.addEventListener(EventStarling.REMOVED, function():void
             {
                 child0.removeFromParent();
             });
@@ -460,9 +460,9 @@ package tests
         [Test(expects="ArgumentError")]
         public function testIllegalRecursion():void
         {
-            var sprite1:Sprite = new Sprite();
-            var sprite2:Sprite = new Sprite();
-            var sprite3:Sprite = new Sprite();
+            var sprite1:SpriteStarling = new SpriteStarling();
+            var sprite2:SpriteStarling = new SpriteStarling();
+            var sprite3:SpriteStarling = new SpriteStarling();
             
             sprite1.addChild(sprite2);
             sprite2.addChild(sprite3);
@@ -474,24 +474,24 @@ package tests
         [Test(expects="ArgumentError")]
         public function testAddAsChildToSelf():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             sprite.addChild(sprite);
         }
         
         [Test]
         public function testDisplayListEvents():void
         {
-            var stage:Stage = new Stage(100, 100);
-            var sprite:Sprite = new Sprite();
-            var quad:Quad = new Quad(20, 20);
+            var stage:StageStarling = new StageStarling(100, 100);
+            var sprite:SpriteStarling = new SpriteStarling();
+            var quad:QuadStarling = new QuadStarling(20, 20);
             
-            quad.addEventListener(Event.ADDED, onAdded);
-            quad.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-            quad.addEventListener(Event.REMOVED, onRemoved);
-            quad.addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+            quad.addEventListener(EventStarling.ADDED, onAdded);
+            quad.addEventListener(EventStarling.ADDED_TO_STAGE, onAddedToStage);
+            quad.addEventListener(EventStarling.REMOVED, onRemoved);
+            quad.addEventListener(EventStarling.REMOVED_FROM_STAGE, onRemovedFromStage);
             
-            stage.addEventListener(Event.ADDED, onAddedChild);
-            stage.addEventListener(Event.REMOVED, onRemovedChild);
+            stage.addEventListener(EventStarling.ADDED, onAddedChild);
+            stage.addEventListener(EventStarling.REMOVED, onRemovedChild);
             
             sprite.addChild(quad);            
             Assert.assertEquals(1, mAdded);
@@ -529,14 +529,14 @@ package tests
         [Test]
         public function testRemovedFromStage():void
         {
-            var stage:Stage = new Stage(100, 100);
-            var sprite:Sprite = new Sprite();
+            var stage:StageStarling = new StageStarling(100, 100);
+            var sprite:SpriteStarling = new SpriteStarling();
             stage.addChild(sprite);
-            sprite.addEventListener(Event.REMOVED_FROM_STAGE, onSpriteRemovedFromStage);
+            sprite.addEventListener(EventStarling.REMOVED_FROM_STAGE, onSpriteRemovedFromStage);
             sprite.removeFromParent();
             Assert.assertEquals(1, mRemovedFromStage);
             
-            function onSpriteRemovedFromStage(e:Event):void
+            function onSpriteRemovedFromStage(e:EventStarling):void
             {
                 // stage should still be accessible in event listener
                 Assert.assertNotNull(sprite.stage);
@@ -547,17 +547,17 @@ package tests
         [Test]
         public function testRepeatedStageRemovedEvent():void
         {
-            var stage:Stage = new Stage(100, 100);
-            var grandParent:Sprite = new Sprite();
-            var parent:Sprite = new Sprite();
-            var child:Sprite = new Sprite();
+            var stage:StageStarling = new StageStarling(100, 100);
+            var grandParent:SpriteStarling = new SpriteStarling();
+            var parent:SpriteStarling = new SpriteStarling();
+            var child:SpriteStarling = new SpriteStarling();
             
             stage.addChild(grandParent);
             grandParent.addChild(parent);
             parent.addChild(child);
             
-            grandParent.addEventListener(Event.REMOVED_FROM_STAGE, onGrandParentRemovedFromStage);
-            child.addEventListener(Event.REMOVED_FROM_STAGE, onChildRemovedFromStage);
+            grandParent.addEventListener(EventStarling.REMOVED_FROM_STAGE, onGrandParentRemovedFromStage);
+            child.addEventListener(EventStarling.REMOVED_FROM_STAGE, onChildRemovedFromStage);
             
             // in this set-up, the child could receive the REMOVED_FROM_STAGE event more than
             // once -- which must be avoided. Furthermore, "stage" must always be accessible
@@ -580,12 +580,12 @@ package tests
             }
         }
         
-        private function onAdded(event:Event):void { mAdded++; }
-        private function onAddedToStage(event:Event):void { mAddedToStage++; }
-        private function onAddedChild(event:Event):void { mAddedChild++; }
+        private function onAdded(event:EventStarling):void { mAdded++; }
+        private function onAddedToStage(event:EventStarling):void { mAddedToStage++; }
+        private function onAddedChild(event:EventStarling):void { mAddedChild++; }
         
-        private function onRemoved(event:Event):void { mRemoved++; }
-        private function onRemovedFromStage(event:Event):void { mRemovedFromStage++; }
-        private function onRemovedChild(event:Event):void { mRemovedChild++; }
+        private function onRemoved(event:EventStarling):void { mRemoved++; }
+        private function onRemovedFromStage(event:EventStarling):void { mRemovedFromStage++; }
+        private function onRemovedChild(event:EventStarling):void { mRemovedChild++; }
     }
 }

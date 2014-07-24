@@ -18,10 +18,10 @@ package tests
     import org.flexunit.asserts.assertTrue;
     import org.hamcrest.number.closeTo;
     
-    import starling.animation.Juggler;
-    import starling.animation.Transitions;
-    import starling.animation.Tween;
-    import starling.display.Quad;
+    import starling.animation.JugglerStarling;
+    import starling.animation.TransitionsStarling;
+    import starling.animation.TweenStarling;
+    import starling.display.QuadStarling;
 
     public class TweenTest
     {
@@ -42,12 +42,12 @@ package tests
             var updateCount:int = 0;
             var completeCount:int = 0;
             
-            var quad:Quad = new Quad(100, 100);
+            var quad:QuadStarling = new QuadStarling(100, 100);
             quad.x = startX;
             quad.y = startY;
             quad.alpha = startAlpha;
             
-            var tween:Tween = new Tween(quad, totalTime, Transitions.LINEAR);
+            var tween:TweenStarling = new TweenStarling(quad, totalTime, TransitionsStarling.LINEAR);
             tween.moveTo(endX, endY);
             tween.animate("alpha", endAlpha);
             tween.onStart    = function():void { startCount++; };
@@ -87,13 +87,13 @@ package tests
         {
             var startPos:Number  = 0.0;
             var targetPos:Number = 50.0;
-            var quad:Quad = new Quad(100, 100);
+            var quad:QuadStarling = new QuadStarling(100, 100);
             
             // 2 tweens should move object up, then down
-            var tween1:Tween = new Tween(quad, 1.0);
+            var tween1:TweenStarling = new TweenStarling(quad, 1.0);
             tween1.animate("y", targetPos);
             
-            var tween2:Tween = new Tween(quad, 1.0);
+            var tween2:TweenStarling = new TweenStarling(quad, 1.0);
             tween2.animate("y", startPos);
             tween2.delay = tween1.totalTime;
             
@@ -113,10 +113,10 @@ package tests
         [Test]
         public function testTweenFromZero():void
         {
-            var quad:Quad = new Quad(100, 100);
+            var quad:QuadStarling = new QuadStarling(100, 100);
             quad.scaleX = 0.0;
             
-            var tween:Tween = new Tween(quad, 1.0);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             tween.animate("scaleX", 1.0);
             
             tween.advanceTime(0.0);
@@ -132,9 +132,9 @@ package tests
         [Test]
         public function testResetTween():void
         {
-            var quad:Quad = new Quad(100, 100);
+            var quad:QuadStarling = new QuadStarling(100, 100);
             
-            var tween:Tween = new Tween(quad, 1.0);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             tween.animate("x", 100);
             
             tween.advanceTime(0.5);
@@ -150,10 +150,10 @@ package tests
         [Test]
         public function testResetTweenInOnComplete():void
         {
-            var quad:Quad = new Quad(100, 100);
-            var juggler:Juggler = new Juggler();
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var juggler:JugglerStarling = new JugglerStarling();
             
-            var tween:Tween = new Tween(quad, 1.0);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             tween.animate("x", 100);
             tween.onComplete = function():void
             {
@@ -188,8 +188,8 @@ package tests
         [Test]
         public function testCustomTween():void
         {
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0, transition);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0, transition);
             tween.animate("x", 100);
             
             tween.advanceTime(0.1);
@@ -216,8 +216,8 @@ package tests
             var repeatCount:int = 0;
             var completeCount:int = 0;
             
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             tween.repeatCount = 3;
             tween.onStart = onStart;
             tween.onRepeat = onRepeat;
@@ -258,8 +258,8 @@ package tests
             var startCount:int = 0;
             var completeCount:int = 0;
             
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             tween.repeatCount = 4;
             tween.reverse = true;
             tween.animate("x", 100);
@@ -286,8 +286,8 @@ package tests
         [Test]
         public function testInfiniteTween():void
         {
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             tween.animate("x", 100);
             tween.repeatCount = 0;
             
@@ -302,8 +302,8 @@ package tests
         [Test]
         public function testGetEndValue():void
         {
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             tween.animate("x", 100);
             tween.fadeTo(0);
             tween.scaleTo(1.5);
@@ -317,8 +317,8 @@ package tests
         [Test]
         public function testProgress():void
         {
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0, easeIn);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0, easeIn);
             Assert.assertEquals(0.0, tween.progress);
             
             tween.advanceTime(0.5);
@@ -338,8 +338,8 @@ package tests
         
         private function executeTween(time:Number, advanceTime:Number):void
         {
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, time);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, time);
             tween.animate("x", 100);
             
             var startCount:int = 0;

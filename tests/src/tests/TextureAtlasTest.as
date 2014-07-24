@@ -15,10 +15,10 @@ package tests
     
     import flexunit.framework.Assert;
     
-    import starling.textures.ConcreteTexture;
-    import starling.textures.SubTexture;
-    import starling.textures.Texture;
-    import starling.textures.TextureAtlas;
+    import starling.textures.ConcreteTextureStarling;
+    import starling.textures.SubTextureStarling;
+    import starling.textures.TextureStarling;
+    import starling.textures.TextureAtlasStarling;
 
     public class TextureAtlasTest
     {		
@@ -32,22 +32,22 @@ package tests
                     <SubTexture name='bob' x='16'  y='32' width='16'   height='32' />
                 </TextureAtlas>;
             
-            var texture:Texture = new ConcreteTexture(null, format, 64, 64, false, false);
-            var atlas:TextureAtlas = new TextureAtlas(texture, xml);
+            var texture:TextureStarling = new ConcreteTextureStarling(null, format, 64, 64, false, false);
+            var atlas:TextureAtlasStarling = new TextureAtlasStarling(texture, xml);
             
-            var ann:Texture = atlas.getTexture("ann");            
-            var bob:Texture = atlas.getTexture("bob");
+            var ann:TextureStarling = atlas.getTexture("ann");
+            var bob:TextureStarling = atlas.getTexture("bob");
             
-            Assert.assertTrue(ann is SubTexture);
-            Assert.assertTrue(bob    is SubTexture);
+            Assert.assertTrue(ann is SubTextureStarling);
+            Assert.assertTrue(bob    is SubTextureStarling);
             
             Assert.assertEquals(55.5, ann.width);
             Assert.assertEquals(16, ann.height);
             Assert.assertEquals(16, bob.width);
             Assert.assertEquals(32, bob.height);
             
-            var annST:SubTexture = ann as SubTexture;
-            var bobST:SubTexture = bob as SubTexture;
+            var annST:SubTextureStarling = ann as SubTextureStarling;
+            var bobST:SubTextureStarling = bob as SubTextureStarling;
             
             Assert.assertEquals(0, annST.clipping.x);
             Assert.assertEquals(0, annST.clipping.y);
@@ -59,8 +59,8 @@ package tests
         public function testManualCreation():void
         {
             var format:String = Context3DTextureFormat.BGRA;
-            var texture:Texture = new ConcreteTexture(null, format, 64, 64, false, false);
-            var atlas:TextureAtlas = new TextureAtlas(texture);
+            var texture:TextureStarling = new ConcreteTextureStarling(null, format, 64, 64, false, false);
+            var atlas:TextureAtlasStarling = new TextureAtlasStarling(texture);
             
             atlas.addRegion("ann", new Rectangle(0, 0, 55.5, 16));
             atlas.addRegion("bob", new Rectangle(16, 32, 16, 32));
@@ -79,8 +79,8 @@ package tests
         public function testGetTextures():void
         {
             var format:String = Context3DTextureFormat.BGRA;
-            var texture:Texture = new ConcreteTexture(null, format, 64, 64, false, false);
-            var atlas:TextureAtlas = new TextureAtlas(texture);
+            var texture:TextureStarling = new ConcreteTextureStarling(null, format, 64, 64, false, false);
+            var atlas:TextureAtlasStarling = new TextureAtlasStarling(texture);
             
             Assert.assertEquals(texture, atlas.texture);
             
@@ -90,7 +90,7 @@ package tests
             atlas.addRegion("bob", new Rectangle(24, 0, 8, 8));
             atlas.addRegion("prefix_2", new Rectangle(32, 0, 2, 8));
             
-            var textures:Vector.<Texture> = atlas.getTextures("prefix_");
+            var textures:Vector.<TextureStarling> = atlas.getTextures("prefix_");
             
             Assert.assertEquals(3, textures.length);
             Assert.assertEquals(1, textures[0].width);

@@ -10,13 +10,13 @@
 
 package starling.display
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A class that provides constant values for the states of the Button class. */
-    public class ButtonState
+    public class ButtonStateStarling
     {
         /** @private */
-        public function ButtonState() { throw new AbstractClassError(); }
+        public function ButtonStateStarling() { throw new AbstractClassErrorStarling(); }
 
         /** The button's default state. */
         public static const UP:String = "up";

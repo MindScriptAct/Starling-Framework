@@ -14,10 +14,10 @@ package starling.utils
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A utility class containing methods related to the Rectangle class. */
-    public class RectangleUtil
+    public class RectangleUtilStarling
     {
         /** Helper objects. */
         private static const sHelperPoint:Point = new Point();
@@ -25,7 +25,7 @@ package starling.utils
             new <Point>[ new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1) ];
 
         /** @private */
-        public function RectangleUtil() { throw new AbstractClassError(); }
+        public function RectangleUtilStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Calculates the intersection between two Rectangles. If the rectangles do not intersect,
          *  this method returns an empty Rectangle object with its properties set to 0. */
@@ -55,13 +55,13 @@ package starling.utils
          *  furthermore, you can avoid pixel alignment errors by only allowing whole-number  
          *  multipliers/divisors (e.g. 3, 2, 1, 1/2, 1/3).</p>
          *  
-         *  @see starling.utils.ScaleMode
+         *  @see starling.utils.ScaleModeStarling
          */
         public static function fit(rectangle:Rectangle, into:Rectangle, 
                                    scaleMode:String="showAll", pixelPerfect:Boolean=false,
                                    resultRect:Rectangle=null):Rectangle
         {
-            if (!ScaleMode.isValid(scaleMode)) throw new ArgumentError("Invalid scaleMode: " + scaleMode);
+            if (!ScaleModeStarling.isValid(scaleMode)) throw new ArgumentError("Invalid scaleMode: " + scaleMode);
             if (resultRect == null) resultRect = new Rectangle();
             
             var width:Number   = rectangle.width;
@@ -70,12 +70,12 @@ package starling.utils
             var factorY:Number = into.height / height;
             var factor:Number  = 1.0;
             
-            if (scaleMode == ScaleMode.SHOW_ALL)
+            if (scaleMode == ScaleModeStarling.SHOW_ALL)
             {
                 factor = factorX < factorY ? factorX : factorY;
                 if (pixelPerfect) factor = nextSuitableScaleFactor(factor, false);
             }
-            else if (scaleMode == ScaleMode.NO_BORDER)
+            else if (scaleMode == ScaleModeStarling.NO_BORDER)
             {
                 factor = factorX > factorY ? factorX : factorY;
                 if (pixelPerfect) factor = nextSuitableScaleFactor(factor, true);
@@ -149,7 +149,7 @@ package starling.utils
             
             for (var i:int=0; i<4; ++i)
             {
-                MatrixUtil.transformCoords(transformationMatrix,
+                MatrixUtilStarling.transformCoords(transformationMatrix,
                     sPositions[i].x * rectangle.width, sPositions[i].y * rectangle.height,
                     sHelperPoint);
                 

@@ -13,12 +13,12 @@ package starling.display
     import flash.errors.IllegalOperationError;
     import flash.media.Sound;
     
-    import starling.animation.IAnimatable;
-    import starling.events.Event;
-    import starling.textures.Texture;
+    import starling.animation.IAnimatableStarling;
+    import starling.events.EventStarling;
+    import starling.textures.TextureStarling;
     
     /** Dispatched whenever the movie has displayed its last frame. */
-    [Event(name="complete", type="starling.events.Event")]
+    [Event(name="complete", type="starling.events.EventStarling")]
     
     /** A MovieClip is a simple way to display an animation depicted by a list of textures.
      *  
@@ -39,11 +39,11 @@ package starling.display
      *  <code>advanceTime</code> method called regularly) to run. The movie will dispatch 
      *  an event of type "Event.COMPLETE" whenever it has displayed its last frame.</p>
      *  
-     *  @see starling.textures.TextureAtlas
+     *  @see starling.textures.TextureAtlasStarling
      */    
-    public class MovieClip extends Image implements IAnimatable
+    public class MovieClipStarling extends ImageStarling implements IAnimatableStarling
     {
-        private var mTextures:Vector.<Texture>;
+        private var mTextures:Vector.<TextureStarling>;
         private var mSounds:Vector.<Sound>;
         private var mDurations:Vector.<Number>;
         private var mStartTimes:Vector.<Number>;
@@ -57,7 +57,7 @@ package starling.display
         
         /** Creates a movie clip from the provided textures and with the specified default framerate.
          *  The movie will have the size of the first frame. */  
-        public function MovieClip(textures:Vector.<Texture>, fps:Number=12)
+        public function MovieClipStarling(textures:Vector.<TextureStarling>, fps:Number=12)
         {
             if (textures.length > 0)
             {
@@ -70,7 +70,7 @@ package starling.display
             }
         }
         
-        private function init(textures:Vector.<Texture>, fps:Number):void
+        private function init(textures:Vector.<TextureStarling>, fps:Number):void
         {
             if (fps <= 0) throw new ArgumentError("Invalid fps: " + fps);
             var numFrames:int = textures.length;
@@ -96,13 +96,13 @@ package starling.display
         
         /** Adds an additional frame, optionally with a sound and a custom duration. If the 
          *  duration is omitted, the default framerate is used (as specified in the constructor). */   
-        public function addFrame(texture:Texture, sound:Sound=null, duration:Number=-1):void
+        public function addFrame(texture:TextureStarling, sound:Sound=null, duration:Number=-1):void
         {
             addFrameAt(numFrames, texture, sound, duration);
         }
         
         /** Adds a frame at a certain index, optionally with a sound and a custom duration. */
-        public function addFrameAt(frameID:int, texture:Texture, sound:Sound=null, 
+        public function addFrameAt(frameID:int, texture:TextureStarling, sound:Sound=null,
                                    duration:Number=-1):void
         {
             if (frameID < 0 || frameID > numFrames) throw new ArgumentError("Invalid frame id");
@@ -132,14 +132,14 @@ package starling.display
         }
         
         /** Returns the texture of a certain frame. */
-        public function getFrameTexture(frameID:int):Texture
+        public function getFrameTexture(frameID:int):TextureStarling
         {
             if (frameID < 0 || frameID >= numFrames) throw new ArgumentError("Invalid frame id");
             return mTextures[frameID];
         }
         
         /** Sets the texture of a certain frame. */
-        public function setFrameTexture(frameID:int, texture:Texture):void
+        public function setFrameTexture(frameID:int, texture:TextureStarling):void
         {
             if (frameID < 0 || frameID >= numFrames) throw new ArgumentError("Invalid frame id");
             mTextures[frameID] = texture;
@@ -238,7 +238,7 @@ package starling.display
                 {
                     if (mCurrentFrame == finalFrame)
                     {
-                        if (mLoop && !hasEventListener(Event.COMPLETE))
+                        if (mLoop && !hasEventListener(EventStarling.COMPLETE))
                         {
                             mCurrentTime -= totalTime;
                             mCurrentFrame = 0;
@@ -271,7 +271,7 @@ package starling.display
                 texture = mTextures[mCurrentFrame];
             
             if (dispatchCompleteEvent)
-                dispatchEventWith(Event.COMPLETE);
+                dispatchEventWith(EventStarling.COMPLETE);
             
             if (mLoop && restTime > 0.0)
                 advanceTime(restTime);

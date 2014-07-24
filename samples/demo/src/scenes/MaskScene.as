@@ -3,50 +3,50 @@ package scenes
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-    import starling.core.Starling;
-    import starling.display.Image;
-    import starling.display.Quad;
-    import starling.display.Sprite;
-    import starling.events.Touch;
-    import starling.events.TouchEvent;
-    import starling.events.TouchPhase;
-    import starling.filters.ColorMatrixFilter;
-    import starling.text.TextField;
+    import starling.core.StarlingStarling;
+    import starling.display.ImageStarling;
+    import starling.display.QuadStarling;
+    import starling.display.SpriteStarling;
+    import starling.events.TouchStarling;
+    import starling.events.TouchEventStarling;
+    import starling.events.TouchPhaseStarling;
+    import starling.filters.ColorMatrixFilterStarling;
+    import starling.text.TextFieldStarling;
 
     public class MaskScene extends Scene
     {
-        private var mContents:Sprite;
-        private var mClipQuad:Quad;
+        private var mContents:SpriteStarling;
+        private var mClipQuad:QuadStarling;
         
         public function MaskScene()
         {
-            mContents = new Sprite();
+            mContents = new SpriteStarling();
             addChild(mContents);
             
-            var stageWidth:Number  = Starling.current.stage.stageWidth;
-            var stageHeight:Number = Starling.current.stage.stageHeight;
+            var stageWidth:Number  = StarlingStarling.current.stage.stageWidth;
+            var stageHeight:Number = StarlingStarling.current.stage.stageHeight;
             
-            var touchQuad:Quad = new Quad(stageWidth, stageHeight);
+            var touchQuad:QuadStarling = new QuadStarling(stageWidth, stageHeight);
             touchQuad.alpha = 0; // only used to get touch events
             addChildAt(touchQuad, 0);
             
-            var image:Image = new Image(Game.assets.getTexture("flight_00"));
+            var image:ImageStarling = new ImageStarling(Game.assets.getTexture("flight_00"));
             image.x = (stageWidth - image.width) / 2;
             image.y = 80;
             mContents.addChild(image);
             
             // just to prove it works, use a filter on the image.
-            var cm:ColorMatrixFilter = new ColorMatrixFilter();
+            var cm:ColorMatrixFilterStarling = new ColorMatrixFilterStarling();
             cm.adjustHue(-0.5);
             image.filter = cm;
             
-            var scissorText:TextField = new TextField(256, 128, 
+            var scissorText:TextFieldStarling = new TextFieldStarling(256, 128,
                 "Move the mouse (or a finger) over the screen to move the clipping rectangle.");
             scissorText.x = (stageWidth - scissorText.width) / 2;
             scissorText.y = 240;
             mContents.addChild(scissorText);
             
-            var maskText:TextField = new TextField(256, 128, 
+            var maskText:TextFieldStarling = new TextFieldStarling(256, 128,
                 "Currently, Starling supports only stage-aligned clipping; more complex masks " +
                 "will be supported in future versions.");
             maskText.x = scissorText.x;
@@ -58,21 +58,21 @@ package scenes
             scissorRect.y = (stageHeight - scissorRect.height) / 2 + 5;
             mContents.clipRect = scissorRect;
             
-            mClipQuad = new Quad(scissorRect.width, scissorRect.height, 0xff0000);
+            mClipQuad = new QuadStarling(scissorRect.width, scissorRect.height, 0xff0000);
             mClipQuad.x = scissorRect.x;
             mClipQuad.y = scissorRect.y;
             mClipQuad.alpha = 0.1;
             mClipQuad.touchable = false;
             addChild(mClipQuad);
             
-            addEventListener(TouchEvent.TOUCH, onTouch);
+            addEventListener(TouchEventStarling.TOUCH, onTouch);
         }
         
-        private function onTouch(event:TouchEvent):void
+        private function onTouch(event:TouchEventStarling):void
         {
-            var touch:Touch = event.getTouch(this, TouchPhase.HOVER) ||
-                              event.getTouch(this, TouchPhase.BEGAN) ||
-                              event.getTouch(this, TouchPhase.MOVED);
+            var touch:TouchStarling = event.getTouch(this, TouchPhaseStarling.HOVER) ||
+                              event.getTouch(this, TouchPhaseStarling.BEGAN) ||
+                              event.getTouch(this, TouchPhaseStarling.MOVED);
 
             if (touch)
             {

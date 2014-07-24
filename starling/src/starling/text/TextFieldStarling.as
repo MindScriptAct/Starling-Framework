@@ -21,20 +21,20 @@ package starling.text
     import flash.text.TextFormat;
     import flash.utils.Dictionary;
     
-    import starling.core.RenderSupport;
-    import starling.core.Starling;
-    import starling.display.DisplayObject;
-    import starling.display.DisplayObjectContainer;
-    import starling.display.Image;
-    import starling.display.Quad;
-    import starling.display.QuadBatch;
-    import starling.display.Sprite;
-    import starling.events.Event;
-    import starling.textures.Texture;
-    import starling.utils.HAlign;
-    import starling.utils.RectangleUtil;
-    import starling.utils.VAlign;
-    import starling.utils.deg2rad;
+    import starling.core.RenderSupportStarling;
+    import starling.core.StarlingStarling;
+    import starling.display.DisplayObjectStarling;
+    import starling.display.DisplayObjectContainerStarling;
+    import starling.display.ImageStarling;
+    import starling.display.QuadStarling;
+    import starling.display.QuadBatchStarling;
+    import starling.display.SpriteStarling;
+    import starling.events.EventStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.RectangleUtilStarling;
+    import starling.utils.VAlignStarling;
+    import starling.utils.deg2radStarling;
 
     /** A TextField displays text, either using standard true type fonts or custom bitmap fonts.
      *  
@@ -79,7 +79,7 @@ package starling.text
      *  characters (per TextField). For longer texts, the batching would take up more CPU time
      *  than what is saved by avoiding the draw calls.</p>
      */
-    public class TextField extends DisplayObjectContainer
+    public class TextFieldStarling extends DisplayObjectContainerStarling
     {
         // the name container with the registered bitmap fonts
         private static const BITMAP_FONT_DATA_NAME:String = "starling.display.TextField.BitmapFonts";
@@ -107,38 +107,38 @@ package starling.text
         private var mBatchable:Boolean;
         
         private var mHitArea:Rectangle;
-        private var mBorder:DisplayObjectContainer;
+        private var mBorder:DisplayObjectContainerStarling;
         
-        private var mImage:Image;
-        private var mQuadBatch:QuadBatch;
+        private var mImage:ImageStarling;
+        private var mQuadBatch:QuadBatchStarling;
         
         /** Helper objects. */
         private static var sHelperMatrix:Matrix = new Matrix();
         private static var sNativeTextField:flash.text.TextField = new flash.text.TextField();
         
         /** Create a new text field with the given properties. */
-        public function TextField(width:int, height:int, text:String, fontName:String="Verdana",
+        public function TextFieldStarling(width:int, height:int, text:String, fontName:String="Verdana",
                                   fontSize:Number=12, color:uint=0x0, bold:Boolean=false)
         {
             mText = text ? text : "";
             mFontSize = fontSize;
             mColor = color;
-            mHAlign = HAlign.CENTER;
-            mVAlign = VAlign.CENTER;
+            mHAlign = HAlignStarling.CENTER;
+            mVAlign = VAlignStarling.CENTER;
             mBorder = null;
             mKerning = true;
             mBold = bold;
-            mAutoSize = TextFieldAutoSize.NONE;
+            mAutoSize = TextFieldAutoSizeStarling.NONE;
             mHitArea = new Rectangle(0, 0, width, height);
             this.fontName = fontName;
             
-            addEventListener(Event.FLATTEN, onFlatten);
+            addEventListener(EventStarling.FLATTEN, onFlatten);
         }
         
         /** Disposes the underlying texture data. */
         public override function dispose():void
         {
-            removeEventListener(Event.FLATTEN, onFlatten);
+            removeEventListener(EventStarling.FLATTEN, onFlatten);
             if (mImage) mImage.texture.dispose();
             if (mQuadBatch) mQuadBatch.dispose();
             super.dispose();
@@ -150,7 +150,7 @@ package starling.text
         }
         
         /** @inheritDoc */
-        public override function render(support:RenderSupport, parentAlpha:Number):void
+        public override function render(support:RenderSupportStarling, parentAlpha:Number):void
         {
             if (mRequiresRedraw) redraw();
             super.render(support, parentAlpha);
@@ -183,15 +183,15 @@ package starling.text
             if (mTextBounds == null) 
                 mTextBounds = new Rectangle();
             
-            var texture:Texture;
-            var scale:Number = Starling.contentScaleFactor;
+            var texture:TextureStarling;
+            var scale:Number = StarlingStarling.contentScaleFactor;
             var bitmapData:BitmapData = renderText(scale, mTextBounds);
             var format:String = sDefaultTextureFormat;
             
             mHitArea.width  = bitmapData.width  / scale;
             mHitArea.height = bitmapData.height / scale;
             
-            texture = Texture.fromBitmapData(bitmapData, false, false, scale, format);
+            texture = TextureStarling.fromBitmapData(bitmapData, false, false, scale, format);
             texture.root.onRestore = function():void
             {
                 if (mTextBounds == null)
@@ -208,7 +208,7 @@ package starling.text
             
             if (mImage == null) 
             {
-                mImage = new Image(texture);
+                mImage = new ImageStarling(texture);
                 mImage.touchable = false;
                 addChild(mImage);
             }
@@ -241,12 +241,12 @@ package starling.text
             if (isHorizontalAutoSize)
             {
                 width = int.MAX_VALUE;
-                hAlign = HAlign.LEFT;
+                hAlign = HAlignStarling.LEFT;
             }
             if (isVerticalAutoSize)
             {
                 height = int.MAX_VALUE;
-                vAlign = VAlign.TOP;
+                vAlign = VAlignStarling.TOP;
             }
             
             var textFormat:TextFormat = new TextFormat(mFontName, 
@@ -286,14 +286,14 @@ package starling.text
             if (height < 1) height = 1.0;
             
             var textOffsetX:Number = 0.0;
-            if (hAlign == HAlign.LEFT)        textOffsetX = 2; // flash adds a 2 pixel offset
-            else if (hAlign == HAlign.CENTER) textOffsetX = (width - textWidth) / 2.0;
-            else if (hAlign == HAlign.RIGHT)  textOffsetX =  width - textWidth - 2;
+            if (hAlign == HAlignStarling.LEFT)        textOffsetX = 2; // flash adds a 2 pixel offset
+            else if (hAlign == HAlignStarling.CENTER) textOffsetX = (width - textWidth) / 2.0;
+            else if (hAlign == HAlignStarling.RIGHT)  textOffsetX =  width - textWidth - 2;
 
             var textOffsetY:Number = 0.0;
-            if (vAlign == VAlign.TOP)         textOffsetY = 2; // flash adds a 2 pixel offset
-            else if (vAlign == VAlign.CENTER) textOffsetY = (height - textHeight) / 2.0;
-            else if (vAlign == VAlign.BOTTOM) textOffsetY =  height - textHeight - 2;
+            if (vAlign == VAlignStarling.TOP)         textOffsetY = 2; // flash adds a 2 pixel offset
+            else if (vAlign == VAlignStarling.CENTER) textOffsetY = (height - textHeight) / 2.0;
+            else if (vAlign == VAlignStarling.BOTTOM) textOffsetY =  height - textHeight - 2;
             
             // if 'nativeFilters' are in use, the text field might grow beyond its bounds
             var filterOffset:Point = calculateFilterOffset(sNativeTextField, hAlign, vAlign);
@@ -358,7 +358,7 @@ package starling.text
                     var blurY:Number    = "blurY"    in filter ? filter["blurY"]    : 0;
                     var angleDeg:Number = "angle"    in filter ? filter["angle"]    : 0;
                     var distance:Number = "distance" in filter ? filter["distance"] : 0;
-                    var angle:Number = deg2rad(angleDeg);
+                    var angle:Number = deg2radStarling(angleDeg);
                     var marginX:Number = blurX * 1.33; // that's an empirical value
                     var marginY:Number = blurY * 1.33;
                     var offsetX:Number  = Math.cos(angle) * distance - marginX / 2.0;
@@ -369,14 +369,14 @@ package starling.text
                     bounds = bounds.union(filterBounds);
                 }
                 
-                if (hAlign == HAlign.LEFT && bounds.x < 0)
+                if (hAlign == HAlignStarling.LEFT && bounds.x < 0)
                     resultOffset.x = -bounds.x;
-                else if (hAlign == HAlign.RIGHT && bounds.y > 0)
+                else if (hAlign == HAlignStarling.RIGHT && bounds.y > 0)
                     resultOffset.x = -(bounds.right - textWidth);
                 
-                if (vAlign == VAlign.TOP && bounds.y < 0)
+                if (vAlign == VAlignStarling.TOP && bounds.y < 0)
                     resultOffset.y = -bounds.y;
-                else if (vAlign == VAlign.BOTTOM && bounds.y > 0)
+                else if (vAlign == VAlignStarling.BOTTOM && bounds.y > 0)
                     resultOffset.y = -(bounds.bottom - textHeight);
             }
             
@@ -396,14 +396,14 @@ package starling.text
             
             if (mQuadBatch == null) 
             { 
-                mQuadBatch = new QuadBatch(); 
+                mQuadBatch = new QuadBatchStarling();
                 mQuadBatch.touchable = false;
                 addChild(mQuadBatch); 
             }
             else
                 mQuadBatch.reset();
             
-            var bitmapFont:BitmapFont = getBitmapFont(mFontName);
+            var bitmapFont:BitmapFontStarling = getBitmapFont(mFontName);
             if (bitmapFont == null) throw new Error("Bitmap font not registered: " + mFontName);
             
             var width:Number  = mHitArea.width;
@@ -414,12 +414,12 @@ package starling.text
             if (isHorizontalAutoSize)
             {
                 width = int.MAX_VALUE;
-                hAlign = HAlign.LEFT;
+                hAlign = HAlignStarling.LEFT;
             }
             if (isVerticalAutoSize)
             {
                 height = int.MAX_VALUE;
-                vAlign = VAlign.TOP;
+                vAlign = VAlignStarling.TOP;
             }
             
             bitmapFont.fillQuadBatch(mQuadBatch,
@@ -427,7 +427,7 @@ package starling.text
             
             mQuadBatch.batchable = mBatchable;
             
-            if (mAutoSize != TextFieldAutoSize.NONE)
+            if (mAutoSize != TextFieldAutoSizeStarling.NONE)
             {
                 mTextBounds = mQuadBatch.getBounds(mQuadBatch, mTextBounds);
                 
@@ -452,10 +452,10 @@ package starling.text
             var width:Number  = mHitArea.width;
             var height:Number = mHitArea.height;
             
-            var topLine:Quad    = mBorder.getChildAt(0) as Quad;
-            var rightLine:Quad  = mBorder.getChildAt(1) as Quad;
-            var bottomLine:Quad = mBorder.getChildAt(2) as Quad;
-            var leftLine:Quad   = mBorder.getChildAt(3) as Quad;
+            var topLine:QuadStarling    = mBorder.getChildAt(0) as QuadStarling;
+            var rightLine:QuadStarling  = mBorder.getChildAt(1) as QuadStarling;
+            var bottomLine:QuadStarling = mBorder.getChildAt(2) as QuadStarling;
+            var leftLine:QuadStarling   = mBorder.getChildAt(3) as QuadStarling;
             
             topLine.width    = width; topLine.height    = 1;
             bottomLine.width = width; bottomLine.height = 1;
@@ -470,14 +470,14 @@ package starling.text
         
         private function get isHorizontalAutoSize():Boolean
         {
-            return mAutoSize == TextFieldAutoSize.HORIZONTAL || 
-                   mAutoSize == TextFieldAutoSize.BOTH_DIRECTIONS;
+            return mAutoSize == TextFieldAutoSizeStarling.HORIZONTAL ||
+                   mAutoSize == TextFieldAutoSizeStarling.BOTH_DIRECTIONS;
         }
         
         private function get isVerticalAutoSize():Boolean
         {
-            return mAutoSize == TextFieldAutoSize.VERTICAL || 
-                   mAutoSize == TextFieldAutoSize.BOTH_DIRECTIONS;
+            return mAutoSize == TextFieldAutoSizeStarling.VERTICAL ||
+                   mAutoSize == TextFieldAutoSizeStarling.BOTH_DIRECTIONS;
         }
         
         /** Returns the bounds of the text within the text field. */
@@ -489,15 +489,15 @@ package starling.text
         }
         
         /** @inheritDoc */
-        public override function getBounds(targetSpace:DisplayObject, resultRect:Rectangle=null):Rectangle
+        public override function getBounds(targetSpace:DisplayObjectStarling, resultRect:Rectangle=null):Rectangle
         {
             if (mRequiresRedraw) redraw();
             getTransformationMatrix(targetSpace, sHelperMatrix);
-            return RectangleUtil.getBounds(mHitArea, sHelperMatrix, resultRect);
+            return RectangleUtilStarling.getBounds(mHitArea, sHelperMatrix, resultRect);
         }
         
         /** @inheritDoc */
-        public override function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObject
+        public override function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObjectStarling
         {
             if (forTouch && (!visible || !touchable)) return null;
             else if (mHitArea.containsPoint(localPoint)) return this;
@@ -540,8 +540,8 @@ package starling.text
         {
             if (mFontName != value)
             {
-                if (value == BitmapFont.MINI && bitmapFonts[value] == undefined)
-                    registerBitmapFont(new BitmapFont());
+                if (value == BitmapFontStarling.MINI && bitmapFonts[value] == undefined)
+                    registerBitmapFont(new BitmapFontStarling());
                 
                 mFontName = value;
                 mRequiresRedraw = true;
@@ -573,11 +573,11 @@ package starling.text
             }
         }
         
-        /** The horizontal alignment of the text. @default center @see starling.utils.HAlign */
+        /** The horizontal alignment of the text. @default center @see starling.utils.HAlignStarling */
         public function get hAlign():String { return mHAlign; }
         public function set hAlign(value:String):void
         {
-            if (!HAlign.isValid(value))
+            if (!HAlignStarling.isValid(value))
                 throw new ArgumentError("Invalid horizontal align: " + value);
             
             if (mHAlign != value)
@@ -587,11 +587,11 @@ package starling.text
             }
         }
         
-        /** The vertical alignment of the text. @default center @see starling.utils.VAlign */
+        /** The vertical alignment of the text. @default center @see starling.utils.VAlignStarling */
         public function get vAlign():String { return mVAlign; }
         public function set vAlign(value:String):void
         {
-            if (!VAlign.isValid(value))
+            if (!VAlignStarling.isValid(value))
                 throw new ArgumentError("Invalid vertical align: " + value);
             
             if (mVAlign != value)
@@ -608,11 +608,11 @@ package starling.text
         {
             if (value && mBorder == null)
             {                
-                mBorder = new Sprite();
+                mBorder = new SpriteStarling();
                 addChild(mBorder);
                 
                 for (var i:int=0; i<4; ++i)
-                    mBorder.addChild(new Quad(1.0, 1.0));
+                    mBorder.addChild(new QuadStarling(1.0, 1.0));
                 
                 updateBorder();
             }
@@ -730,7 +730,7 @@ package starling.text
          *  The font is identified by its <code>name</code> (not case sensitive).
          *  Per default, the <code>name</code> property of the bitmap font will be used, but you 
          *  can pass a custom name, as well. @return the name of the font. */
-        public static function registerBitmapFont(bitmapFont:BitmapFont, name:String=null):String
+        public static function registerBitmapFont(bitmapFont:BitmapFontStarling, name:String=null):String
         {
             if (name == null) name = bitmapFont.name;
             bitmapFonts[name.toLowerCase()] = bitmapFont;
@@ -750,7 +750,7 @@ package starling.text
         
         /** Returns a registered bitmap font (or null, if the font has not been registered). 
          *  The name is not case sensitive. */
-        public static function getBitmapFont(name:String):BitmapFont
+        public static function getBitmapFont(name:String):BitmapFontStarling
         {
             return bitmapFonts[name.toLowerCase()];
         }
@@ -759,12 +759,12 @@ package starling.text
          *  in one Stage3D context, they are saved in Starling's 'contextData' property. */
         private static function get bitmapFonts():Dictionary
         {
-            var fonts:Dictionary = Starling.current.contextData[BITMAP_FONT_DATA_NAME] as Dictionary;
+            var fonts:Dictionary = StarlingStarling.current.contextData[BITMAP_FONT_DATA_NAME] as Dictionary;
             
             if (fonts == null)
             {
                 fonts = new Dictionary();
-                Starling.current.contextData[BITMAP_FONT_DATA_NAME] = fonts;
+                StarlingStarling.current.contextData[BITMAP_FONT_DATA_NAME] = fonts;
             }
             
             return fonts;

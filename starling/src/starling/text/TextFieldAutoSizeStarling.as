@@ -10,14 +10,14 @@
 
 package starling.text 
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** This class is an enumeration of constant values used in setting the 
      *  autoSize property of the TextField class. */ 
-    public class TextFieldAutoSize
+    public class TextFieldAutoSizeStarling
     {
         /** @private */
-        public function TextFieldAutoSize() { throw new AbstractClassError(); }
+        public function TextFieldAutoSizeStarling() { throw new AbstractClassErrorStarling(); }
         
         /** No auto-sizing will happen. */
         public static const NONE:String = "none";

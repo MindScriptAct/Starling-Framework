@@ -1,8 +1,8 @@
 package scenes
 {
-    import starling.text.TextField;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
+    import starling.text.TextFieldStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.VAlignStarling;
     
     import utils.RoundButton;
 
@@ -14,10 +14,10 @@ package scenes
                 "Pushing the bird only works when the touch occurs within a circle." + 
                 "This can be accomplished by overriding the method 'hitTest'.";
             
-            var infoText:TextField = new TextField(300, 100, description);
+            var infoText:TextFieldStarling = new TextFieldStarling(300, 100, description);
             infoText.x = infoText.y = 10;
-            infoText.vAlign = VAlign.TOP;
-            infoText.hAlign = HAlign.CENTER;
+            infoText.vAlign = VAlignStarling.TOP;
+            infoText.hAlign = HAlignStarling.CENTER;
             addChild(infoText);
             
             // 'RoundButton' is a helper class of the Demo, not a part of Starling!

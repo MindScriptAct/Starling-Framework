@@ -2,21 +2,21 @@ package scenes
 {
     import flash.system.System;
     
-    import starling.core.Starling;
-    import starling.display.Button;
-    import starling.display.Image;
-    import starling.display.Sprite;
-    import starling.events.EnterFrameEvent;
-    import starling.events.Event;
-    import starling.text.TextField;
-    import starling.utils.formatString;
+    import starling.core.StarlingStarling;
+    import starling.display.ButtonStarling;
+    import starling.display.ImageStarling;
+    import starling.display.SpriteStarling;
+    import starling.events.EnterFrameEventStarling;
+    import starling.events.EventStarling;
+    import starling.text.TextFieldStarling;
+    import starling.utils.formatStringStarling;
 
     public class BenchmarkScene extends Scene
     {
-        private var mStartButton:Button;
-        private var mResultText:TextField;
+        private var mStartButton:ButtonStarling;
+        private var mResultText:TextFieldStarling;
         
-        private var mContainer:Sprite;
+        private var mContainer:SpriteStarling;
         private var mFrameCount:int;
         private var mElapsed:Number;
         private var mStarted:Boolean;
@@ -28,13 +28,13 @@ package scenes
             super();
             
             // the container will hold all test objects
-            mContainer = new Sprite();
+            mContainer = new SpriteStarling();
             mContainer.touchable = false; // we do not need touch events on the test objects -- 
                                           // thus, it is more efficient to disable them.
             addChildAt(mContainer, 0);
             
-            mStartButton = new Button(Game.assets.getTexture("button_normal"), "Start benchmark");
-            mStartButton.addEventListener(Event.TRIGGERED, onStartButtonTriggered);
+            mStartButton = new ButtonStarling(Game.assets.getTexture("button_normal"), "Start benchmark");
+            mStartButton.addEventListener(EventStarling.TRIGGERED, onStartButtonTriggered);
             mStartButton.x = Constants.CenterX - int(mStartButton.width / 2);
             mStartButton.y = 20;
             addChild(mStartButton);
@@ -42,17 +42,17 @@ package scenes
             mStarted = false;
             mElapsed = 0.0;
             
-            addEventListener(Event.ENTER_FRAME, onEnterFrame);
+            addEventListener(EventStarling.ENTER_FRAME, onEnterFrame);
         }
         
         public override function dispose():void
         {
-            removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-            mStartButton.removeEventListener(Event.TRIGGERED, onStartButtonTriggered);
+            removeEventListener(EventStarling.ENTER_FRAME, onEnterFrame);
+            mStartButton.removeEventListener(EventStarling.TRIGGERED, onStartButtonTriggered);
             super.dispose();
         }
         
-        private function onEnterFrame(event:EnterFrameEvent):void
+        private function onEnterFrame(event:EnterFrameEventStarling):void
         {
             if (!mStarted) return;
             
@@ -62,7 +62,7 @@ package scenes
             if (mFrameCount % mWaitFrames == 0)
             {
                 var fps:Number = mWaitFrames / mElapsed;
-                var targetFps:int = Starling.current.nativeStage.frameRate;
+                var targetFps:int = StarlingStarling.current.nativeStage.frameRate;
                 
                 if (Math.ceil(fps) >= targetFps)
                 {
@@ -117,7 +117,7 @@ package scenes
             
             for (var i:int = 0; i<numObjects; ++i)
             {
-                var egg:Image = new Image(Game.assets.getTexture("benchmark_object"));
+                var egg:ImageStarling = new ImageStarling(Game.assets.getTexture("benchmark_object"));
                 egg.x = padding + Math.random() * (Constants.GameWidth - 2 * padding);
                 egg.y = padding + Math.random() * (Constants.GameHeight - 2 * padding);
                 mContainer.addChild(egg);
@@ -129,15 +129,15 @@ package scenes
             mStarted = false;
             mStartButton.visible = true;
             
-            var fps:int = Starling.current.nativeStage.frameRate;
+            var fps:int = StarlingStarling.current.nativeStage.frameRate;
             
             trace("Benchmark complete!");
             trace("FPS: " + fps);
             trace("Number of objects: " + mContainer.numChildren);
             
-            var resultString:String = formatString("Result:\n{0} objects\nwith {1} fps",
+            var resultString:String = formatStringStarling("Result:\n{0} objects\nwith {1} fps",
                                                    mContainer.numChildren, fps);
-            mResultText = new TextField(240, 200, resultString);
+            mResultText = new TextFieldStarling(240, 200, resultString);
             mResultText.fontSize = 30;
             mResultText.x = Constants.CenterX - mResultText.width / 2;
             mResultText.y = Constants.CenterY - mResultText.height / 2;

@@ -10,11 +10,11 @@
 
 package starling.textures
 {
-    import starling.core.Starling;
+    import starling.core.StarlingStarling;
 
     /** The TextureOptions class specifies options for loading textures with the 'Texture.fromData'
      *  method. */ 
-    public class TextureOptions
+    public class TextureOptionsStarling
     {
         private var mScale:Number;
         private var mFormat:String;
@@ -23,7 +23,7 @@ package starling.textures
         private var mOnReady:Function = null;
         private var mRepeat:Boolean = false;
         
-        public function TextureOptions(scale:Number=1.0, mipMapping:Boolean=false, 
+        public function TextureOptionsStarling(scale:Number=1.0, mipMapping:Boolean=false,
                                        format:String="bgra", repeat:Boolean=false)
         {
             mScale = scale;
@@ -33,9 +33,9 @@ package starling.textures
         }
         
         /** Creates a clone of the TextureOptions object with the exact same properties. */
-        public function clone():TextureOptions
+        public function clone():TextureOptionsStarling
         {
-            var clone:TextureOptions = new TextureOptions(mScale, mMipMapping, mFormat, mRepeat);
+            var clone:TextureOptionsStarling = new TextureOptionsStarling(mScale, mMipMapping, mFormat, mRepeat);
             clone.mOptimizeForRenderToTexture = mOptimizeForRenderToTexture;
             clone.mOnReady = mOnReady;
             return clone;
@@ -46,7 +46,7 @@ package starling.textures
         public function get scale():Number { return mScale; }
         public function set scale(value:Number):void
         {
-            mScale = value > 0 ? value : Starling.contentScaleFactor;
+            mScale = value > 0 ? value : StarlingStarling.contentScaleFactor;
         }
         
         /** The <code>Context3DTextureFormat</code> of the underlying texture data. Only used

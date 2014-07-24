@@ -14,13 +14,13 @@ package starling.display
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-    import starling.core.RenderSupport;
-    import starling.events.Event;
-    import starling.utils.MatrixUtil;
-    import starling.utils.RectangleUtil;
+    import starling.core.RenderSupportStarling;
+    import starling.events.EventStarling;
+    import starling.utils.MatrixUtilStarling;
+    import starling.utils.RectangleUtilStarling;
 
     /** Dispatched on all children when the object is flattened. */
-    [Event(name="flatten", type="starling.events.Event")]
+    [Event(name="flatten", type="starling.events.EventStarling")]
     
     /** A Sprite is the most lightweight, non-abstract container class.
      *  <p>Use it as a simple means of grouping objects together in one coordinate system, or
@@ -46,12 +46,12 @@ package starling.display
      *  This limitation is inherited from the underlying "scissoring" technique that is used
      *  internally.</p>
      *  
-     *  @see DisplayObject
-     *  @see DisplayObjectContainer
+     *  @see DisplayObjectStarling
+     *  @see DisplayObjectContainerStarling
      */
-    public class Sprite extends DisplayObjectContainer
+    public class SpriteStarling extends DisplayObjectContainerStarling
     {
-        private var mFlattenedContents:Vector.<QuadBatch>;
+        private var mFlattenedContents:Vector.<QuadBatchStarling>;
         private var mFlattenRequested:Boolean;
         private var mClipRect:Rectangle;
         
@@ -61,7 +61,7 @@ package starling.display
         private static var sHelperRect:Rectangle = new Rectangle();
         
         /** Creates an empty sprite. */
-        public function Sprite()
+        public function SpriteStarling()
         {
             super();
         }
@@ -101,7 +101,7 @@ package starling.display
         public function flatten():void
         {
             mFlattenRequested = true;
-            broadcastEventWith(Event.FLATTEN);
+            broadcastEventWith(EventStarling.FLATTEN);
         }
         
         /** Removes the rendering optimizations that were created when flattening the sprite.
@@ -131,7 +131,7 @@ package starling.display
 
         /** Returns the bounds of the container's clipRect in the given coordinate space, or
          *  null if the sprite doens't have a clipRect. */ 
-        public function getClipRect(targetSpace:DisplayObject, resultRect:Rectangle=null):Rectangle
+        public function getClipRect(targetSpace:DisplayObjectStarling, resultRect:Rectangle=null):Rectangle
         {
             if (mClipRect == null) return null;
             if (resultRect == null) resultRect = new Rectangle();
@@ -152,7 +152,7 @@ package starling.display
                     case 2: x = mClipRect.right; y = mClipRect.top;    break;
                     case 3: x = mClipRect.right; y = mClipRect.bottom; break;
                 }
-                var transformedPoint:Point = MatrixUtil.transformCoords(transMatrix, x, y, sHelperPoint);
+                var transformedPoint:Point = MatrixUtilStarling.transformCoords(transMatrix, x, y, sHelperPoint);
                 
                 if (minX > transformedPoint.x) minX = transformedPoint.x;
                 if (maxX < transformedPoint.x) maxX = transformedPoint.x;
@@ -165,20 +165,20 @@ package starling.display
         }
         
         /** @inheritDoc */ 
-        public override function getBounds(targetSpace:DisplayObject, resultRect:Rectangle=null):Rectangle
+        public override function getBounds(targetSpace:DisplayObjectStarling, resultRect:Rectangle=null):Rectangle
         {
             var bounds:Rectangle = super.getBounds(targetSpace, resultRect);
             
             // if we have a scissor rect, intersect it with our bounds
             if (mClipRect)
-                RectangleUtil.intersect(bounds, getClipRect(targetSpace, sHelperRect), 
+                RectangleUtilStarling.intersect(bounds, getClipRect(targetSpace, sHelperRect),
                                         bounds);
             
             return bounds;
         }
         
         /** @inheritDoc */
-        public override function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObject
+        public override function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObjectStarling
         {
             if (mClipRect != null && !mClipRect.containsPoint(localPoint))
                 return null;
@@ -187,7 +187,7 @@ package starling.display
         }
         
         /** @inheritDoc */
-        public override function render(support:RenderSupport, parentAlpha:Number):void
+        public override function render(support:RenderSupportStarling, parentAlpha:Number):void
         {
             if (mClipRect)
             {
@@ -203,11 +203,11 @@ package starling.display
             if (mFlattenedContents || mFlattenRequested)
             {
                 if (mFlattenedContents == null)
-                    mFlattenedContents = new <QuadBatch>[];
+                    mFlattenedContents = new <QuadBatchStarling>[];
                 
                 if (mFlattenRequested)
                 {
-                    QuadBatch.compile(this, mFlattenedContents);
+                    QuadBatchStarling.compile(this, mFlattenedContents);
                     support.applyClipRect(); // compiling filters might change scissor rect. :-\
                     mFlattenRequested = false;
                 }
@@ -221,8 +221,8 @@ package starling.display
                 
                 for (var i:int=0; i<numBatches; ++i)
                 {
-                    var quadBatch:QuadBatch = mFlattenedContents[i];
-                    var blendMode:String = quadBatch.blendMode == BlendMode.AUTO ?
+                    var quadBatch:QuadBatchStarling = mFlattenedContents[i];
+                    var blendMode:String = quadBatch.blendMode == BlendModeStarling.AUTO ?
                         support.blendMode : quadBatch.blendMode;
                     quadBatch.renderCustom(mvpMatrix, alpha, blendMode);
                 }

@@ -11,9 +11,9 @@
 
 package starling.animation
 {
-    import starling.core.starling_internal;
-    import starling.events.Event;
-    import starling.events.EventDispatcher;
+    import starling.core.starling_internalStarling;
+    import starling.events.EventStarling;
+    import starling.events.EventDispatcherStarling;
 
     /** A Tween animates numeric properties of objects. It uses different transition functions 
      *  to give the animations various styles.
@@ -37,10 +37,10 @@ package starling.animation
      *  tween will only be executed if its "advanceTime" method is executed regularly - the 
      *  juggler will do that for you, and will remove the tween when it is finished.</p>
      *  
-     *  @see Juggler
-     *  @see Transitions
+     *  @see JugglerStarling
+     *  @see TransitionsStarling
      */ 
-    public class Tween extends EventDispatcher implements IAnimatable
+    public class TweenStarling extends EventDispatcherStarling implements IAnimatableStarling
     {
         private var mTarget:Object;
         private var mTransitionFunc:Function;
@@ -65,7 +65,7 @@ package starling.animation
         private var mProgress:Number;
         private var mDelay:Number;
         private var mRoundToInt:Boolean;
-        private var mNextTween:Tween;
+        private var mNextTween:TweenStarling;
         private var mRepeatCount:int;
         private var mRepeatDelay:Number;
         private var mReverse:Boolean;
@@ -77,13 +77,13 @@ package starling.animation
          *  @param transition can be either a String (e.g. one of the constants defined in the
          *         Transitions class) or a function. Look up the 'Transitions' class for a   
          *         documentation about the required function signature. */ 
-        public function Tween(target:Object, time:Number, transition:Object="linear")        
+        public function TweenStarling(target:Object, time:Number, transition:Object="linear")
         {
              reset(target, time, transition);
         }
 
         /** Resets the tween to its default values. Useful for pooling tweens. */
-        public function reset(target:Object, time:Number, transition:Object="linear"):Tween
+        public function reset(target:Object, time:Number, transition:Object="linear"):TweenStarling
         {
             mTarget = target;
             mCurrentTime = 0.0;
@@ -204,7 +204,7 @@ package starling.animation
                     // in the 'onComplete' callback, people might want to call "tween.reset" and
                     // add it to another juggler; so this event has to be dispatched *before*
                     // executing 'onComplete'.
-                    dispatchEventWith(Event.REMOVE_FROM_JUGGLER);
+                    dispatchEventWith(EventStarling.REMOVE_FROM_JUGGLER);
                     if (onComplete != null) onComplete.apply(null, onCompleteArgs);
                 }
             }
@@ -231,12 +231,12 @@ package starling.animation
         /** The target object that is animated. */
         public function get target():Object { return mTarget; }
         
-        /** The transition method used for the animation. @see Transitions */
+        /** The transition method used for the animation. @see TransitionsStarling */
         public function get transition():String { return mTransitionName; }
         public function set transition(value:String):void 
         { 
             mTransitionName = value;
-            mTransitionFunc = Transitions.getTransition(value);
+            mTransitionFunc = TransitionsStarling.getTransition(value);
             
             if (mTransitionFunc == null)
                 throw new ArgumentError("Invalid transiton: " + value);
@@ -320,23 +320,23 @@ package starling.animation
         
         /** Another tween that will be started (i.e. added to the same juggler) as soon as 
          *  this tween is completed. */
-        public function get nextTween():Tween { return mNextTween; }
-        public function set nextTween(value:Tween):void { mNextTween = value; }
+        public function get nextTween():TweenStarling { return mNextTween; }
+        public function set nextTween(value:TweenStarling):void { mNextTween = value; }
         
         // tween pooling
         
-        private static var sTweenPool:Vector.<Tween> = new <Tween>[];
+        private static var sTweenPool:Vector.<TweenStarling> = new <TweenStarling>[];
         
         /** @private */
-        starling_internal static function fromPool(target:Object, time:Number, 
-                                                   transition:Object="linear"):Tween
+        starling_internalStarling static function fromPool(target:Object, time:Number,
+                                                   transition:Object="linear"):TweenStarling
         {
             if (sTweenPool.length) return sTweenPool.pop().reset(target, time, transition);
-            else return new Tween(target, time, transition);
+            else return new TweenStarling(target, time, transition);
         }
         
         /** @private */
-        starling_internal static function toPool(tween:Tween):void
+        starling_internalStarling static function toPool(tween:TweenStarling):void
         {
             // reset any object-references, to make sure we don't prevent any garbage collection
             tween.mOnStart = tween.mOnUpdate = tween.mOnRepeat = tween.mOnComplete = null;

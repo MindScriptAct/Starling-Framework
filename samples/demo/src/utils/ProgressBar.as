@@ -3,16 +3,16 @@ package utils
     import flash.display.BitmapData;
     import flash.display.Shape;
     
-    import starling.core.Starling;
-    import starling.display.Image;
-    import starling.display.Quad;
-    import starling.display.Sprite;
-    import starling.textures.Texture;
+    import starling.core.StarlingStarling;
+    import starling.display.ImageStarling;
+    import starling.display.QuadStarling;
+    import starling.display.SpriteStarling;
+    import starling.textures.TextureStarling;
 
-    public class ProgressBar extends Sprite
+    public class ProgressBar extends SpriteStarling
     {
-        private var mBar:Quad;
-        private var mBackground:Image;
+        private var mBar:QuadStarling;
+        private var mBackground:ImageStarling;
         
         public function ProgressBar(width:int, height:int)
         {
@@ -21,7 +21,7 @@ package utils
         
         private function init(width:int, height:int):void
         {
-            var scale:Number = Starling.contentScaleFactor;
+            var scale:Number = StarlingStarling.contentScaleFactor;
             var padding:Number = height * 0.2;
             var cornerRadius:Number = padding * scale * 2;
             
@@ -34,14 +34,14 @@ package utils
             
             var bgBitmapData:BitmapData = new BitmapData(width*scale, height*scale, true, 0x0);
             bgBitmapData.draw(bgShape);
-            var bgTexture:Texture = Texture.fromBitmapData(bgBitmapData, false, false, scale);
+            var bgTexture:TextureStarling = TextureStarling.fromBitmapData(bgBitmapData, false, false, scale);
             
-            mBackground = new Image(bgTexture);
+            mBackground = new ImageStarling(bgTexture);
             addChild(mBackground);
             
             // create progress bar quad
             
-            mBar = new Quad(width - 2*padding, height - 2*padding, 0xeeeeee);
+            mBar = new QuadStarling(width - 2*padding, height - 2*padding, 0xeeeeee);
             mBar.setVertexColor(2, 0xaaaaaa);
             mBar.setVertexColor(3, 0xaaaaaa);
             mBar.x = padding;

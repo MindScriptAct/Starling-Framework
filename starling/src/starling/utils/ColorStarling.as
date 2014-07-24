@@ -10,11 +10,11 @@
 
 package starling.utils
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A utility class containing predefined colors and methods converting between different
      *  color representations. */
-    public class Color
+    public class ColorStarling
     {
         public static const WHITE:uint   = 0xffffff;
         public static const SILVER:uint  = 0xc0c0c0;
@@ -60,6 +60,6 @@ package starling.utils
         }
         
         /** @private */
-        public function Color() { throw new AbstractClassError(); }
+        public function ColorStarling() { throw new AbstractClassErrorStarling(); }
     }
 }

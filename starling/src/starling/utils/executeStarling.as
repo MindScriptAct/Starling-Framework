@@ -12,7 +12,7 @@ package starling.utils
 {
     /** Executes a function with the specified arguments. If the argument count does not match
      *  the function, the argument list is cropped / filled up with <code>null</code> values. */
-    public function execute(func:Function, ...args):void
+    public function executeStarling(func:Function, ...args):void
     {
         if (func != null)
         {

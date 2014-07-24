@@ -12,9 +12,9 @@ package tests
 {
     import flexunit.framework.Assert;
     
-    import starling.display.Sprite;
-    import starling.events.Event;
-    import starling.events.EventDispatcher;
+    import starling.display.SpriteStarling;
+    import starling.events.EventStarling;
+    import starling.events.EventDispatcherStarling;
     
     public class EventTest
     {		
@@ -23,9 +23,9 @@ package tests
         {
             const eventType:String = "test";
             
-            var grandParent:Sprite = new Sprite();
-            var parent:Sprite = new Sprite();
-            var child:Sprite = new Sprite();
+            var grandParent:SpriteStarling = new SpriteStarling();
+            var parent:SpriteStarling = new SpriteStarling();
+            var child:SpriteStarling = new SpriteStarling();
             
             grandParent.addChild(parent);
             parent.addChild(child);
@@ -41,7 +41,7 @@ package tests
             parent.addEventListener(eventType, onParentEvent);
             child.addEventListener(eventType, onChildEvent);
             
-            var event:Event = new Event(eventType, true);
+            var event:EventStarling = new EventStarling(eventType, true);
             child.dispatchEvent(event);
             
             Assert.assertTrue(grandParentEventHandlerHit);
@@ -61,7 +61,7 @@ package tests
             
             // don't bubble
             
-            event = new Event(eventType);
+            event = new EventStarling(eventType);
             
             grandParentEventHandlerHit = parentEventHandlerHit = childEventHandlerHit = false;
             parent.addEventListener(eventType, onParentEvent);
@@ -72,7 +72,7 @@ package tests
             Assert.assertFalse(parentEventHandlerHit);
             Assert.assertFalse(grandParentEventHandlerHit);
             
-            function onGrandParentEvent(event:Event):void
+            function onGrandParentEvent(event:EventStarling):void
             {
                 grandParentEventHandlerHit = true;                
                 Assert.assertEquals(child, event.target);
@@ -80,7 +80,7 @@ package tests
                 hitCount++;
             }
             
-            function onParentEvent(event:Event):void
+            function onParentEvent(event:EventStarling):void
             {
                 parentEventHandlerHit = true;                
                 Assert.assertEquals(child, event.target);
@@ -88,7 +88,7 @@ package tests
                 hitCount++;
             }
             
-            function onChildEvent(event:Event):void
+            function onChildEvent(event:EventStarling):void
             {
                 childEventHandlerHit = true;                               
                 Assert.assertEquals(child, event.target);
@@ -102,9 +102,9 @@ package tests
         {
             const eventType:String = "test";
             
-            var grandParent:Sprite = new Sprite();
-            var parent:Sprite = new Sprite();
-            var child:Sprite = new Sprite();
+            var grandParent:SpriteStarling = new SpriteStarling();
+            var parent:SpriteStarling = new SpriteStarling();
+            var child:SpriteStarling = new SpriteStarling();
             
             grandParent.addChild(parent);
             parent.addChild(child);
@@ -118,7 +118,7 @@ package tests
             parent.addEventListener(eventType, onEvent);
             grandParent.addEventListener(eventType, onEvent);
             
-            child.dispatchEvent(new Event(eventType, true));
+            child.dispatchEvent(new EventStarling(eventType, true));
             
             Assert.assertEquals(3, hitCount);
             
@@ -130,22 +130,22 @@ package tests
             parent.addEventListener(eventType, onEvent_StopImmediatePropagation);
             parent.addEventListener(eventType, onEvent);
             
-            child.dispatchEvent(new Event(eventType, true));
+            child.dispatchEvent(new EventStarling(eventType, true));
             
             Assert.assertEquals(5, hitCount);
             
-            function onEvent(event:Event):void
+            function onEvent(event:EventStarling):void
             {
                 hitCount++;
             }
             
-            function onEvent_StopPropagation(event:Event):void
+            function onEvent_StopPropagation(event:EventStarling):void
             {
                 event.stopPropagation();
                 hitCount++;
             }
             
-            function onEvent_StopImmediatePropagation(event:Event):void
+            function onEvent_StopImmediatePropagation(event:EventStarling):void
             {
                 event.stopImmediatePropagation();
                 hitCount++;
@@ -156,38 +156,38 @@ package tests
         public function testRemoveEventListeners():void
         {
             var hitCount:int = 0;
-            var dispatcher:EventDispatcher = new EventDispatcher();
+            var dispatcher:EventDispatcherStarling = new EventDispatcherStarling();
             
             dispatcher.addEventListener("Type1", onEvent);
             dispatcher.addEventListener("Type2", onEvent);
             dispatcher.addEventListener("Type3", onEvent);
             
             hitCount = 0;
-            dispatcher.dispatchEvent(new Event("Type1"));
+            dispatcher.dispatchEvent(new EventStarling("Type1"));
             Assert.assertEquals(1, hitCount);
             
-            dispatcher.dispatchEvent(new Event("Type2"));
+            dispatcher.dispatchEvent(new EventStarling("Type2"));
             Assert.assertEquals(2, hitCount);
             
-            dispatcher.dispatchEvent(new Event("Type3"));
+            dispatcher.dispatchEvent(new EventStarling("Type3"));
             Assert.assertEquals(3, hitCount);
             
             hitCount = 0;
             dispatcher.removeEventListener("Type1", onEvent);
-            dispatcher.dispatchEvent(new Event("Type1"));
+            dispatcher.dispatchEvent(new EventStarling("Type1"));
             Assert.assertEquals(0, hitCount);
             
-            dispatcher.dispatchEvent(new Event("Type3"));
+            dispatcher.dispatchEvent(new EventStarling("Type3"));
             Assert.assertEquals(1, hitCount);
             
             hitCount = 0;
             dispatcher.removeEventListeners();
-            dispatcher.dispatchEvent(new Event("Type1"));
-            dispatcher.dispatchEvent(new Event("Type2"));
-            dispatcher.dispatchEvent(new Event("Type3"));
+            dispatcher.dispatchEvent(new EventStarling("Type1"));
+            dispatcher.dispatchEvent(new EventStarling("Type2"));
+            dispatcher.dispatchEvent(new EventStarling("Type3"));
             Assert.assertEquals(0, hitCount);
             
-            function onEvent(event:Event):void
+            function onEvent(event:EventStarling):void
             {
                 ++hitCount;
             }
@@ -196,7 +196,7 @@ package tests
         [Test]
         public function testBlankEventDispatcher():void
         {
-            var dispatcher:EventDispatcher = new EventDispatcher();
+            var dispatcher:EventDispatcherStarling = new EventDispatcherStarling();
             
             Helpers.assertDoesNotThrow(function():void
             {
@@ -212,16 +212,16 @@ package tests
         [Test]
         public function testDuplicateEventHandler():void
         {
-            var dispatcher:EventDispatcher = new EventDispatcher();
+            var dispatcher:EventDispatcherStarling = new EventDispatcherStarling();
             var callCount:int = 0;
             
             dispatcher.addEventListener("test", onEvent);
             dispatcher.addEventListener("test", onEvent);
             
-            dispatcher.dispatchEvent(new Event("test"));
+            dispatcher.dispatchEvent(new EventStarling("test"));
             Assert.assertEquals(1, callCount);
             
-            function onEvent(event:Event):void
+            function onEvent(event:EventStarling):void
             {
                 callCount++;
             }
@@ -232,9 +232,9 @@ package tests
         {
             const eventType:String = "test";
             
-            var grandParent:Sprite = new Sprite();
-            var parent:Sprite = new Sprite();
-            var child:Sprite = new Sprite();
+            var grandParent:SpriteStarling = new SpriteStarling();
+            var parent:SpriteStarling = new SpriteStarling();
+            var child:SpriteStarling = new SpriteStarling();
             
             grandParent.addChild(parent);
             parent.addChild(child);
@@ -248,7 +248,7 @@ package tests
             child.addEventListener(eventType, onEvent);
             child.addEventListener(eventType, onEvent_removeFromParent);
             
-            child.dispatchEvent(new Event(eventType, true));
+            child.dispatchEvent(new EventStarling(eventType, true));
             
             Assert.assertNull(parent.parent);
             Assert.assertEquals(3, hitCount);
@@ -269,9 +269,9 @@ package tests
         {
             const eventType:String = "test";
             
-            var grandParent:Sprite = new Sprite();
-            var parent:Sprite = new Sprite();
-            var child:Sprite = new Sprite();
+            var grandParent:SpriteStarling = new SpriteStarling();
+            var parent:SpriteStarling = new SpriteStarling();
+            var child:SpriteStarling = new SpriteStarling();
             
             grandParent.addChild(parent);
             parent.addChild(child);
@@ -306,13 +306,13 @@ package tests
             Assert.assertEquals(targets[4], child);
             Assert.assertEquals(currentTargets[4], grandParent);
             
-            function onEvent(event:Event):void
+            function onEvent(event:EventStarling):void
             {
                 targets.push(event.target);
                 currentTargets.push(event.currentTarget);
             }
             
-            function onEvent_redispatch(event:Event):void
+            function onEvent_redispatch(event:EventStarling):void
             {
                 parent.removeEventListener(eventType, onEvent_redispatch);
                 parent.dispatchEvent(event);

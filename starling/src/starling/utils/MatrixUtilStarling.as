@@ -14,17 +14,17 @@ package starling.utils
     import flash.geom.Matrix3D;
     import flash.geom.Point;
     
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A utility class containing methods related to the Matrix class. */
-    public class MatrixUtil
+    public class MatrixUtilStarling
     {
         /** Helper object. */
         private static var sRawData:Vector.<Number> = 
             new <Number>[1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1];
         
         /** @private */
-        public function MatrixUtil() { throw new AbstractClassError(); }
+        public function MatrixUtilStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Converts a 2D matrix to a 3D matrix. If you pass a 'resultMatrix',  
          *  the result will be stored in this matrix instead of creating a new object. */

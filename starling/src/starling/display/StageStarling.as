@@ -14,17 +14,17 @@ package starling.display
     import flash.errors.IllegalOperationError;
     import flash.geom.Point;
     
-    import starling.core.RenderSupport;
-    import starling.core.Starling;
-    import starling.core.starling_internal;
-    import starling.events.EnterFrameEvent;
-    import starling.events.Event;
-    import starling.filters.FragmentFilter;
+    import starling.core.RenderSupportStarling;
+    import starling.core.StarlingStarling;
+    import starling.core.starling_internalStarling;
+    import starling.events.EnterFrameEventStarling;
+    import starling.events.EventStarling;
+    import starling.filters.FragmentFilterStarling;
     
-    use namespace starling_internal;
+    use namespace starling_internalStarling;
     
     /** Dispatched when the Flash container is resized. */
-    [Event(name="resize", type="starling.events.ResizeEvent")]
+    [Event(name="resize", type="starling.events.ResizeEventStarling")]
     
     /** A Stage represents the root of the display tree.  
      *  Only objects that are direct or indirect children of the stage will be rendered.
@@ -48,38 +48,38 @@ package starling.display
      *  <p>When the Flash player is resized, the stage dispatches a <code>ResizeEvent</code>. The 
      *  event contains properties containing the updated width and height of the Flash player.</p>
      *
-     *  @see starling.events.KeyboardEvent
-     *  @see starling.events.ResizeEvent  
+     *  @see starling.events.KeyboardEventStarling
+     *  @see starling.events.ResizeEventStarling
      * 
      * */
-    public class Stage extends DisplayObjectContainer
+    public class StageStarling extends DisplayObjectContainerStarling
     {
         private var mWidth:int;
         private var mHeight:int;
         private var mColor:uint;
-        private var mEnterFrameEvent:EnterFrameEvent;
-        private var mEnterFrameListeners:Vector.<DisplayObject>;
+        private var mEnterFrameEvent:EnterFrameEventStarling;
+        private var mEnterFrameListeners:Vector.<DisplayObjectStarling>;
         
         /** @private */
-        public function Stage(width:int, height:int, color:uint=0)
+        public function StageStarling(width:int, height:int, color:uint=0)
         {
             mWidth = width;
             mHeight = height;
             mColor = color;
-            mEnterFrameEvent = new EnterFrameEvent(Event.ENTER_FRAME, 0.0);
-            mEnterFrameListeners = new <DisplayObject>[];
+            mEnterFrameEvent = new EnterFrameEventStarling(EventStarling.ENTER_FRAME, 0.0);
+            mEnterFrameListeners = new <DisplayObjectStarling>[];
         }
         
         /** @inheritDoc */
         public function advanceTime(passedTime:Number):void
         {
-            mEnterFrameEvent.reset(Event.ENTER_FRAME, false, passedTime);
+            mEnterFrameEvent.reset(EventStarling.ENTER_FRAME, false, passedTime);
             broadcastEvent(mEnterFrameEvent);
         }
 
         /** Returns the object that is found topmost beneath a point in stage coordinates, or  
          *  the stage itself if nothing else is found. */
-        public override function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObject
+        public override function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObjectStarling
         {
             if (forTouch && (!visible || !touchable))
                 return null;
@@ -90,7 +90,7 @@ package starling.display
                 return null;
             
             // if nothing else is hit, the stage returns itself as target
-            var target:DisplayObject = super.hitTest(localPoint, forTouch);
+            var target:DisplayObjectStarling = super.hitTest(localPoint, forTouch);
             if (target == null) target = this;
             return target;
         }
@@ -111,8 +111,8 @@ package starling.display
         public function drawToBitmapData(destination:BitmapData=null,
                                          transparent:Boolean=true):BitmapData
         {
-            var support:RenderSupport = new RenderSupport();
-            var star:Starling = Starling.current;
+            var support:RenderSupportStarling = new RenderSupportStarling();
+            var star:StarlingStarling = StarlingStarling.current;
             
             if (destination == null)
                 destination = new BitmapData(star.backBufferWidth, star.backBufferHeight, transparent);
@@ -126,8 +126,8 @@ package starling.display
             render(support, 1.0);
             support.finishQuadBatch();
             
-            Starling.current.context.drawToBitmapData(destination);
-            Starling.current.context.present(); // required on some platforms to avoid flickering
+            StarlingStarling.current.context.drawToBitmapData(destination);
+            StarlingStarling.current.context.present(); // required on some platforms to avoid flickering
             
             return destination;
         }
@@ -135,23 +135,23 @@ package starling.display
         // enter frame event optimization
         
         /** @private */
-        internal function addEnterFrameListener(listener:DisplayObject):void
+        internal function addEnterFrameListener(listener:DisplayObjectStarling):void
         {
             mEnterFrameListeners.push(listener);
         }
         
         /** @private */
-        internal function removeEnterFrameListener(listener:DisplayObject):void
+        internal function removeEnterFrameListener(listener:DisplayObjectStarling):void
         {
             var index:int = mEnterFrameListeners.indexOf(listener);
             if (index >= 0) mEnterFrameListeners.splice(index, 1); 
         }
         
         /** @private */
-        internal override function getChildEventListeners(object:DisplayObject, eventType:String, 
-                                                          listeners:Vector.<DisplayObject>):void
+        internal override function getChildEventListeners(object:DisplayObjectStarling, eventType:String,
+                                                          listeners:Vector.<DisplayObjectStarling>):void
         {
-            if (eventType == Event.ENTER_FRAME && object == this)
+            if (eventType == EventStarling.ENTER_FRAME && object == this)
             {
                 for (var i:int=0, length:int=mEnterFrameListeners.length; i<length; ++i)
                     listeners[listeners.length] = mEnterFrameListeners[i]; // avoiding 'push' 
@@ -217,7 +217,7 @@ package starling.display
         }
         
         /** @private */
-        public override function set filter(value:FragmentFilter):void
+        public override function set filter(value:FragmentFilterStarling):void
         {
             throw new IllegalOperationError("Cannot add filter to stage. Add it to 'root' instead!");
         }

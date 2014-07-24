@@ -13,7 +13,7 @@ package starling.textures
     import flash.geom.Rectangle;
     import flash.utils.Dictionary;
     
-    import starling.utils.cleanMasterString;
+    import starling.utils.cleanMasterStringStarling;
 
     /** A texture atlas is a collection of many smaller textures in one big image. This class
      *  is used to access textures from such an atlas.
@@ -69,9 +69,9 @@ package starling.textures
      *  form), while the "frame" properties must describe the texture in its upright form.</p>
      *
      */
-    public class TextureAtlas
+    public class TextureAtlasStarling
     {
-        private var mAtlasTexture:Texture;
+        private var mAtlasTexture:TextureStarling;
         private var mTextureInfos:Dictionary;
         private var mTextureNames:Vector.<String>;
         
@@ -79,7 +79,7 @@ package starling.textures
         private static var sNames:Vector.<String> = new <String>[];
         
         /** Create a texture atlas from a texture by parsing the regions from an XML file. */
-        public function TextureAtlas(texture:Texture, atlasXml:XML=null)
+        public function TextureAtlasStarling(texture:TextureStarling, atlasXml:XML=null)
         {
             mTextureInfos = new Dictionary();
             mAtlasTexture = texture;
@@ -103,7 +103,7 @@ package starling.textures
             
             for each (var subTexture:XML in atlasXml.SubTexture)
             {
-                var name:String        = cleanMasterString(subTexture.@name);
+                var name:String        = cleanMasterStringStarling(subTexture.@name);
                 var x:Number           = parseFloat(subTexture.@x) / scale;
                 var y:Number           = parseFloat(subTexture.@y) / scale;
                 var width:Number       = parseFloat(subTexture.@width)  / scale;
@@ -123,19 +123,19 @@ package starling.textures
         }
         
         /** Retrieves a subtexture by name. Returns <code>null</code> if it is not found. */
-        public function getTexture(name:String):Texture
+        public function getTexture(name:String):TextureStarling
         {
             var info:TextureInfo = mTextureInfos[name];
             
             if (info == null) return null;
-            else return Texture.fromTexture(mAtlasTexture, info.region, info.frame, info.rotated);
+            else return TextureStarling.fromTexture(mAtlasTexture, info.region, info.frame, info.rotated);
         }
         
         /** Returns all textures that start with a certain string, sorted alphabetically
          *  (especially useful for "MovieClip"). */
-        public function getTextures(prefix:String="", result:Vector.<Texture>=null):Vector.<Texture>
+        public function getTextures(prefix:String="", result:Vector.<TextureStarling>=null):Vector.<TextureStarling>
         {
-            if (result == null) result = new <Texture>[];
+            if (result == null) result = new <TextureStarling>[];
             
             for each (var name:String in getNames(prefix, sNames)) 
                 result.push(getTexture(name)); 
@@ -205,7 +205,7 @@ package starling.textures
         }
         
         /** The base texture that makes up the atlas. */
-        public function get texture():Texture { return mAtlasTexture; }
+        public function get texture():TextureStarling { return mAtlasTexture; }
         
         // utility methods
         

@@ -14,7 +14,7 @@ package tests
     
     import flexunit.framework.Assert;
     
-    import starling.display.BlendMode;
+    import starling.display.BlendModeStarling;
 
     public class BlendModeTest
     {		
@@ -25,11 +25,11 @@ package tests
             
             // register for pma = true; should set factors for both pma possibilities.
             
-            BlendMode.register(name, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA,
+            BlendModeStarling.register(name, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA,
                                      Context3DBlendFactor.DESTINATION_COLOR, true);
             
-            var modesPma:Array = BlendMode.getBlendFactors(name, true);
-            var modesNoPma:Array = BlendMode.getBlendFactors(name, false);
+            var modesPma:Array = BlendModeStarling.getBlendFactors(name, true);
+            var modesNoPma:Array = BlendModeStarling.getBlendFactors(name, false);
             
             Assert.assertEquals(Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA, modesPma[0]);
             Assert.assertEquals(Context3DBlendFactor.DESTINATION_COLOR, modesPma[1]);
@@ -39,11 +39,11 @@ package tests
             
             // now overwrite for pma = false; should not change pma = true factors.
             
-            BlendMode.register(name, Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO, 
+            BlendModeStarling.register(name, Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO,
                                false);
             
-            modesPma = BlendMode.getBlendFactors(name, true);
-            modesNoPma = BlendMode.getBlendFactors(name, false);
+            modesPma = BlendModeStarling.getBlendFactors(name, true);
+            modesNoPma = BlendModeStarling.getBlendFactors(name, false);
             
             Assert.assertEquals(Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA, modesPma[0]);
             Assert.assertEquals(Context3DBlendFactor.DESTINATION_COLOR, modesPma[1]);

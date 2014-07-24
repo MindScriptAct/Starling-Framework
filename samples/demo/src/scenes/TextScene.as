@@ -1,10 +1,10 @@
 package scenes
 {
-    import starling.text.BitmapFont;
-    import starling.text.TextField;
-    import starling.utils.Color;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
+    import starling.text.BitmapFontStarling;
+    import starling.text.TextFieldStarling;
+    import starling.utils.ColorStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.VAlignStarling;
 
     public class TextScene extends Scene
     {
@@ -21,7 +21,7 @@ package scenes
             var ttFont:String = "Ubuntu";
             var ttFontSize:int = 19; 
             
-            var colorTF:TextField = new TextField(300, 80, 
+            var colorTF:TextFieldStarling = new TextFieldStarling(300, 80,
                 "TextFields can have a border and a color. They can be aligned in different ways, ...", 
                 ttFont, ttFontSize);
             colorTF.x = colorTF.y = offset;
@@ -29,27 +29,27 @@ package scenes
             colorTF.color = 0x333399;
             addChild(colorTF);
             
-            var leftTF:TextField = new TextField(145, 80,
+            var leftTF:TextFieldStarling = new TextFieldStarling(145, 80,
                 "... e.g.\ntop-left ...", ttFont, ttFontSize);
             leftTF.x = offset;
             leftTF.y = colorTF.y + colorTF.height + offset;
-            leftTF.hAlign = HAlign.LEFT;
-            leftTF.vAlign = VAlign.TOP;
+            leftTF.hAlign = HAlignStarling.LEFT;
+            leftTF.vAlign = VAlignStarling.TOP;
             leftTF.border = true;
             leftTF.color = 0x993333;
             addChild(leftTF);
             
-            var rightTF:TextField = new TextField(145, 80,
+            var rightTF:TextFieldStarling = new TextFieldStarling(145, 80,
                 "... or\nbottom right ...", ttFont, ttFontSize);
             rightTF.x = 2*offset + leftTF.width;
             rightTF.y = leftTF.y;
-            rightTF.hAlign = HAlign.RIGHT;
-            rightTF.vAlign = VAlign.BOTTOM;
+            rightTF.hAlign = HAlignStarling.RIGHT;
+            rightTF.vAlign = VAlignStarling.BOTTOM;
             rightTF.color = 0x228822;
             rightTF.border = true;
             addChild(rightTF);
             
-            var fontTF:TextField = new TextField(300, 80,
+            var fontTF:TextFieldStarling = new TextFieldStarling(300, 80,
                 "... or centered. Embedded fonts are detected automatically.",
                 ttFont, ttFontSize, 0x0, true);
             fontTF.x = offset;
@@ -69,11 +69,11 @@ package scenes
             // Look at the file "Assets.as" to see how this is done.
             // After that, you can use them just like a conventional TrueType font.
             
-            var bmpFontTF:TextField = new TextField(300, 150, 
+            var bmpFontTF:TextFieldStarling = new TextFieldStarling(300, 150,
                 "It is very easy to use Bitmap fonts,\nas well!", "Desyrel");
             
-            bmpFontTF.fontSize = BitmapFont.NATIVE_SIZE; // the native bitmap font size, no scaling
-            bmpFontTF.color = Color.WHITE; // use white to use the texture as it is (no tinting)
+            bmpFontTF.fontSize = BitmapFontStarling.NATIVE_SIZE; // the native bitmap font size, no scaling
+            bmpFontTF.color = ColorStarling.WHITE; // use white to use the texture as it is (no tinting)
             bmpFontTF.x = offset;
             bmpFontTF.y = fontTF.y + fontTF.height + offset;
             addChild(bmpFontTF);

@@ -10,13 +10,13 @@
 
 package starling.utils
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A class that provides constant values for vertical alignment of objects. */
-    public final class VAlign
+    public final class VAlignStarling
     {
         /** @private */
-        public function VAlign() { throw new AbstractClassError(); }
+        public function VAlignStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Top alignment. */
         public static const TOP:String    = "top";

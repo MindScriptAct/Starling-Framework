@@ -15,10 +15,10 @@ package starling.utils
     import flash.system.Capabilities;
     import flash.utils.getDefinitionByName;
     
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A utility class with methods related to the current platform and runtime. */
-    public class SystemUtil
+    public class SystemUtilStarling
     {
         private static var sInitialized:Boolean = false;
         private static var sApplicationActive:Boolean = true;
@@ -27,7 +27,7 @@ package starling.utils
         private static var sAIR:Boolean;
         
         /** @private */
-        public function SystemUtil() { throw new AbstractClassError(); }
+        public function SystemUtilStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Initializes the <code>ACTIVATE/DEACTIVATE</code> event handlers on the native
          *  application. This method is automatically called by the Starling constructor. */

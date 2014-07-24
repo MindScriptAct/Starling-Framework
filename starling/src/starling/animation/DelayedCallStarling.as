@@ -10,9 +10,9 @@
 
 package starling.animation
 {
-    import starling.core.starling_internal;
-    import starling.events.Event;
-    import starling.events.EventDispatcher;
+    import starling.core.starling_internalStarling;
+    import starling.events.EventStarling;
+    import starling.events.EventDispatcherStarling;
 
     /** A DelayedCall allows you to execute a method after a certain time has passed. Since it 
      *  implements the IAnimatable interface, it can be added to a juggler. In most cases, you 
@@ -22,9 +22,9 @@ package starling.animation
      *  <p>DelayedCall dispatches an Event of type 'Event.REMOVE_FROM_JUGGLER' when it is finished,
      *  so that the juggler automatically removes it when its no longer needed.</p>
      * 
-     *  @see Juggler
+     *  @see JugglerStarling
      */ 
-    public class DelayedCall extends EventDispatcher implements IAnimatable
+    public class DelayedCallStarling extends EventDispatcherStarling implements IAnimatableStarling
     {
         private var mCurrentTime:Number;
         private var mTotalTime:Number;
@@ -33,13 +33,13 @@ package starling.animation
         private var mRepeatCount:int;
         
         /** Creates a delayed call. */
-        public function DelayedCall(call:Function, delay:Number, args:Array=null)
+        public function DelayedCallStarling(call:Function, delay:Number, args:Array=null)
         {
             reset(call, delay, args);
         }
         
         /** Resets the delayed call to its default values, which is useful for pooling. */
-        public function reset(call:Function, delay:Number, args:Array=null):DelayedCall
+        public function reset(call:Function, delay:Number, args:Array=null):DelayedCallStarling
         {
             mCurrentTime = 0;
             mTotalTime = Math.max(delay, 0.0001);
@@ -74,7 +74,7 @@ package starling.animation
                     
                     // in the callback, people might want to call "reset" and re-add it to the
                     // juggler; so this event has to be dispatched *before* executing 'call'.
-                    dispatchEventWith(Event.REMOVE_FROM_JUGGLER);
+                    dispatchEventWith(EventStarling.REMOVE_FROM_JUGGLER);
                     call.apply(null, args);
                 }
             }
@@ -99,18 +99,18 @@ package starling.animation
         
         // delayed call pooling
         
-        private static var sPool:Vector.<DelayedCall> = new <DelayedCall>[];
+        private static var sPool:Vector.<DelayedCallStarling> = new <DelayedCallStarling>[];
         
         /** @private */
-        starling_internal static function fromPool(call:Function, delay:Number, 
-                                                   args:Array=null):DelayedCall
+        starling_internalStarling static function fromPool(call:Function, delay:Number,
+                                                   args:Array=null):DelayedCallStarling
         {
             if (sPool.length) return sPool.pop().reset(call, delay, args);
-            else return new DelayedCall(call, delay, args);
+            else return new DelayedCallStarling(call, delay, args);
         }
         
         /** @private */
-        starling_internal static function toPool(delayedCall:DelayedCall):void
+        starling_internalStarling static function toPool(delayedCall:DelayedCallStarling):void
         {
             // reset any object-references, to make sure we don't prevent any garbage collection
             delayedCall.mCall = null;

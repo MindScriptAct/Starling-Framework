@@ -17,19 +17,19 @@ package tests
     import org.flexunit.asserts.assertEquals;
     import org.hamcrest.number.closeTo;
     
-    import starling.textures.ConcreteTexture;
-    import starling.textures.SubTexture;
-    import starling.textures.Texture;
-    import starling.utils.VertexData;
+    import starling.textures.ConcreteTextureStarling;
+    import starling.textures.SubTextureStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.VertexDataStarling;
 
     public class TextureTest
     {
         private static const E:Number = 0.0001;
         
-        [Test(expects="starling.errors.AbstractClassError")]
+        [Test(expects="starling.errors.AbstractClassErrorStarling")]
         public function testCreateTexture():void
         {
-            new Texture();
+            new TextureStarling();
         }
         
         [Test]
@@ -37,21 +37,21 @@ package tests
         {
             var rootWidth:int = 256;
             var rootHeight:int = 128;
-            var subTexture:SubTexture;
-            var subSubTexture:SubTexture;
-            var vertexData:VertexData = createStandardVertexData();
-            var adjustedVertexData:VertexData;            
-            var texture:ConcreteTexture = new ConcreteTexture(null, null, rootWidth, rootHeight, false, false);
+            var subTexture:SubTextureStarling;
+            var subSubTexture:SubTextureStarling;
+            var vertexData:VertexDataStarling = createStandardVertexData();
+            var adjustedVertexData:VertexDataStarling;
+            var texture:ConcreteTextureStarling = new ConcreteTextureStarling(null, null, rootWidth, rootHeight, false, false);
             var texCoords:Point = new Point();
             
             // test subtexture filling the whole base texture
-            subTexture = new SubTexture(texture, new Rectangle(0, 0, rootWidth, rootHeight));            
+            subTexture = new SubTextureStarling(texture, new Rectangle(0, 0, rootWidth, rootHeight));
             adjustedVertexData = vertexData.clone(); 
             subTexture.adjustVertexData(adjustedVertexData, 0, 4);
             Helpers.compareVectors(vertexData.rawData, adjustedVertexData.rawData);
             
             // test subtexture with 50% of the size of the base texture
-            subTexture = new SubTexture(texture,
+            subTexture = new SubTextureStarling(texture,
                 new Rectangle(rootWidth/4, rootHeight/4, rootWidth/2, rootHeight/2));
             adjustedVertexData = vertexData.clone();
             subTexture.adjustVertexData(adjustedVertexData, 0, 4);
@@ -66,7 +66,7 @@ package tests
             Helpers.comparePoints(new Point(0.75, 0.75), texCoords);
             
             // test subtexture of subtexture
-            subSubTexture = new SubTexture(subTexture,
+            subSubTexture = new SubTextureStarling(subTexture,
                 new Rectangle(subTexture.width/4, subTexture.height/4, 
                               subTexture.width/2, subTexture.height/2));
             adjustedVertexData = vertexData.clone();
@@ -101,28 +101,28 @@ package tests
         {
             var rootWidth:int = 256;
             var rootHeight:int = 128;
-            var subTexture:SubTexture;
-            var subSubTexture:SubTexture;
+            var subTexture:SubTextureStarling;
+            var subSubTexture:SubTextureStarling;
             var texCoords:Vector.<Number>;
-            var texture:ConcreteTexture =
-                new ConcreteTexture(null, null, rootWidth, rootHeight, false, false);
+            var texture:ConcreteTextureStarling =
+                new ConcreteTextureStarling(null, null, rootWidth, rootHeight, false, false);
             
             // rotate full region once
-            subTexture = new SubTexture(texture, null, false, null, true);
+            subTexture = new SubTextureStarling(texture, null, false, null, true);
             texCoords = createStandardTexCoords();
             
             subTexture.adjustTexCoords(texCoords);
             Helpers.compareVectors(texCoords, new <Number>[1,0, 1,1, 0,0, 0,1]);
             
             // rotate again
-            subSubTexture = new SubTexture(subTexture, null, false, null, true);
+            subSubTexture = new SubTextureStarling(subTexture, null, false, null, true);
             texCoords = createStandardTexCoords();
             
             subSubTexture.adjustTexCoords(texCoords);
             Helpers.compareVectors(texCoords, new <Number>[1,1, 0,1, 1,0, 0,0]);
             
             // now get rotated region
-            subTexture = new SubTexture(texture, 
+            subTexture = new SubTextureStarling(texture,
                 new Rectangle(rootWidth/4, rootHeight/2, rootWidth/2, rootHeight/4), 
                 false, null, true);
             texCoords = createStandardTexCoords();
@@ -137,9 +137,9 @@ package tests
             }
         }
         
-        private function createStandardVertexData():VertexData
+        private function createStandardVertexData():VertexDataStarling
         {
-            var vertexData:VertexData = new VertexData(4);
+            var vertexData:VertexDataStarling = new VertexDataStarling(4);
             vertexData.setTexCoords(0, 0.0, 0.0);
             vertexData.setTexCoords(1, 1.0, 0.0);
             vertexData.setTexCoords(2, 0.0, 1.0);
@@ -147,9 +147,9 @@ package tests
             return vertexData;            
         }
         
-        private function createVertexDataWithMovedTexCoords():VertexData
+        private function createVertexDataWithMovedTexCoords():VertexDataStarling
         {
-            var vertexData:VertexData = new VertexData(4);
+            var vertexData:VertexDataStarling = new VertexDataStarling(4);
             vertexData.setTexCoords(0, 0.25, 0.25);
             vertexData.setTexCoords(1, 0.75, 0.25);
             vertexData.setTexCoords(2, 0.25, 0.75);
@@ -160,9 +160,9 @@ package tests
         [Test]
         public function testGetRoot():void
         {
-            var texture:ConcreteTexture = new ConcreteTexture(null, null, 32, 32, false, false);
-            var subTexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, 16, 16));
-            var subSubTexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, 8, 8));
+            var texture:ConcreteTextureStarling = new ConcreteTextureStarling(null, null, 32, 32, false, false);
+            var subTexture:SubTextureStarling = new SubTextureStarling(texture, new Rectangle(0, 0, 16, 16));
+            var subSubTexture:SubTextureStarling = new SubTextureStarling(texture, new Rectangle(0, 0, 8, 8));
             
             assertEquals(texture, texture.root);
             assertEquals(texture, subTexture.root);
@@ -173,8 +173,8 @@ package tests
         [Test]
         public function testGetSize():void
         {
-            var texture:ConcreteTexture = new ConcreteTexture(null, null, 32, 16, false, false, false, 2);
-            var subTexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, 12, 8));
+            var texture:ConcreteTextureStarling = new ConcreteTextureStarling(null, null, 32, 16, false, false, false, 2);
+            var subTexture:SubTextureStarling = new SubTextureStarling(texture, new Rectangle(0, 0, 12, 8));
             
             assertThat(texture.width, closeTo(16, E));
             assertThat(texture.height, closeTo(8, E));

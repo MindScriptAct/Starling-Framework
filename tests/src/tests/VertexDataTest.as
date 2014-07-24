@@ -20,8 +20,8 @@ package tests
     import org.flexunit.asserts.assertEquals;
     import org.hamcrest.number.closeTo;
     
-    import starling.utils.Color;
-    import starling.utils.VertexData;
+    import starling.utils.ColorStarling;
+    import starling.utils.VertexDataStarling;
     
     public class VertexDataTest
     {
@@ -31,7 +31,7 @@ package tests
         public function testInit():void
         {
             var numVertices:int = 3;
-            var vd:VertexData = new VertexData(numVertices);
+            var vd:VertexDataStarling = new VertexDataStarling(numVertices);
             var position:Point = new Point();
             var texCoords:Point = new Point();
             
@@ -50,28 +50,28 @@ package tests
         [Test]
         public function testGetNumVertices():void
         {
-            var vd:VertexData = new VertexData(4);
+            var vd:VertexDataStarling = new VertexDataStarling(4);
             Assert.assertEquals(4, vd.numVertices);
         }
         
         [Test(expects="Error")]
         public function testBoundsLow():void
         {
-            var vd:VertexData = new VertexData(3);
+            var vd:VertexDataStarling = new VertexDataStarling(3);
             vd.getColor(-1);
         }
         
         [Test(expects="Error")]
         public function testBoundsHigh():void
         {
-            var vd:VertexData = new VertexData(3);
+            var vd:VertexDataStarling = new VertexDataStarling(3);
             vd.getColor(3);
         }
         
         [Test]
         public function testPosition():void
         {
-            var vd:VertexData = new VertexData(4);            
+            var vd:VertexDataStarling = new VertexDataStarling(4);
             vd.setPosition(0, 1, 2);
             vd.setPosition(1, 4, 5);
             
@@ -89,7 +89,7 @@ package tests
         [Test]
         public function testColor():void
         {
-            var vd:VertexData = new VertexData(3, true);
+            var vd:VertexDataStarling = new VertexDataStarling(3, true);
             Assert.assertEquals(3, vd.numVertices);
             Assert.assertTrue(vd.premultipliedAlpha);
             
@@ -106,7 +106,7 @@ package tests
             var red:int   = 80;
             var green:int = 60;
             var blue:int  = 40;
-            var rgb:uint = Color.rgb(red, green, blue);
+            var rgb:uint = ColorStarling.rgb(red, green, blue);
             
             vd.setColor(2, rgb);
             vd.setAlpha(2, alpha);
@@ -115,7 +115,7 @@ package tests
             Assert.assertEquals(alpha, vd.getAlpha(2));
             
             var data:Vector.<Number> = vd.rawData;
-            var offset:int = VertexData.ELEMENTS_PER_VERTEX * 2 + VertexData.COLOR_OFFSET;
+            var offset:int = VertexDataStarling.ELEMENTS_PER_VERTEX * 2 + VertexDataStarling.COLOR_OFFSET;
             
             assertThat(data[offset  ], closeTo(red   / 255.0 * alpha, E));
             assertThat(data[offset+1], closeTo(green / 255.0 * alpha, E));
@@ -143,7 +143,7 @@ package tests
         [Test]
         public function testTexCoords():void
         {
-            var vd:VertexData = new VertexData(2);
+            var vd:VertexDataStarling = new VertexDataStarling(2);
             vd.setTexCoords(0, 0.25, 0.75);
             vd.setTexCoords(1, 0.33, 0.66);
             
@@ -161,7 +161,7 @@ package tests
         [Test]
         public function testGetBounds():void
         {
-            var vd:VertexData = new VertexData(0);
+            var vd:VertexDataStarling = new VertexDataStarling(0);
             var bounds:Rectangle = vd.getBounds();
             var expectedBounds:Rectangle = new Rectangle();
             
@@ -187,7 +187,7 @@ package tests
         [Test]
         public function testCopyTo():void
         {
-            var vd1:VertexData = new VertexData(2, false);
+            var vd1:VertexDataStarling = new VertexDataStarling(2, false);
             vd1.setPosition(0, 1, 2);
             vd1.setColor(0, 0xaabbcc);
             vd1.setTexCoords(0, 0.1, 0.2);
@@ -195,7 +195,7 @@ package tests
             vd1.setColor(1, 0x334455);
             vd1.setTexCoords(1, 0.3, 0.4);
             
-            var vd2:VertexData = new VertexData(2, false);
+            var vd2:VertexDataStarling = new VertexDataStarling(2, false);
             vd1.copyTo(vd2);
             
             Helpers.compareVectors(vd1.rawData, vd2.rawData);
@@ -206,16 +206,16 @@ package tests
             assertEquals(4, vd2.numVertices);
             
             for (var i:int=0; i<2; ++i)
-                for (var j:int=0; j<VertexData.ELEMENTS_PER_VERTEX; ++j)
+                for (var j:int=0; j<VertexDataStarling.ELEMENTS_PER_VERTEX; ++j)
                     assertEquals(
-                        vd1.rawData[   i  * VertexData.ELEMENTS_PER_VERTEX + j], 
-                        vd2.rawData[(2+i) * VertexData.ELEMENTS_PER_VERTEX + j]);
+                        vd1.rawData[   i  * VertexDataStarling.ELEMENTS_PER_VERTEX + j],
+                        vd2.rawData[(2+i) * VertexDataStarling.ELEMENTS_PER_VERTEX + j]);
         }
         
         [Test]
         public function testTransformVertex():void
         {
-            var vd:VertexData = new VertexData(2);
+            var vd:VertexDataStarling = new VertexDataStarling(2);
             vd.setPosition(0, 10, 20);
             vd.setPosition(1, 30, 40);
             
@@ -241,7 +241,7 @@ package tests
         [Test]
         public function testAppend():void
         {
-            var vd1:VertexData = new VertexData(2);
+            var vd1:VertexDataStarling = new VertexDataStarling(2);
             vd1.setPosition(0, 0, 1);
             vd1.setTexCoords(0, 0.0, 0.1);
             vd1.setColor(0, 0xf);
@@ -249,7 +249,7 @@ package tests
             vd1.setTexCoords(1, 0.2, 0.3);
             vd1.setColor(1, 0xf0);
             
-            var vd2:VertexData = new VertexData(1);
+            var vd2:VertexDataStarling = new VertexDataStarling(1);
             vd2.setPosition(0, 4, 5);
             vd2.setTexCoords(0, 0.4, 0.5);
             vd2.setColor(0, 0xf00);

@@ -14,17 +14,17 @@ package
     import scenes.TextureScene;
     import scenes.TouchScene;
     
-    import starling.core.Starling;
-    import starling.display.Button;
-    import starling.display.Image;
-    import starling.display.Sprite;
-    import starling.events.TouchEvent;
-    import starling.events.TouchPhase;
-    import starling.text.TextField;
-    import starling.textures.Texture;
-    import starling.utils.VAlign;
+    import starling.core.StarlingStarling;
+    import starling.display.ButtonStarling;
+    import starling.display.ImageStarling;
+    import starling.display.SpriteStarling;
+    import starling.events.TouchEventStarling;
+    import starling.events.TouchPhaseStarling;
+    import starling.text.TextFieldStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.VAlignStarling;
 
-    public class MainMenu extends Sprite
+    public class MainMenu extends SpriteStarling
     {
         public function MainMenu()
         {
@@ -33,7 +33,7 @@ package
         
         private function init():void
         {
-            var logo:Image = new Image(Game.assets.getTexture("logo"));
+            var logo:ImageStarling = new ImageStarling(Game.assets.getTexture("logo"));
             addChild(logo);
             
             var scenesToCreate:Array = [
@@ -50,7 +50,7 @@ package
                 ["Clipping", MaskScene]
             ];
             
-            var buttonTexture:Texture = Game.assets.getTexture("button_medium");
+            var buttonTexture:TextureStarling = Game.assets.getTexture("button_medium");
             var count:int = 0;
             
             for each (var sceneToCreate:Array in scenesToCreate)
@@ -58,7 +58,7 @@ package
                 var sceneTitle:String = sceneToCreate[0];
                 var sceneClass:Class  = sceneToCreate[1];
                 
-                var button:Button = new Button(buttonTexture, sceneTitle);
+                var button:ButtonStarling = new ButtonStarling(buttonTexture, sceneTitle);
                 button.x = count % 2 == 0 ? 28 : 167;
                 button.y = 155 + int(count / 2) * 46;
                 button.name = getQualifiedClassName(sceneClass);
@@ -72,19 +72,19 @@ package
             
             // show information about rendering method (hardware/software)
             
-            var driverInfo:String = Starling.context.driverInfo;
-            var infoText:TextField = new TextField(310, 64, driverInfo, "Verdana", 10);
+            var driverInfo:String = StarlingStarling.context.driverInfo;
+            var infoText:TextFieldStarling = new TextFieldStarling(310, 64, driverInfo, "Verdana", 10);
             infoText.x = 5;
             infoText.y = 475 - infoText.height;
-            infoText.vAlign = VAlign.BOTTOM;
-            infoText.addEventListener(TouchEvent.TOUCH, onInfoTextTouched);
+            infoText.vAlign = VAlignStarling.BOTTOM;
+            infoText.addEventListener(TouchEventStarling.TOUCH, onInfoTextTouched);
             addChildAt(infoText, 0);
         }
         
-        private function onInfoTextTouched(event:TouchEvent):void
+        private function onInfoTextTouched(event:TouchEventStarling):void
         {
-            if (event.getTouch(this, TouchPhase.ENDED))
-                Starling.current.showStats = !Starling.current.showStats;
+            if (event.getTouch(this, TouchPhaseStarling.ENDED))
+                StarlingStarling.current.showStats = !StarlingStarling.current.showStats;
         }
     }
 }

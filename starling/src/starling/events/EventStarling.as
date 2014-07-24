@@ -12,10 +12,10 @@ package starling.events
 {
     import flash.utils.getQualifiedClassName;
     
-    import starling.core.starling_internal;
-    import starling.utils.formatString;
+    import starling.core.starling_internalStarling;
+    import starling.utils.formatStringStarling;
     
-    use namespace starling_internal;
+    use namespace starling_internalStarling;
 
     /** Event objects are passed as parameters to event listeners when an event occurs.  
      *  This is Starling's version of the Flash Event class. 
@@ -33,9 +33,9 @@ package starling.events
      *  <p>Furthermore, the event class contains methods that can stop the event from being 
      *  processed by other listeners - either completely or at the next bubble stage.</p>
      * 
-     *  @see EventDispatcher
+     *  @see EventDispatcherStarling
      */
-    public class Event
+    public class EventStarling
     {
         /** Event type for a display object that is added to a parent. */
         public static const ADDED:String = "added";
@@ -81,10 +81,10 @@ package starling.events
         /** An event type to be utilized in custom events. Not used by Starling right now. */
         public static const SELECT:String = "select";
         
-        private static var sEventPool:Vector.<Event> = new <Event>[];
+        private static var sEventPool:Vector.<EventStarling> = new <EventStarling>[];
         
-        private var mTarget:EventDispatcher;
-        private var mCurrentTarget:EventDispatcher;
+        private var mTarget:EventDispatcherStarling;
+        private var mCurrentTarget:EventDispatcherStarling;
         private var mType:String;
         private var mBubbles:Boolean;
         private var mStopsPropagation:Boolean;
@@ -92,7 +92,7 @@ package starling.events
         private var mData:Object;
         
         /** Creates an event object that can be passed to listeners. */
-        public function Event(type:String, bubbles:Boolean=false, data:Object=null)
+        public function EventStarling(type:String, bubbles:Boolean=false, data:Object=null)
         {
             mType = type;
             mBubbles = bubbles;
@@ -114,7 +114,7 @@ package starling.events
         /** Returns a description of the event, containing type and bubble information. */
         public function toString():String
         {
-            return formatString("[{0} type=\"{1}\" bubbles={2}]", 
+            return formatStringStarling("[{0} type=\"{1}\" bubbles={2}]",
                 getQualifiedClassName(this).split("::").pop(), mType, mBubbles);
         }
         
@@ -122,10 +122,10 @@ package starling.events
         public function get bubbles():Boolean { return mBubbles; }
         
         /** The object that dispatched the event. */
-        public function get target():EventDispatcher { return mTarget; }
+        public function get target():EventDispatcherStarling { return mTarget; }
         
         /** The object the event is currently bubbling at. */
-        public function get currentTarget():EventDispatcher { return mCurrentTarget; }
+        public function get currentTarget():EventDispatcherStarling { return mCurrentTarget; }
         
         /** A string that identifies the event. */
         public function get type():String { return mType; }
@@ -136,10 +136,10 @@ package starling.events
         // properties for internal use
         
         /** @private */
-        internal function setTarget(value:EventDispatcher):void { mTarget = value; }
+        internal function setTarget(value:EventDispatcherStarling):void { mTarget = value; }
         
         /** @private */
-        internal function setCurrentTarget(value:EventDispatcher):void { mCurrentTarget = value; } 
+        internal function setCurrentTarget(value:EventDispatcherStarling):void { mCurrentTarget = value; }
         
         /** @private */
         internal function setData(value:Object):void { mData = value; }
@@ -153,21 +153,21 @@ package starling.events
         // event pooling
         
         /** @private */
-        starling_internal static function fromPool(type:String, bubbles:Boolean=false, data:Object=null):Event
+        starling_internalStarling static function fromPool(type:String, bubbles:Boolean=false, data:Object=null):EventStarling
         {
             if (sEventPool.length) return sEventPool.pop().reset(type, bubbles, data);
-            else return new Event(type, bubbles, data);
+            else return new EventStarling(type, bubbles, data);
         }
         
         /** @private */
-        starling_internal static function toPool(event:Event):void
+        starling_internalStarling static function toPool(event:EventStarling):void
         {
             event.mData = event.mTarget = event.mCurrentTarget = null;
             sEventPool[sEventPool.length] = event; // avoiding 'push'
         }
         
         /** @private */
-        starling_internal function reset(type:String, bubbles:Boolean=false, data:Object=null):Event
+        starling_internalStarling function reset(type:String, bubbles:Boolean=false, data:Object=null):EventStarling
         {
             mType = type;
             mBubbles = bubbles;

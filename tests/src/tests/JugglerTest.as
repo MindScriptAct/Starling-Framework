@@ -18,11 +18,11 @@ package tests
     import org.flexunit.asserts.assertTrue;
     import org.hamcrest.number.closeTo;
     
-    import starling.animation.IAnimatable;
-    import starling.animation.Juggler;
-    import starling.animation.Tween;
-    import starling.display.Quad;
-    import starling.events.Event;
+    import starling.animation.IAnimatableStarling;
+    import starling.animation.JugglerStarling;
+    import starling.animation.TweenStarling;
+    import starling.display.QuadStarling;
+    import starling.events.EventStarling;
 
     public class JugglerTest
     {
@@ -31,15 +31,15 @@ package tests
         [Test]
         public function testModificationWithinCallback():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             var startReached:Boolean = false;
             juggler.add(tween);
             
             tween.onComplete = function():void 
             {
-                var otherTween:Tween = new Tween(quad, 1.0);
+                var otherTween:TweenStarling = new TweenStarling(quad, 1.0);
                 otherTween.onStart = function():void 
                 { 
                     startReached = true; 
@@ -58,9 +58,9 @@ package tests
         [Test]
         public function testContains():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             
             Assert.assertFalse(juggler.contains(tween));
             juggler.add(tween);
@@ -70,11 +70,11 @@ package tests
         [Test]
         public function testPurge():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
             
-            var tween1:Tween = new Tween(quad, 1.0);
-            var tween2:Tween = new Tween(quad, 2.0);
+            var tween1:TweenStarling = new TweenStarling(quad, 1.0);
+            var tween2:TweenStarling = new TweenStarling(quad, 2.0);
             
             juggler.add(tween1);
             juggler.add(tween2);
@@ -82,13 +82,13 @@ package tests
             tween1.animate("x", 100);
             tween2.animate("y", 100);
             
-            Assert.assertTrue(tween1.hasEventListener(Event.REMOVE_FROM_JUGGLER));
-            Assert.assertTrue(tween2.hasEventListener(Event.REMOVE_FROM_JUGGLER));
+            Assert.assertTrue(tween1.hasEventListener(EventStarling.REMOVE_FROM_JUGGLER));
+            Assert.assertTrue(tween2.hasEventListener(EventStarling.REMOVE_FROM_JUGGLER));
             
             juggler.purge();
             
-            Assert.assertFalse(tween1.hasEventListener(Event.REMOVE_FROM_JUGGLER));
-            Assert.assertFalse(tween2.hasEventListener(Event.REMOVE_FROM_JUGGLER));
+            Assert.assertFalse(tween1.hasEventListener(EventStarling.REMOVE_FROM_JUGGLER));
+            Assert.assertFalse(tween2.hasEventListener(EventStarling.REMOVE_FROM_JUGGLER));
             
             juggler.advanceTime(10);
             
@@ -99,12 +99,12 @@ package tests
         [Test]
         public function testPurgeFromAdvanceTime():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
             
-            var tween1:Tween = new Tween(quad, 1.0);
-            var tween2:Tween = new Tween(quad, 1.0);
-            var tween3:Tween = new Tween(quad, 1.0);
+            var tween1:TweenStarling = new TweenStarling(quad, 1.0);
+            var tween2:TweenStarling = new TweenStarling(quad, 1.0);
+            var tween3:TweenStarling = new TweenStarling(quad, 1.0);
             
             juggler.add(tween1);
             juggler.add(tween2);
@@ -119,13 +119,13 @@ package tests
         [Test]
         public function testRemoveTweensWithTarget():void
         {
-            var juggler:Juggler = new Juggler();
+            var juggler:JugglerStarling = new JugglerStarling();
             
-            var quad1:Quad = new Quad(100, 100);
-            var quad2:Quad = new Quad(100, 100);
+            var quad1:QuadStarling = new QuadStarling(100, 100);
+            var quad2:QuadStarling = new QuadStarling(100, 100);
             
-            var tween1:Tween = new Tween(quad1, 1.0);
-            var tween2:Tween = new Tween(quad2, 1.0);
+            var tween1:TweenStarling = new TweenStarling(quad1, 1.0);
+            var tween2:TweenStarling = new TweenStarling(quad2, 1.0);
             
             tween1.animate("rotation", 1.0);
             tween2.animate("rotation", 1.0);
@@ -143,10 +143,10 @@ package tests
         [Test]
         public function testContainsTweens():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad1:Quad = new Quad(100, 100);
-            var quad2:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad1, 1.0);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad1:QuadStarling = new QuadStarling(100, 100);
+            var quad2:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad1, 1.0);
             
             juggler.add(tween);
             
@@ -157,9 +157,9 @@ package tests
         [Test]
         public function testAddTwice():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
-            var tween:Tween = new Tween(quad, 1.0);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            var tween:TweenStarling = new TweenStarling(quad, 1.0);
             
             juggler.add(tween);
             juggler.add(tween);
@@ -172,16 +172,16 @@ package tests
         [Test]
         public function testModifyJugglerInCallback():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
             
-            var tween1:Tween = new Tween(quad, 1.0);
+            var tween1:TweenStarling = new TweenStarling(quad, 1.0);
             tween1.animate("x", 100);
             
-            var tween2:Tween = new Tween(quad, 0.5);
+            var tween2:TweenStarling = new TweenStarling(quad, 0.5);
             tween2.animate("y", 100);
             
-            var tween3:Tween = new Tween(quad, 0.5);
+            var tween3:TweenStarling = new TweenStarling(quad, 0.5);
             tween3.animate("scaleX", 0.5);
             
             tween2.onComplete = function():void {
@@ -205,11 +205,11 @@ package tests
         {
             // https://github.com/PrimaryFeather/Starling-Framework/issues/155
             
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
             
-            var tween1:Tween = new Tween(quad, 1.0);
-            var tween2:Tween = new Tween(quad, 1.0);
+            var tween1:TweenStarling = new TweenStarling(quad, 1.0);
+            var tween2:TweenStarling = new TweenStarling(quad, 1.0);
             tween2.fadeTo(0);
             
             juggler.add(tween1);
@@ -228,8 +228,8 @@ package tests
         [Test]
         public function testTweenConvenienceMethod():void
         {
-            var juggler:Juggler = new Juggler();
-            var quad:Quad = new Quad(100, 100);
+            var juggler:JugglerStarling = new JugglerStarling();
+            var quad:QuadStarling = new QuadStarling(100, 100);
             
             var completeCount:int = 0;
             var startCount:int = 0;
@@ -257,7 +257,7 @@ package tests
         [Test]
         public function testDelayedCallConvenienceMethod():void
         {
-            var juggler:Juggler = new Juggler();
+            var juggler:JugglerStarling = new JugglerStarling();
             var counter:int = 0;
             
             juggler.delayCall(raiseCounter, 1.0);
@@ -286,7 +286,7 @@ package tests
         [Test]
         public function testRepeatCall():void
         {
-            var juggler:Juggler = new Juggler();
+            var juggler:JugglerStarling = new JugglerStarling();
             var counter:int = 0;
             
             juggler.repeatCall(raiseCounter, 0.25, 4, 1);
@@ -310,10 +310,10 @@ package tests
         [Test]
         public function testEndlessRepeatCall():void
         {
-            var juggler:Juggler = new Juggler();
+            var juggler:JugglerStarling = new JugglerStarling();
             var counter:int = 0;
             
-            var id:IAnimatable = juggler.repeatCall(raiseCounter, 1.0);
+            var id:IAnimatableStarling = juggler.repeatCall(raiseCounter, 1.0);
             assertEquals(0, counter);
             
             juggler.advanceTime(50);

@@ -10,7 +10,7 @@
 
 package starling.events
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A class that provides constant values for the phases of a touch object. 
      *  
@@ -28,10 +28,10 @@ package starling.events
      *  the equivalent of a <code>MouseOver</code> event in Flash when the mouse button is
      *  <em>not</em> pressed.</p> 
      */
-    public final class TouchPhase
+    public final class TouchPhaseStarling
     {
         /** @private */
-        public function TouchPhase() { throw new AbstractClassError(); }
+        public function TouchPhaseStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Only available for mouse input: the cursor hovers over an object <em>without</em> a 
          *  pressed button. */

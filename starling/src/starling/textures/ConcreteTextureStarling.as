@@ -19,17 +19,17 @@ package starling.textures
     import flash.geom.Rectangle;
     import flash.utils.ByteArray;
     
-    import starling.core.RenderSupport;
-    import starling.core.Starling;
-    import starling.core.starling_internal;
-    import starling.errors.MissingContextError;
-    import starling.events.Event;
-    import starling.utils.Color;
+    import starling.core.RenderSupportStarling;
+    import starling.core.StarlingStarling;
+    import starling.core.starling_internalStarling;
+    import starling.errors.MissingContextErrorStarling;
+    import starling.events.EventStarling;
+    import starling.utils.ColorStarling;
     
-    use namespace starling_internal;
+    use namespace starling_internalStarling;
 
     /** A ConcreteTexture wraps a Stage3D texture object, storing the properties of the texture. */
-    public class ConcreteTexture extends Texture
+    public class ConcreteTextureStarling extends TextureStarling
     {
         private var mBase:TextureBase;
         private var mFormat:String;
@@ -48,7 +48,7 @@ package starling.textures
         
         /** Creates a ConcreteTexture object from a TextureBase, storing information about size,
          *  mip-mapping, and if the channels contain premultiplied alpha values. */
-        public function ConcreteTexture(base:TextureBase, format:String, width:int, height:int, 
+        public function ConcreteTextureStarling(base:TextureBase, format:String, width:int, height:int,
                                         mipMapping:Boolean, premultipliedAlpha:Boolean,
                                         optimizedForRenderTexture:Boolean=false,
                                         scale:Number=1, repeat:Boolean=false)
@@ -151,7 +151,7 @@ package starling.textures
         {
             const eventType:String = "textureReady"; // defined here for backwards compatibility
             
-            var self:ConcreteTexture = this;
+            var self:ConcreteTextureStarling = this;
             var isAsync:Boolean = async is Function || async === true;
             var potTexture:flash.display3D.textures.Texture = 
                   mBase as flash.display3D.textures.Texture;
@@ -194,9 +194,9 @@ package starling.textures
          *  as the one that was passed to the constructor. You have to upload new data before the
          *  texture becomes usable again. Beware: this method does <strong>not</strong> dispose
          *  the current base. */
-        starling_internal function createBase():void
+        starling_internalStarling function createBase():void
         {
-            var context:Context3D = Starling.context;
+            var context:Context3D = StarlingStarling.context;
             
             if (mBase is flash.display3D.textures.Texture)
                 mBase = context.createTexture(mWidth, mHeight, mFormat, 
@@ -213,13 +213,13 @@ package starling.textures
          *  don't call it from within a render method. */ 
         public function clear(color:uint=0x0, alpha:Number=0.0):void
         {
-            var context:Context3D = Starling.context;
-            if (context == null) throw new MissingContextError();
+            var context:Context3D = StarlingStarling.context;
+            if (context == null) throw new MissingContextErrorStarling();
             
             if (mPremultipliedAlpha && alpha < 1.0)
-                color = Color.rgb(Color.getRed(color)   * alpha,
-                                  Color.getGreen(color) * alpha,
-                                  Color.getBlue(color)  * alpha);
+                color = ColorStarling.rgb(ColorStarling.getRed(color)   * alpha,
+                                  ColorStarling.getGreen(color) * alpha,
+                                  ColorStarling.getBlue(color)  * alpha);
             
             context.setRenderToTexture(mBase);
             
@@ -227,7 +227,7 @@ package starling.textures
             // FP 11.8 plugin/projector: calling clear on a compressed texture doesn't work there
             // (while it *does* work on iOS + Android).
             
-            try { RenderSupport.clear(color, alpha); }
+            try { RenderSupportStarling.clear(color, alpha); }
             catch (e:Error) {}
             
             context.setRenderToBackBuffer();
@@ -246,12 +246,12 @@ package starling.textures
         public function get onRestore():Function { return mOnRestore; }
         public function set onRestore(value:Function):void
         {
-            Starling.current.removeEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
+            StarlingStarling.current.removeEventListener(EventStarling.CONTEXT3D_CREATE, onContextCreated);
             
-            if (Starling.handleLostContext && value != null)
+            if (StarlingStarling.handleLostContext && value != null)
             {
                 mOnRestore = value;
-                Starling.current.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
+                StarlingStarling.current.addEventListener(EventStarling.CONTEXT3D_CREATE, onContextCreated);
             }
             else mOnRestore = null;
         }
@@ -260,7 +260,7 @@ package starling.textures
         public override function get base():TextureBase { return mBase; }
         
         /** @inheritDoc */
-        public override function get root():ConcreteTexture { return this; }
+        public override function get root():ConcreteTextureStarling { return this; }
         
         /** @inheritDoc */
         public override function get format():String { return mFormat; }

@@ -14,17 +14,17 @@ package starling.display
     import flash.ui.Mouse;
     import flash.ui.MouseCursor;
     
-    import starling.events.Event;
-    import starling.events.Touch;
-    import starling.events.TouchEvent;
-    import starling.events.TouchPhase;
-    import starling.text.TextField;
-    import starling.textures.Texture;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
+    import starling.events.EventStarling;
+    import starling.events.TouchStarling;
+    import starling.events.TouchEventStarling;
+    import starling.events.TouchPhaseStarling;
+    import starling.text.TextFieldStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.VAlignStarling;
 
     /** Dispatched when the user triggers the button. Bubbles. */
-    [Event(name="triggered", type="starling.events.Event")]
+    [Event(name="triggered", type="starling.events.EventStarling")]
     
     /** A simple button composed of an image and, optionally, text.
      *  
@@ -39,20 +39,20 @@ package starling.display
      *  Use this event instead of normal touch events. That way, users can cancel button
      *  activation by moving the mouse/finger away from the button before releasing.</p>
      */
-    public class Button extends DisplayObjectContainer
+    public class ButtonStarling extends DisplayObjectContainerStarling
     {
         private static const MAX_DRAG_DIST:Number = 50;
         
-        private var mUpState:Texture;
-        private var mDownState:Texture;
-        private var mOverState:Texture;
-        private var mDisabledState:Texture;
+        private var mUpState:TextureStarling;
+        private var mDownState:TextureStarling;
+        private var mOverState:TextureStarling;
+        private var mDisabledState:TextureStarling;
         
-        private var mContents:Sprite;
-        private var mBody:Image;
-        private var mTextField:TextField;
+        private var mContents:SpriteStarling;
+        private var mBody:ImageStarling;
+        private var mTextField:TextFieldStarling;
         private var mTextBounds:Rectangle;
-        private var mOverlay:Sprite;
+        private var mOverlay:SpriteStarling;
         
         private var mScaleWhenDown:Number;
         private var mAlphaWhenDisabled:Number;
@@ -63,8 +63,8 @@ package starling.display
         /** Creates a button with a set of state-textures and (optionally) some text.
          *  Any state that is left 'null' will display the up-state texture. Beware that all
          *  state textures should have the same dimensions. */
-        public function Button(upState:Texture, text:String="", downState:Texture=null,
-                               overState:Texture=null, disabledState:Texture=null)
+        public function ButtonStarling(upState:TextureStarling, text:String="", downState:TextureStarling=null,
+                               overState:TextureStarling=null, disabledState:TextureStarling=null)
         {
             if (upState == null) throw new ArgumentError("Texture 'upState' cannot be null");
             
@@ -73,18 +73,18 @@ package starling.display
             mOverState = overState;
             mDisabledState = disabledState;
 
-            mState = ButtonState.UP;
-            mBody = new Image(upState);
+            mState = ButtonStateStarling.UP;
+            mBody = new ImageStarling(upState);
             mScaleWhenDown = downState ? 1.0 : 0.9;
             mAlphaWhenDisabled = disabledState ? 1.0: 0.5;
             mEnabled = true;
             mUseHandCursor = true;
             mTextBounds = new Rectangle(0, 0, upState.width, upState.height);            
             
-            mContents = new Sprite();
+            mContents = new SpriteStarling();
             mContents.addChild(mBody);
             addChild(mContents);
-            addEventListener(TouchEvent.TOUCH, onTouch);
+            addEventListener(TouchEventStarling.TOUCH, onTouch);
             
             this.touchGroup = true;
             this.text = text;
@@ -116,9 +116,9 @@ package starling.display
         {
             if (mTextField == null)
             {
-                mTextField = new TextField(mTextBounds.width, mTextBounds.height, "");
-                mTextField.vAlign = VAlign.CENTER;
-                mTextField.hAlign = HAlign.CENTER;
+                mTextField = new TextFieldStarling(mTextBounds.width, mTextBounds.height, "");
+                mTextField.vAlign = VAlignStarling.CENTER;
+                mTextField.hAlign = HAlignStarling.CENTER;
                 mTextField.touchable = false;
                 mTextField.autoScale = true;
                 mTextField.batchable = true;
@@ -130,12 +130,12 @@ package starling.display
             mTextField.y = mTextBounds.y;
         }
         
-        private function onTouch(event:TouchEvent):void
+        private function onTouch(event:TouchEventStarling):void
         {
             Mouse.cursor = (mUseHandCursor && mEnabled && event.interactsWith(this)) ?
                 MouseCursor.BUTTON : MouseCursor.AUTO;
             
-            var touch:Touch = event.getTouch(this);
+            var touch:TouchStarling = event.getTouch(this);
             
             if (!mEnabled)
             {
@@ -143,17 +143,17 @@ package starling.display
             }
             else if (touch == null)
             {
-                state = ButtonState.UP;
+                state = ButtonStateStarling.UP;
             }
-            else if (touch.phase == TouchPhase.HOVER)
+            else if (touch.phase == TouchPhaseStarling.HOVER)
             {
-                state = ButtonState.OVER;
+                state = ButtonStateStarling.OVER;
             }
-            else if (touch.phase == TouchPhase.BEGAN && mState != ButtonState.DOWN)
+            else if (touch.phase == TouchPhaseStarling.BEGAN && mState != ButtonStateStarling.DOWN)
             {
-                state = ButtonState.DOWN;
+                state = ButtonStateStarling.DOWN;
             }
-            else if (touch.phase == TouchPhase.MOVED && mState == ButtonState.DOWN)
+            else if (touch.phase == TouchPhaseStarling.MOVED && mState == ButtonStateStarling.DOWN)
             {
                 // reset button when user dragged too far away after pushing
                 var buttonRect:Rectangle = getBounds(stage);
@@ -162,13 +162,13 @@ package starling.display
                     touch.globalX > buttonRect.x + buttonRect.width + MAX_DRAG_DIST ||
                     touch.globalY > buttonRect.y + buttonRect.height + MAX_DRAG_DIST)
                 {
-                    state = ButtonState.UP;
+                    state = ButtonStateStarling.UP;
                 }
             }
-            else if (touch.phase == TouchPhase.ENDED && mState == ButtonState.DOWN)
+            else if (touch.phase == TouchPhaseStarling.ENDED && mState == ButtonStateStarling.DOWN)
             {
-                state = ButtonState.UP;
-                dispatchEventWith(Event.TRIGGERED, true);
+                state = ButtonStateStarling.UP;
+                dispatchEventWith(EventStarling.TRIGGERED, true);
             }
         }
         
@@ -182,21 +182,21 @@ package starling.display
 
             switch (mState)
             {
-                case ButtonState.DOWN:
+                case ButtonStateStarling.DOWN:
                     setStateTexture(mDownState);
                     mContents.scaleX = mContents.scaleY = scaleWhenDown;
                     mContents.x = (1.0 - scaleWhenDown) / 2.0 * mBody.width;
                     mContents.y = (1.0 - scaleWhenDown) / 2.0 * mBody.height;
                     break;
-                case ButtonState.UP:
+                case ButtonStateStarling.UP:
                     setStateTexture(mUpState);
                     mContents.x = mContents.y = 0;
                     break;
-                case ButtonState.OVER:
+                case ButtonStateStarling.OVER:
                     setStateTexture(mOverState);
                     mContents.x = mContents.y = 0;
                     break;
-                case ButtonState.DISABLED:
+                case ButtonStateStarling.DISABLED:
                     setStateTexture(mDisabledState);
                     mContents.x = mContents.y = 0;
                     break;
@@ -205,7 +205,7 @@ package starling.display
             }
         }
 
-        private function setStateTexture(texture:Texture):void
+        private function setStateTexture(texture:TextureStarling):void
         {
             mBody.texture = texture ? texture : mUpState;
         }
@@ -227,7 +227,7 @@ package starling.display
             {
                 mEnabled = value;
                 mContents.alpha = value ? 1.0 : mAlphaWhenDisabled;
-                state = value ? ButtonState.UP : ButtonState.DISABLED;
+                state = value ? ButtonStateStarling.UP : ButtonStateStarling.DISABLED;
             }
         }
         
@@ -287,8 +287,8 @@ package starling.display
         }
         
         /** The texture that is displayed when the button is not being touched. */
-        public function get upState():Texture { return mUpState; }
-        public function set upState(value:Texture):void
+        public function get upState():TextureStarling { return mUpState; }
+        public function set upState(value:TextureStarling):void
         {
             if (value == null)
                 throw new ArgumentError("Texture 'upState' cannot be null");
@@ -296,47 +296,47 @@ package starling.display
             if (mUpState != value)
             {
                 mUpState = value;
-                if (mState == ButtonState.UP) setStateTexture(value);
+                if (mState == ButtonStateStarling.UP) setStateTexture(value);
             }
         }
         
         /** The texture that is displayed while the button is touched. */
-        public function get downState():Texture { return mDownState; }
-        public function set downState(value:Texture):void
+        public function get downState():TextureStarling { return mDownState; }
+        public function set downState(value:TextureStarling):void
         {
             if (mDownState != value)
             {
                 mDownState = value;
-                if (mState == ButtonState.DOWN) setStateTexture(value);
+                if (mState == ButtonStateStarling.DOWN) setStateTexture(value);
             }
         }
 
         /** The texture that is displayed while mouse hovers over the button. */
-        public function get overState():Texture { return mOverState; }
-        public function set overState(value:Texture):void
+        public function get overState():TextureStarling { return mOverState; }
+        public function set overState(value:TextureStarling):void
         {
             if (mOverState != value)
             {
                 mOverState = value;
-                if (mState == ButtonState.OVER) setStateTexture(value);
+                if (mState == ButtonStateStarling.OVER) setStateTexture(value);
             }
         }
 
         /** The texture that is displayed when the button is disabled. */
-        public function get disabledState():Texture { return mDisabledState; }
-        public function set disabledState(value:Texture):void
+        public function get disabledState():TextureStarling { return mDisabledState; }
+        public function set disabledState(value:TextureStarling):void
         {
             if (mDisabledState != value)
             {
                 mDisabledState = value;
-                if (mState == ButtonState.DISABLED) setStateTexture(value);
+                if (mState == ButtonStateStarling.DISABLED) setStateTexture(value);
             }
         }
         
         /** The vertical alignment of the text on the button. */
         public function get textVAlign():String
         {
-            return mTextField ? mTextField.vAlign : VAlign.CENTER;
+            return mTextField ? mTextField.vAlign : VAlignStarling.CENTER;
         }
         
         public function set textVAlign(value:String):void
@@ -348,7 +348,7 @@ package starling.display
         /** The horizontal alignment of the text on the button. */
         public function get textHAlign():String
         {
-            return mTextField ? mTextField.hAlign : HAlign.CENTER;
+            return mTextField ? mTextField.hAlign : HAlignStarling.CENTER;
         }
         
         public function set textHAlign(value:String):void
@@ -372,10 +372,10 @@ package starling.display
 
         /** The overlay sprite is displayed on top of the button contents. It scales with the
          *  button when pressed. Use it to add additional objects to the button (e.g. an icon). */
-        public function get overlay():Sprite
+        public function get overlay():SpriteStarling
         {
             if (mOverlay == null)
-                mOverlay = new Sprite();
+                mOverlay = new SpriteStarling();
 
             mContents.addChild(mOverlay); // make sure it's always on top
             return mOverlay;

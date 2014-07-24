@@ -13,12 +13,12 @@ package starling.events
     import flash.geom.Matrix;
     import flash.geom.Point;
     
-    import starling.core.starling_internal;
-    import starling.display.DisplayObject;
-    import starling.utils.MatrixUtil;
-    import starling.utils.formatString;
+    import starling.core.starling_internalStarling;
+    import starling.display.DisplayObjectStarling;
+    import starling.utils.MatrixUtilStarling;
+    import starling.utils.formatStringStarling;
     
-    use namespace starling_internal;
+    use namespace starling_internalStarling;
 
     /** A Touch object contains information about the presence or movement of a finger 
      *  or the mouse on the screen.
@@ -35,10 +35,10 @@ package starling.events
      *  most of the time. For this reason, there are methods that convert the current and previous 
      *  touches into the local coordinate system of any object.</p>
      * 
-     *  @see TouchEvent
-     *  @see TouchPhase
+     *  @see TouchEventStarling
+     *  @see TouchPhaseStarling
      */  
-    public class Touch
+    public class TouchStarling
     {
         private var mID:int;
         private var mGlobalX:Number;
@@ -47,50 +47,50 @@ package starling.events
         private var mPreviousGlobalY:Number;
         private var mTapCount:int;
         private var mPhase:String;
-        private var mTarget:DisplayObject;
+        private var mTarget:DisplayObjectStarling;
         private var mTimestamp:Number;
         private var mPressure:Number;
         private var mWidth:Number;
         private var mHeight:Number;
-        private var mBubbleChain:Vector.<EventDispatcher>;
+        private var mBubbleChain:Vector.<EventDispatcherStarling>;
         
         /** Helper object. */
         private static var sHelperMatrix:Matrix = new Matrix();
         
         /** Creates a new Touch object. */
-        public function Touch(id:int)
+        public function TouchStarling(id:int)
         {
             mID = id;
             mTapCount = 0;
-            mPhase = TouchPhase.HOVER;
+            mPhase = TouchPhaseStarling.HOVER;
             mPressure = mWidth = mHeight = 1.0;
-            mBubbleChain = new <EventDispatcher>[];
+            mBubbleChain = new <EventDispatcherStarling>[];
         }
         
         /** Converts the current location of a touch to the local coordinate system of a display 
          *  object. If you pass a 'resultPoint', the result will be stored in this point instead 
          *  of creating a new object.*/
-        public function getLocation(space:DisplayObject, resultPoint:Point=null):Point
+        public function getLocation(space:DisplayObjectStarling, resultPoint:Point=null):Point
         {
             if (resultPoint == null) resultPoint = new Point();
             space.base.getTransformationMatrix(space, sHelperMatrix);
-            return MatrixUtil.transformCoords(sHelperMatrix, mGlobalX, mGlobalY, resultPoint); 
+            return MatrixUtilStarling.transformCoords(sHelperMatrix, mGlobalX, mGlobalY, resultPoint);
         }
         
         /** Converts the previous location of a touch to the local coordinate system of a display 
          *  object. If you pass a 'resultPoint', the result will be stored in this point instead 
          *  of creating a new object.*/
-        public function getPreviousLocation(space:DisplayObject, resultPoint:Point=null):Point
+        public function getPreviousLocation(space:DisplayObjectStarling, resultPoint:Point=null):Point
         {
             if (resultPoint == null) resultPoint = new Point();
             space.base.getTransformationMatrix(space, sHelperMatrix);
-            return MatrixUtil.transformCoords(sHelperMatrix, mPreviousGlobalX, mPreviousGlobalY, resultPoint);
+            return MatrixUtilStarling.transformCoords(sHelperMatrix, mPreviousGlobalX, mPreviousGlobalY, resultPoint);
         }
         
         /** Returns the movement of the touch between the current and previous location. 
          *  If you pass a 'resultPoint', the result will be stored in this point instead 
          *  of creating a new object. */ 
-        public function getMovement(space:DisplayObject, resultPoint:Point=null):Point
+        public function getMovement(space:DisplayObjectStarling, resultPoint:Point=null):Point
         {
             if (resultPoint == null) resultPoint = new Point();
             getLocation(space, resultPoint);
@@ -102,7 +102,7 @@ package starling.events
         }
         
         /** Indicates if the target or one of its children is touched. */ 
-        public function isTouching(target:DisplayObject):Boolean
+        public function isTouching(target:DisplayObjectStarling):Boolean
         {
             return mBubbleChain.indexOf(target) != -1;
         }
@@ -110,14 +110,14 @@ package starling.events
         /** Returns a description of the object. */
         public function toString():String
         {
-            return formatString("Touch {0}: globalX={1}, globalY={2}, phase={3}",
+            return formatStringStarling("Touch {0}: globalX={1}, globalY={2}, phase={3}",
                                 mID, mGlobalX, mGlobalY, mPhase);
         }
         
         /** Creates a clone of the Touch object. */
-        public function clone():Touch
+        public function clone():TouchStarling
         {
-            var clone:Touch = new Touch(mID);
+            var clone:TouchStarling = new TouchStarling(mID);
             clone.mGlobalX = mGlobalX;
             clone.mGlobalY = mGlobalY;
             clone.mPreviousGlobalX = mPreviousGlobalX;
@@ -139,7 +139,7 @@ package starling.events
             if (mTarget)
             {
                 var length:int = 1;
-                var element:DisplayObject = mTarget;
+                var element:DisplayObjectStarling = mTarget;
                 
                 mBubbleChain.length = 1;
                 mBubbleChain[0] = element;
@@ -187,13 +187,13 @@ package starling.events
         public function get tapCount():int { return mTapCount; }
         public function set tapCount(value:int):void { mTapCount = value; }
         
-        /** The current phase the touch is in. @see TouchPhase */
+        /** The current phase the touch is in. @see TouchPhaseStarling */
         public function get phase():String { return mPhase; }
         public function set phase(value:String):void { mPhase = value; }
         
         /** The display object at which the touch occurred. */
-        public function get target():DisplayObject { return mTarget; }
-        public function set target(value:DisplayObject):void
+        public function get target():DisplayObjectStarling { return mTarget; }
+        public function set target(value:DisplayObjectStarling):void
         {
             if (mTarget != value)
             {
@@ -226,13 +226,13 @@ package starling.events
         /** @private 
          *  Dispatches a touch event along the current bubble chain (which is updated each time
          *  a target is set). */
-        internal function dispatchEvent(event:TouchEvent):void
+        internal function dispatchEvent(event:TouchEventStarling):void
         {
             if (mTarget) event.dispatch(mBubbleChain);
         }
         
         /** @private */
-        internal function get bubbleChain():Vector.<EventDispatcher>
+        internal function get bubbleChain():Vector.<EventDispatcherStarling>
         {
             return mBubbleChain.concat();
         }

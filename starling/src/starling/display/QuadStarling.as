@@ -14,8 +14,8 @@ package starling.display
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-    import starling.core.RenderSupport;
-    import starling.utils.VertexData;
+    import starling.core.RenderSupportStarling;
+    import starling.utils.VertexDataStarling;
     
     /** A Quad represents a rectangle with a uniform color or a color gradient.
      *  
@@ -31,14 +31,14 @@ package starling.display
      *  2 - 3
      *  </pre>
      * 
-     *  @see Image
+     *  @see ImageStarling
      */
-    public class Quad extends DisplayObject
+    public class QuadStarling extends DisplayObjectStarling
     {
         private var mTinted:Boolean;
         
         /** The raw vertex data of the quad. */
-        protected var mVertexData:VertexData;
+        protected var mVertexData:VertexDataStarling;
         
         /** Helper objects. */
         private static var sHelperPoint:Point = new Point();
@@ -47,7 +47,7 @@ package starling.display
         /** Creates a quad with a certain size and color. The last parameter controls if the 
          *  alpha value should be premultiplied into the color values on rendering, which can
          *  influence blending output. You can use the default value in most cases.  */
-        public function Quad(width:Number, height:Number, color:uint=0xffffff,
+        public function QuadStarling(width:Number, height:Number, color:uint=0xffffff,
                              premultipliedAlpha:Boolean=true)
         {
             if (width == 0.0 || height == 0.0)
@@ -55,7 +55,7 @@ package starling.display
 
             mTinted = color != 0xffffff;
             
-            mVertexData = new VertexData(4, premultipliedAlpha);
+            mVertexData = new VertexDataStarling(4, premultipliedAlpha);
             mVertexData.setPosition(0, 0.0, 0.0);
             mVertexData.setPosition(1, width, 0.0);
             mVertexData.setPosition(2, 0.0, height);
@@ -72,7 +72,7 @@ package starling.display
         }
         
         /** @inheritDoc */
-        public override function getBounds(targetSpace:DisplayObject, resultRect:Rectangle=null):Rectangle
+        public override function getBounds(targetSpace:DisplayObjectStarling, resultRect:Rectangle=null):Rectangle
         {
             if (resultRect == null) resultRect = new Rectangle();
             
@@ -158,21 +158,21 @@ package starling.display
         }
         
         /** Copies the raw vertex data to a VertexData instance. */
-        public function copyVertexDataTo(targetData:VertexData, targetVertexID:int=0):void
+        public function copyVertexDataTo(targetData:VertexDataStarling, targetVertexID:int=0):void
         {
             mVertexData.copyTo(targetData, targetVertexID);
         }
         
         /** Transforms the vertex positions of the raw vertex data by a certain matrix and
          *  copies the result to another VertexData instance. */
-        public function copyVertexDataTransformedTo(targetData:VertexData, targetVertexID:int=0,
+        public function copyVertexDataTransformedTo(targetData:VertexDataStarling, targetVertexID:int=0,
                                                     matrix:Matrix=null):void
         {
             mVertexData.copyTransformedTo(targetData, targetVertexID, matrix, 0, 4);
         }
         
         /** @inheritDoc */
-        public override function render(support:RenderSupport, parentAlpha:Number):void
+        public override function render(support:RenderSupportStarling, parentAlpha:Number):void
         {
             support.batchQuad(this, parentAlpha);
         }

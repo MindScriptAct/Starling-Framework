@@ -20,12 +20,12 @@ package tests
     import org.flexunit.asserts.assertEquals;
     import org.hamcrest.number.closeTo;
     
-    import starling.display.Quad;
-    import starling.display.Sprite;
-    import starling.display.Stage;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
-    import starling.utils.deg2rad;
+    import starling.display.QuadStarling;
+    import starling.display.SpriteStarling;
+    import starling.display.StageStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.VAlignStarling;
+    import starling.utils.deg2radStarling;
 
     public class DisplayObjectTest
     {
@@ -34,9 +34,9 @@ package tests
         [Test]
         public function testBase():void
         {
-            var object1:Sprite = new Sprite();
-            var object2:Sprite = new Sprite();
-            var object3:Sprite = new Sprite();
+            var object1:SpriteStarling = new SpriteStarling();
+            var object2:SpriteStarling = new SpriteStarling();
+            var object3:SpriteStarling = new SpriteStarling();
             
             object1.addChild(object2);
             object2.addChild(object3);
@@ -45,16 +45,16 @@ package tests
             Assert.assertEquals(object1, object2.base);
             Assert.assertEquals(object1, object3.base);
             
-            var quad:Quad = new Quad(100, 100);
+            var quad:QuadStarling = new QuadStarling(100, 100);
             Assert.assertEquals(quad, quad.base);
         }
         
         [Test]
         public function testRootAndStage():void
         {
-            var object1:Sprite = new Sprite();
-            var object2:Sprite = new Sprite();
-            var object3:Sprite = new Sprite();
+            var object1:SpriteStarling = new SpriteStarling();
+            var object2:SpriteStarling = new SpriteStarling();
+            var object3:SpriteStarling = new SpriteStarling();
             
             object1.addChild(object2);
             object2.addChild(object3);
@@ -66,7 +66,7 @@ package tests
             Assert.assertEquals(null, object2.stage);
             Assert.assertEquals(null, object3.stage);
             
-            var stage:Stage = new Stage(100, 100);
+            var stage:StageStarling = new StageStarling(100, 100);
             stage.addChild(object1);
             
             Assert.assertEquals(object1, object1.root);
@@ -80,8 +80,8 @@ package tests
         [Test]
         public function testGetTransformationMatrix():void
         {
-            var sprite:Sprite = new Sprite();
-            var child:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
+            var child:SpriteStarling = new SpriteStarling();
             child.x = 30;
             child.y = 20;
             child.scaleX = 1.2;
@@ -103,7 +103,7 @@ package tests
         [Test]
         public function testSetTransformationMatrix():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             var matrix:Matrix = new Matrix();
             matrix.scale(1.5, 2.0);
             matrix.rotate(0.25);
@@ -124,7 +124,7 @@ package tests
         {
             // pivot point information is redundant; instead, x/y properties will be modified.
             
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             sprite.pivotX = 50;
             sprite.pivotY = 20;
             
@@ -140,7 +140,7 @@ package tests
         [Test]
         public function testSetTransformationMatrixWithRightAngles():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             var matrix:Matrix = new Matrix();
             var angles:Array = [Math.PI / 2.0, Math.PI / -2.0];
 
@@ -161,7 +161,7 @@ package tests
         [Test]
         public function testSetTransformationMatrixWithZeroValues():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             var matrix:Matrix = new Matrix(0, 0, 0, 0, 0, 0);
             sprite.transformationMatrix = matrix;
             
@@ -177,7 +177,7 @@ package tests
         [Test]
         public function testBounds():void
         {
-            var quad:Quad = new Quad(10, 20);
+            var quad:QuadStarling = new QuadStarling(10, 20);
             quad.x = -10;
             quad.y =  10;
             quad.rotation = Math.PI / 2;
@@ -198,7 +198,7 @@ package tests
         [Test]
         public function testZeroSize():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             assertEquals(1.0, sprite.scaleX);
             assertEquals(1.0, sprite.scaleY);
             
@@ -212,7 +212,7 @@ package tests
             
             // setting a value to zero should be no problem -- and the original size 
             // should be remembered.
-            var quad:Quad = new Quad(100, 200);
+            var quad:QuadStarling = new QuadStarling(100, 200);
             quad.scaleX = 0.0;
             quad.scaleY = 0.0;
             assertThat(quad.width, closeTo(0, E));
@@ -227,12 +227,12 @@ package tests
         [Test]
         public function testLocalToGlobal():void
         {
-            var root:Sprite = new Sprite();
-            var sprite:Sprite = new Sprite();
+            var root:SpriteStarling = new SpriteStarling();
+            var sprite:SpriteStarling = new SpriteStarling();
             sprite.x = 10;
             sprite.y = 20;
             root.addChild(sprite);
-            var sprite2:Sprite = new Sprite();
+            var sprite2:SpriteStarling = new SpriteStarling();
             sprite2.x = 150;
             sprite2.y = 200;
             sprite.addChild(sprite2);
@@ -252,12 +252,12 @@ package tests
         [Test]
         public function testGlobalToLocal():void
         {
-            var root:Sprite = new Sprite();
-            var sprite:Sprite = new Sprite();
+            var root:SpriteStarling = new SpriteStarling();
+            var sprite:SpriteStarling = new SpriteStarling();
             sprite.x = 10;
             sprite.y = 20;
             root.addChild(sprite);
-            var sprite2:Sprite = new Sprite();
+            var sprite2:SpriteStarling = new SpriteStarling();
             sprite2.x = 150;
             sprite2.y = 200;
             sprite.addChild(sprite2);
@@ -277,7 +277,7 @@ package tests
         [Test]
         public function testHitTestPoint():void
         {
-            var quad:Quad = new Quad(25, 10);            
+            var quad:QuadStarling = new QuadStarling(25, 10);
             Assert.assertNotNull(quad.hitTest(new Point(15, 5), true));
             Assert.assertNotNull(quad.hitTest(new Point(0, 0), true));
             Assert.assertNotNull(quad.hitTest(new Point(24.99, 0), true));
@@ -301,25 +301,25 @@ package tests
         [Test]
         public function testRotation():void
         {
-            var quad:Quad = new Quad(100, 100);
-            quad.rotation = deg2rad(400);
-            assertThat(quad.rotation, closeTo(deg2rad(40), E));
-            quad.rotation = deg2rad(220);
-            assertThat(quad.rotation, closeTo(deg2rad(-140), E));
-            quad.rotation = deg2rad(180);
-            assertThat(quad.rotation, closeTo(deg2rad(180), E));
-            quad.rotation = deg2rad(-90);
-            assertThat(quad.rotation, closeTo(deg2rad(-90), E));
-            quad.rotation = deg2rad(-179);
-            assertThat(quad.rotation, closeTo(deg2rad(-179), E));
-            quad.rotation = deg2rad(-180);
-            assertThat(quad.rotation, closeTo(deg2rad(-180), E));
-            quad.rotation = deg2rad(-181);
-            assertThat(quad.rotation, closeTo(deg2rad(179), E));
-            quad.rotation = deg2rad(-300);
-            assertThat(quad.rotation, closeTo(deg2rad(60), E));
-            quad.rotation = deg2rad(-370);
-            assertThat(quad.rotation, closeTo(deg2rad(-10), E));
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            quad.rotation = deg2radStarling(400);
+            assertThat(quad.rotation, closeTo(deg2radStarling(40), E));
+            quad.rotation = deg2radStarling(220);
+            assertThat(quad.rotation, closeTo(deg2radStarling(-140), E));
+            quad.rotation = deg2radStarling(180);
+            assertThat(quad.rotation, closeTo(deg2radStarling(180), E));
+            quad.rotation = deg2radStarling(-90);
+            assertThat(quad.rotation, closeTo(deg2radStarling(-90), E));
+            quad.rotation = deg2radStarling(-179);
+            assertThat(quad.rotation, closeTo(deg2radStarling(-179), E));
+            quad.rotation = deg2radStarling(-180);
+            assertThat(quad.rotation, closeTo(deg2radStarling(-180), E));
+            quad.rotation = deg2radStarling(-181);
+            assertThat(quad.rotation, closeTo(deg2radStarling(179), E));
+            quad.rotation = deg2radStarling(-300);
+            assertThat(quad.rotation, closeTo(deg2radStarling(60), E));
+            quad.rotation = deg2radStarling(-370);
+            assertThat(quad.rotation, closeTo(deg2radStarling(-10), E));
         }
         
         [Test]
@@ -331,10 +331,10 @@ package tests
             // a quad with a pivot point should behave exactly as a quad without 
             // pivot point inside a sprite
             
-            var sprite:Sprite = new Sprite();
-            var innerQuad:Quad = new Quad(width, height);
+            var sprite:SpriteStarling = new SpriteStarling();
+            var innerQuad:QuadStarling = new QuadStarling(width, height);
             sprite.addChild(innerQuad);            
-            var quad:Quad = new Quad(width, height);            
+            var quad:QuadStarling = new QuadStarling(width, height);
             Helpers.compareRectangles(sprite.bounds, quad.bounds);
             
             innerQuad.x = -50;
@@ -343,7 +343,7 @@ package tests
             quad.pivotY = 20;            
             Helpers.compareRectangles(sprite.bounds, quad.bounds);
             
-            sprite.rotation = quad.rotation = deg2rad(45);
+            sprite.rotation = quad.rotation = deg2radStarling(45);
             Helpers.compareRectangles(sprite.bounds, quad.bounds);
             
             sprite.scaleX = quad.scaleX = 1.5;
@@ -367,11 +367,11 @@ package tests
             
             // create a scaled, rotated and skewed object from a sprite and a quad
             
-            var quad:Quad = new Quad(width, height);
+            var quad:QuadStarling = new QuadStarling(width, height);
             quad.x = width / -2;
             quad.y = height / -2;
             
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             sprite.x = width / 2;
             sprite.y = height / 2;
             sprite.skewX = skewX;
@@ -382,7 +382,7 @@ package tests
             
             // do the same without a sprite, but with a pivoted quad
             
-            var pQuad:Quad = new Quad(width, height);
+            var pQuad:QuadStarling = new QuadStarling(width, height);
             pQuad.x = width / 2;
             pQuad.y = height / 2;
             pQuad.pivotX = width / 2;
@@ -400,8 +400,8 @@ package tests
         [Test]
         public function testAlignPivot():void
         {
-            var sprite:Sprite = new Sprite();
-            var quad:Quad = new Quad(100, 50);
+            var sprite:SpriteStarling = new SpriteStarling();
+            var quad:QuadStarling = new QuadStarling(100, 50);
             quad.x = 200;
             quad.y = -100;
             sprite.addChild(quad);
@@ -410,15 +410,15 @@ package tests
             assertThat(sprite.pivotX, closeTo(250, E));
             assertThat(sprite.pivotY, closeTo(-75, E));
 
-            sprite.alignPivot(HAlign.LEFT, VAlign.TOP);
+            sprite.alignPivot(HAlignStarling.LEFT, VAlignStarling.TOP);
             assertThat(sprite.pivotX, closeTo(200, E));
             assertThat(sprite.pivotY, closeTo(-100, E));
 
-            sprite.alignPivot(HAlign.RIGHT, VAlign.BOTTOM);
+            sprite.alignPivot(HAlignStarling.RIGHT, VAlignStarling.BOTTOM);
             assertThat(sprite.pivotX, closeTo(300, E));
             assertThat(sprite.pivotY, closeTo(-50, E));
 
-            sprite.alignPivot(HAlign.LEFT, VAlign.BOTTOM);
+            sprite.alignPivot(HAlignStarling.LEFT, VAlignStarling.BOTTOM);
             assertThat(sprite.pivotX, closeTo(200, E));
             assertThat(sprite.pivotY, closeTo(-50, E));
         }
@@ -426,7 +426,7 @@ package tests
         [Test]
         public function testName():void
         {
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             Assert.assertNull(sprite.name);
             
             sprite.name = "hugo";

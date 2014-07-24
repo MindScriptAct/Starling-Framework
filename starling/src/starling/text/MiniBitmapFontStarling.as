@@ -14,7 +14,7 @@ package starling.text
     import flash.geom.Rectangle;
     import flash.utils.ByteArray;
     
-    import starling.textures.Texture;
+    import starling.textures.TextureStarling;
     
     /** @private
      *  This class contains constants for the 'MINI' bitmap font. It's done that way to avoid
@@ -23,7 +23,7 @@ package starling.text
      *  <p>The font is based on "uni05_53.ttf" from Craig Kroeger (http://www.miniml.com) and was
      *  converted to a Bitmap Font with "GlyphDesigner" from 71squared (http://www.71squared.com).
      *  </p> */
-    internal class MiniBitmapFont
+    internal class MiniBitmapFontStarling
     {
         private static const BITMAP_WIDTH:int = 128;
         private static const BITMAP_HEIGHT:int = 64;
@@ -273,10 +273,10 @@ package starling.text
           </chars>
         </font>;
         
-        public static function get texture():Texture
+        public static function get texture():TextureStarling
         {
             var bitmapData:BitmapData = getBitmapData();
-            var texture:Texture = Texture.fromBitmapData(bitmapData, false);
+            var texture:TextureStarling = TextureStarling.fromBitmapData(bitmapData, false);
             bitmapData.dispose();
             bitmapData = null;
 

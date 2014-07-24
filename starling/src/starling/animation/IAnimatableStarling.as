@@ -19,10 +19,10 @@ package starling.animation
      *   <code>Event.REMOVE_FROM_JUGGLER</code>. The "Tween" class is an example of a class that
      *   dispatches such an event; you don't have to remove tweens manually from the juggler.</p> 
      *   
-     *   @see Juggler
-     *   @see Tween
+     *   @see JugglerStarling
+     *   @see TweenStarling
      */
-    public interface IAnimatable 
+    public interface IAnimatableStarling
     {
         /** Advance the time by a number of seconds. @param time in seconds. */
         function advanceTime(time:Number):void;

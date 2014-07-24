@@ -13,14 +13,14 @@ package starling.text
     import flash.geom.Rectangle;
     import flash.utils.Dictionary;
     
-    import starling.display.Image;
-    import starling.display.QuadBatch;
-    import starling.display.Sprite;
-    import starling.textures.Texture;
-    import starling.textures.TextureSmoothing;
-    import starling.utils.HAlign;
-    import starling.utils.VAlign;
-    import starling.utils.cleanMasterString;
+    import starling.display.ImageStarling;
+    import starling.display.QuadBatchStarling;
+    import starling.display.SpriteStarling;
+    import starling.textures.TextureStarling;
+    import starling.textures.TextureSmoothingStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.VAlignStarling;
+    import starling.utils.cleanMasterStringStarling;
 
     /** The BitmapFont class parses bitmap font files and arranges the glyphs 
      *  in the form of a text.
@@ -52,7 +52,7 @@ package starling.text
      *  <code>name</code> value of the bitmap font. This will make the text field use the bitmap
      *  font.  
      */ 
-    public class BitmapFont
+    public class BitmapFontStarling
     {
         /** Use this constant for the <code>fontSize</code> property of the TextField class to 
          *  render the bitmap font in exactly the size it was created. */ 
@@ -66,7 +66,7 @@ package starling.text
         private static const CHAR_NEWLINE:int         = 10;
         private static const CHAR_CARRIAGE_RETURN:int = 13;
         
-        private var mTexture:Texture;
+        private var mTexture:TextureStarling;
         private var mChars:Dictionary;
         private var mName:String;
         private var mSize:Number;
@@ -74,20 +74,20 @@ package starling.text
         private var mBaseline:Number;
         private var mOffsetX:Number;
         private var mOffsetY:Number;
-        private var mHelperImage:Image;
+        private var mHelperImage:ImageStarling;
 
         /** Helper objects. */
         private static var sLines:Array = [];
         
         /** Creates a bitmap font by parsing an XML file and uses the specified texture. 
          *  If you don't pass any data, the "mini" font will be created. */
-        public function BitmapFont(texture:Texture=null, fontXml:XML=null)
+        public function BitmapFontStarling(texture:TextureStarling=null, fontXml:XML=null)
         {
             // if no texture is passed in, we create the minimal, embedded font
             if (texture == null && fontXml == null)
             {
-                texture = MiniBitmapFont.texture;
-                fontXml = MiniBitmapFont.xml;
+                texture = MiniBitmapFontStarling.texture;
+                fontXml = MiniBitmapFontStarling.xml;
             }
             
             mName = "unknown";
@@ -95,7 +95,7 @@ package starling.text
             mOffsetX = mOffsetY = 0.0;
             mTexture = texture;
             mChars = new Dictionary();
-            mHelperImage = new Image(texture);
+            mHelperImage = new ImageStarling(texture);
             
             if (fontXml) parseFontXml(fontXml);
         }
@@ -114,13 +114,13 @@ package starling.text
             var frameX:Number = frame ? frame.x : 0;
             var frameY:Number = frame ? frame.y : 0;
             
-            mName = cleanMasterString(fontXml.info.@face);
+            mName = cleanMasterStringStarling(fontXml.info.@face);
             mSize = parseFloat(fontXml.info.@size) / scale;
             mLineHeight = parseFloat(fontXml.common.@lineHeight) / scale;
             mBaseline = parseFloat(fontXml.common.@base) / scale;
             
             if (fontXml.info.@smooth.toString() == "0")
-                smoothing = TextureSmoothing.NONE;
+                smoothing = TextureSmoothingStarling.NONE;
             
             if (mSize <= 0)
             {
@@ -141,8 +141,8 @@ package starling.text
                 region.width  = parseFloat(charElement.@width)  / scale;
                 region.height = parseFloat(charElement.@height) / scale;
                 
-                var texture:Texture = Texture.fromTexture(mTexture, region);
-                var bitmapChar:BitmapChar = new BitmapChar(id, texture, xOffset, yOffset, xAdvance); 
+                var texture:TextureStarling = TextureStarling.fromTexture(mTexture, region);
+                var bitmapChar:BitmapCharStarling = new BitmapCharStarling(id, texture, xOffset, yOffset, xAdvance);
                 addChar(id, bitmapChar);
             }
             
@@ -156,13 +156,13 @@ package starling.text
         }
         
         /** Returns a single bitmap char with a certain character ID. */
-        public function getChar(charID:int):BitmapChar
+        public function getChar(charID:int):BitmapCharStarling
         {
             return mChars[charID];   
         }
         
         /** Adds a bitmap char with a certain character ID. */
-        public function addChar(charID:int, bitmapChar:BitmapChar):void
+        public function addChar(charID:int, bitmapChar:BitmapCharStarling):void
         {
             mChars[charID] = bitmapChar;
         }
@@ -205,17 +205,17 @@ package starling.text
                                      fontSize:Number=-1, color:uint=0xffffff, 
                                      hAlign:String="center", vAlign:String="center",      
                                      autoScale:Boolean=true, 
-                                     kerning:Boolean=true):Sprite
+                                     kerning:Boolean=true):SpriteStarling
         {
             var charLocations:Vector.<CharLocation> = arrangeChars(width, height, text, fontSize, 
                                                                    hAlign, vAlign, autoScale, kerning);
             var numChars:int = charLocations.length;
-            var sprite:Sprite = new Sprite();
+            var sprite:SpriteStarling = new SpriteStarling();
             
             for (var i:int=0; i<numChars; ++i)
             {
                 var charLocation:CharLocation = charLocations[i];
-                var char:Image = charLocation.char.createImage();
+                var char:ImageStarling = charLocation.char.createImage();
                 char.x = charLocation.x;
                 char.y = charLocation.y;
                 char.scaleX = char.scaleY = charLocation.scale;
@@ -228,7 +228,7 @@ package starling.text
         }
         
         /** Draws text into a QuadBatch. */
-        public function fillQuadBatch(quadBatch:QuadBatch, width:Number, height:Number, text:String,
+        public function fillQuadBatch(quadBatch:QuadBatchStarling, width:Number, height:Number, text:String,
                                       fontSize:Number=-1, color:uint=0xffffff, 
                                       hAlign:String="center", vAlign:String="center",      
                                       autoScale:Boolean=true, 
@@ -289,7 +289,7 @@ package starling.text
                     {
                         var lineFull:Boolean = false;
                         var charID:int = text.charCodeAt(i);
-                        var char:BitmapChar = getChar(charID);
+                        var char:BitmapCharStarling = getChar(charID);
                         
                         if (charID == CHAR_NEWLINE || charID == CHAR_CARRIAGE_RETURN)
                         {
@@ -374,8 +374,8 @@ package starling.text
             var bottom:Number = currentY + mLineHeight;
             var yOffset:int = 0;
             
-            if (vAlign == VAlign.BOTTOM)      yOffset =  containerHeight - bottom;
-            else if (vAlign == VAlign.CENTER) yOffset = (containerHeight - bottom) / 2;
+            if (vAlign == VAlignStarling.BOTTOM)      yOffset =  containerHeight - bottom;
+            else if (vAlign == VAlignStarling.CENTER) yOffset = (containerHeight - bottom) / 2;
             
             for (var lineID:int=0; lineID<numLines; ++lineID)
             {
@@ -389,8 +389,8 @@ package starling.text
                 var right:Number = lastLocation.x - lastLocation.char.xOffset 
                                                   + lastLocation.char.xAdvance;
                 
-                if (hAlign == HAlign.RIGHT)       xOffset =  containerWidth - right;
-                else if (hAlign == HAlign.CENTER) xOffset = (containerWidth - right) / 2;
+                if (hAlign == HAlignStarling.RIGHT)       xOffset =  containerWidth - right;
+                else if (hAlign == HAlignStarling.CENTER) xOffset = (containerWidth - right) / 2;
                 
                 for (var c:int=0; c<numChars; ++c)
                 {
@@ -437,25 +437,25 @@ package starling.text
         public function set offsetY(value:Number):void { mOffsetY = value; }
 
         /** The underlying texture that contains all the chars. */
-        public function get texture():Texture { return mTexture; }
+        public function get texture():TextureStarling { return mTexture; }
     }
 }
 
-import starling.text.BitmapChar;
+import starling.text.BitmapCharStarling;
 
 class CharLocation
 {
-    public var char:BitmapChar;
+    public var char:BitmapCharStarling;
     public var scale:Number;
     public var x:Number;
     public var y:Number;
     
-    public function CharLocation(char:BitmapChar)
+    public function CharLocation(char:BitmapCharStarling)
     {
         reset(char);
     }
 
-    private function reset(char:BitmapChar):CharLocation
+    private function reset(char:BitmapCharStarling):CharLocation
     {
         this.char = char;
         return this;
@@ -469,7 +469,7 @@ class CharLocation
     private static var sInstanceLoan:Vector.<CharLocation> = new <CharLocation>[];
     private static var sVectorLoan:Array = [];
 
-    public static function instanceFromPool(char:BitmapChar):CharLocation
+    public static function instanceFromPool(char:BitmapCharStarling):CharLocation
     {
         var instance:CharLocation = sInstancePool.length > 0 ?
             sInstancePool.pop() : new CharLocation(char);

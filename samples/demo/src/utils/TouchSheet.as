@@ -2,17 +2,17 @@ package utils
 {
     import flash.geom.Point;
     
-    import starling.display.DisplayObject;
-    import starling.display.Sprite;
-    import starling.events.Touch;
-    import starling.events.TouchEvent;
-    import starling.events.TouchPhase;
+    import starling.display.DisplayObjectStarling;
+    import starling.display.SpriteStarling;
+    import starling.events.TouchStarling;
+    import starling.events.TouchEventStarling;
+    import starling.events.TouchPhaseStarling;
 
-    public class TouchSheet extends Sprite
+    public class TouchSheet extends SpriteStarling
     {
-        public function TouchSheet(contents:DisplayObject=null)
+        public function TouchSheet(contents:DisplayObjectStarling=null)
         {
-            addEventListener(TouchEvent.TOUCH, onTouch);
+            addEventListener(TouchEventStarling.TOUCH, onTouch);
             useHandCursor = true;
             
             if (contents)
@@ -23,9 +23,9 @@ package utils
             }
         }
         
-        private function onTouch(event:TouchEvent):void
+        private function onTouch(event:TouchEventStarling):void
         {
-            var touches:Vector.<Touch> = event.getTouches(this, TouchPhase.MOVED);
+            var touches:Vector.<TouchStarling> = event.getTouches(this, TouchPhaseStarling.MOVED);
             
             if (touches.length == 1)
             {
@@ -37,8 +37,8 @@ package utils
             else if (touches.length == 2)
             {
                 // two fingers touching -> rotate and scale
-                var touchA:Touch = touches[0];
-                var touchB:Touch = touches[1];
+                var touchA:TouchStarling = touches[0];
+                var touchB:TouchStarling = touches[1];
                 
                 var currentPosA:Point  = touchA.getLocation(parent);
                 var previousPosA:Point = touchA.getPreviousLocation(parent);
@@ -71,7 +71,7 @@ package utils
                 scaleY *= sizeDiff;
             }
             
-            var touch:Touch = event.getTouch(this, TouchPhase.ENDED);
+            var touch:TouchStarling = event.getTouch(this, TouchPhaseStarling.ENDED);
             
             if (touch && touch.tapCount == 2)
                 parent.addChild(this); // bring self to front
@@ -83,7 +83,7 @@ package utils
         
         public override function dispose():void
         {
-            removeEventListener(TouchEvent.TOUCH, onTouch);
+            removeEventListener(TouchEventStarling.TOUCH, onTouch);
             super.dispose();
         }
     }

@@ -1,10 +1,10 @@
 package
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     public class Constants
     {
-        public function Constants() { throw new AbstractClassError(); }
+        public function Constants() { throw new AbstractClassErrorStarling(); }
         
         // We chose this stage size because it is used by many mobile devices; 
         // it's e.g. the resolution of the iPhone (non-retina), which means that your game

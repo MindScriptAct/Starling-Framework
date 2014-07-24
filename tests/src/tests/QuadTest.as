@@ -14,41 +14,41 @@ package tests
     
     import flexunit.framework.Assert;
     
-    import starling.core.starling_internal;
-    import starling.display.Quad;
-    import starling.display.Sprite;
-    import starling.utils.Color;
+    import starling.core.starling_internalStarling;
+    import starling.display.QuadStarling;
+    import starling.display.SpriteStarling;
+    import starling.utils.ColorStarling;
     
-    use namespace starling_internal;
+    use namespace starling_internalStarling;
 
     public class QuadTest
     {		
         [Test]
         public function testQuad():void
         {
-            var quad:Quad = new Quad(100, 200, Color.AQUA);            
-            Assert.assertEquals(Color.AQUA, quad.color);            
+            var quad:QuadStarling = new QuadStarling(100, 200, ColorStarling.AQUA);
+            Assert.assertEquals(ColorStarling.AQUA, quad.color);
         }
         
         [Test]
         public function testColors():void
         {
-            var quad:Quad = new Quad(100, 100);            
-            quad.setVertexColor(0, Color.AQUA);
-            quad.setVertexColor(1, Color.BLACK);
-            quad.setVertexColor(2, Color.BLUE);
-            quad.setVertexColor(3, Color.FUCHSIA);
+            var quad:QuadStarling = new QuadStarling(100, 100);
+            quad.setVertexColor(0, ColorStarling.AQUA);
+            quad.setVertexColor(1, ColorStarling.BLACK);
+            quad.setVertexColor(2, ColorStarling.BLUE);
+            quad.setVertexColor(3, ColorStarling.FUCHSIA);
             
-            Assert.assertEquals(Color.AQUA,    quad.getVertexColor(0));
-            Assert.assertEquals(Color.BLACK,   quad.getVertexColor(1));
-            Assert.assertEquals(Color.BLUE,    quad.getVertexColor(2));
-            Assert.assertEquals(Color.FUCHSIA, quad.getVertexColor(3));
+            Assert.assertEquals(ColorStarling.AQUA,    quad.getVertexColor(0));
+            Assert.assertEquals(ColorStarling.BLACK,   quad.getVertexColor(1));
+            Assert.assertEquals(ColorStarling.BLUE,    quad.getVertexColor(2));
+            Assert.assertEquals(ColorStarling.FUCHSIA, quad.getVertexColor(3));
         }
         
         [Test]
         public function testTinted():void
         {
-            var quad:Quad = new Quad(100, 100);
+            var quad:QuadStarling = new QuadStarling(100, 100);
             Assert.assertFalse(quad.tinted);
             
             quad.setVertexColor(2, 0xffffff);
@@ -111,7 +111,7 @@ package tests
         {
             // https://github.com/PrimaryFeather/Starling-Framework/issues/123
             
-            var quad:Quad = new Quad(100, 100);
+            var quad:QuadStarling = new QuadStarling(100, 100);
             quad.color = 0xff0000;
             quad.alpha = 0.5;
             quad.color = 0xffffff;
@@ -121,7 +121,7 @@ package tests
         [Test]
         public function testBounds():void
         {
-            var quad:Quad = new Quad(100, 200);
+            var quad:QuadStarling = new QuadStarling(100, 200);
             Helpers.compareRectangles(new Rectangle(0, 0, 100, 200), quad.bounds);
             
             quad.pivotX = 50;
@@ -142,7 +142,7 @@ package tests
             quad.y = 20;
             Helpers.compareRectangles(new Rectangle(-90, -10, 200, 100), quad.bounds);
             
-            var parent:Sprite = new Sprite();
+            var parent:SpriteStarling = new SpriteStarling();
             parent.addChild(quad);
             
             Helpers.compareRectangles(parent.bounds, quad.bounds);
@@ -151,7 +151,7 @@ package tests
         [Test]
         public function testWidthAndHeight():void
         {
-            var quad:Quad = new Quad(100, 50);
+            var quad:QuadStarling = new QuadStarling(100, 50);
             Assert.assertEquals(100, quad.width);
             Assert.assertEquals(50,  quad.height);
             

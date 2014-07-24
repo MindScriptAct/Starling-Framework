@@ -19,10 +19,10 @@ package tests
     import org.flexunit.asserts.assertFalse;
     import org.hamcrest.number.closeTo;
     
-    import starling.display.MovieClip;
-    import starling.events.Event;
-    import starling.textures.ConcreteTexture;
-    import starling.textures.Texture;
+    import starling.display.MovieClipStarling;
+    import starling.events.EventStarling;
+    import starling.textures.ConcreteTextureStarling;
+    import starling.textures.TextureStarling;
 
     public class MovieClipTest
     {
@@ -35,12 +35,12 @@ package tests
             var frameDuration:Number = 1.0 / fps;
             var format:String = Context3DTextureFormat.BGRA;
             
-            var texture0:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
-            var texture1:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
-            var texture2:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
-            var texture3:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
+            var texture0:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
+            var texture1:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
+            var texture2:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
+            var texture3:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
             
-            var movie:MovieClip = new MovieClip(new <Texture>[texture0], fps);
+            var movie:MovieClipStarling = new MovieClipStarling(new <TextureStarling>[texture0], fps);
             
             assertThat(movie.width, closeTo(texture0.width, E));
             assertThat(movie.height, closeTo(texture0.height, E));
@@ -104,12 +104,12 @@ package tests
             var frameDuration:Number = 1.0 / fps;
             var format:String = Context3DTextureFormat.BGRA;
             
-            var texture0:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
-            var texture1:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
-            var texture2:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
-            var texture3:Texture = new ConcreteTexture(null, format, 16, 16, false, false);
+            var texture0:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
+            var texture1:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
+            var texture2:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
+            var texture3:TextureStarling = new ConcreteTextureStarling(null, format, 16, 16, false, false);
             
-            var movie:MovieClip = new MovieClip(new <Texture>[texture0], fps);
+            var movie:MovieClipStarling = new MovieClipStarling(new <TextureStarling>[texture0], fps);
             movie.addFrame(texture2, null, 0.5);
             movie.addFrame(texture3);
             movie.addFrameAt(0, texture1);
@@ -149,8 +149,8 @@ package tests
         [Test]
         public function testChangeFps():void
         {
-            var frames:Vector.<Texture> = createFrames(3);
-            var movie:MovieClip = new MovieClip(frames, 4.0);
+            var frames:Vector.<TextureStarling> = createFrames(3);
+            var movie:MovieClipStarling = new MovieClipStarling(frames, 4.0);
             
             assertThat(movie.fps, closeTo(4.0, E));
             
@@ -175,9 +175,9 @@ package tests
             var frameDuration:Number = 1.0 / fps;
             var completedCount:int = 0;
             
-            var frames:Vector.<Texture> = createFrames(4);
-            var movie:MovieClip = new MovieClip(frames, fps);
-            movie.addEventListener(Event.COMPLETE, onMovieCompleted);
+            var frames:Vector.<TextureStarling> = createFrames(4);
+            var movie:MovieClipStarling = new MovieClipStarling(frames, fps);
+            movie.addEventListener(EventStarling.COMPLETE, onMovieCompleted);
             movie.loop = false;
             
             Assert.assertFalse(movie.isComplete);
@@ -219,7 +219,7 @@ package tests
             movie.advanceTime(movie.numFrames * 2 * frameDuration);
             Assert.assertEquals(3, completedCount);
             
-            function onMovieCompleted(event:Event):void
+            function onMovieCompleted(event:EventStarling):void
             {
                 completedCount++;
             }
@@ -232,17 +232,17 @@ package tests
             var frameDuration:Number = 1.0 / fps;
             var completedCount:int = 0;
             
-            var frames:Vector.<Texture> = createFrames(4);
-            var movie:MovieClip = new MovieClip(frames, fps);
+            var frames:Vector.<TextureStarling> = createFrames(4);
+            var movie:MovieClipStarling = new MovieClipStarling(frames, fps);
             
             movie.loop = true;
-            movie.addEventListener(Event.COMPLETE, onMovieCompleted);
+            movie.addEventListener(EventStarling.COMPLETE, onMovieCompleted);
             movie.advanceTime(1.75);
             
             Assert.assertFalse(movie.isPlaying);
             Assert.assertEquals(0, movie.currentFrame);
 
-            function onMovieCompleted(event:Event):void
+            function onMovieCompleted(event:EventStarling):void
             {
                 movie.pause();
                 movie.currentFrame = 0;
@@ -252,8 +252,8 @@ package tests
         [Test]
         public function testRemoveAllFrames():void
         {
-            var frames:Vector.<Texture> = createFrames(2);
-            var movie:MovieClip = new MovieClip(frames);
+            var frames:Vector.<TextureStarling> = createFrames(2);
+            var movie:MovieClipStarling = new MovieClipStarling(frames);
             
             // it must not be allowed to remove the last frame 
             movie.removeFrameAt(0);
@@ -275,9 +275,9 @@ package tests
         public function testLastTextureInFastPlayback():void
         {
             var fps:Number = 20.0;
-            var frames:Vector.<Texture> = createFrames(3);
-            var movie:MovieClip = new MovieClip(frames, fps);
-            movie.addEventListener(Event.COMPLETE, onMovieCompleted);
+            var frames:Vector.<TextureStarling> = createFrames(3);
+            var movie:MovieClipStarling = new MovieClipStarling(frames, fps);
+            movie.addEventListener(EventStarling.COMPLETE, onMovieCompleted);
             movie.advanceTime(1.0);
             
             function onMovieCompleted():void
@@ -291,10 +291,10 @@ package tests
         {
             // https://github.com/PrimaryFeather/Starling-Framework/issues/232
             
-            var frames:Vector.<Texture> = createFrames(2);
-            var movie:MovieClip = new MovieClip(frames, 2);
+            var frames:Vector.<TextureStarling> = createFrames(2);
+            var movie:MovieClipStarling = new MovieClipStarling(frames, 2);
             
-            movie.addEventListener(Event.COMPLETE, onComplete);
+            movie.addEventListener(EventStarling.COMPLETE, onComplete);
             assertEquals(frames[0], movie.texture);
             
             movie.advanceTime(0.5);
@@ -312,10 +312,10 @@ package tests
         [Test]
         public function testStopMovieInCompleteHandler():void
         {
-            var frames:Vector.<Texture> = createFrames(5);
-            var movie:MovieClip = new MovieClip(frames, 5);
+            var frames:Vector.<TextureStarling> = createFrames(5);
+            var movie:MovieClipStarling = new MovieClipStarling(frames, 5);
             
-            movie.addEventListener(Event.COMPLETE, onComplete);
+            movie.addEventListener(EventStarling.COMPLETE, onComplete);
             movie.advanceTime(1.3);
             
             assertFalse(movie.isPlaying);
@@ -330,13 +330,13 @@ package tests
             function onComplete():void { movie.stop(); }
         }
         
-        private function createFrames(count:int):Vector.<Texture>
+        private function createFrames(count:int):Vector.<TextureStarling>
         {
-            var frames:Vector.<Texture> = new <Texture>[];
+            var frames:Vector.<TextureStarling> = new <TextureStarling>[];
             var format:String = Context3DTextureFormat.BGRA;
             
             for (var i:int=0; i<count; ++i)
-                frames.push(new ConcreteTexture(null, format, 16, 16, false, false));
+                frames.push(new ConcreteTextureStarling(null, format, 16, 16, false, false));
             
             return frames;
         }

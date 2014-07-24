@@ -12,10 +12,10 @@ package starling.events
 {
     import flash.utils.Dictionary;
     
-    import starling.core.starling_internal;
-    import starling.display.DisplayObject;
+    import starling.core.starling_internalStarling;
+    import starling.display.DisplayObjectStarling;
     
-    use namespace starling_internal;
+    use namespace starling_internalStarling;
     
     /** The EventDispatcher class is the base class for all classes that dispatch events. 
      *  This is the Starling version of the Flash class with the same name. 
@@ -32,10 +32,10 @@ package starling.events
      *  Starling events, which will bubble along Starling display objects - but they cannot 
      *  dispatch Flash events or bubble along Flash display objects.</p>
      *  
-     *  @see Event
-     *  @see starling.display.DisplayObject DisplayObject
+     *  @see EventStarling
+     *  @see starling.display.DisplayObjectStarling DisplayObject
      */
-    public class EventDispatcher
+    public class EventDispatcherStarling
     {
         private var mEventListeners:Dictionary;
         
@@ -43,7 +43,7 @@ package starling.events
         private static var sBubbleChains:Array = [];
         
         /** Creates an EventDispatcher. */
-        public function EventDispatcher()
+        public function EventDispatcherStarling()
         {  }
         
         /** Registers an event listener at a certain object. */
@@ -100,7 +100,7 @@ package starling.events
          *  If an event with enabled 'bubble' property is dispatched to a display object, it will 
          *  travel up along the line of parents, until it either hits the root object or someone
          *  stops its propagation manually. */
-        public function dispatchEvent(event:Event):void
+        public function dispatchEvent(event:EventStarling):void
         {
             var bubbles:Boolean = event.bubbles;
             
@@ -110,10 +110,10 @@ package starling.events
             // we save the current target and restore it later;
             // this allows users to re-dispatch events without creating a clone.
             
-            var previousTarget:EventDispatcher = event.target;
+            var previousTarget:EventDispatcherStarling = event.target;
             event.setTarget(this);
             
-            if (bubbles && this is DisplayObject) bubbleEvent(event);
+            if (bubbles && this is DisplayObjectStarling) bubbleEvent(event);
             else                                  invokeEvent(event);
             
             if (previousTarget) event.setTarget(previousTarget);
@@ -123,7 +123,7 @@ package starling.events
          *  Invokes an event on the current object. This method does not do any bubbling, nor
          *  does it back-up and restore the previous target on the event. The 'dispatchEvent' 
          *  method uses this method internally. */
-        internal function invokeEvent(event:Event):Boolean
+        internal function invokeEvent(event:EventStarling):Boolean
         {
             var listeners:Vector.<Function> = mEventListeners ?
                 mEventListeners[event.type] as Vector.<Function> : null;
@@ -159,17 +159,17 @@ package starling.events
         }
         
         /** @private */
-        internal function bubbleEvent(event:Event):void
+        internal function bubbleEvent(event:EventStarling):void
         {
             // we determine the bubble chain before starting to invoke the listeners.
             // that way, changes done by the listeners won't affect the bubble chain.
             
-            var chain:Vector.<EventDispatcher>;
-            var element:DisplayObject = this as DisplayObject;
+            var chain:Vector.<EventDispatcherStarling>;
+            var element:DisplayObjectStarling = this as DisplayObjectStarling;
             var length:int = 1;
             
             if (sBubbleChains.length > 0) { chain = sBubbleChains.pop(); chain[0] = element; }
-            else chain = new <EventDispatcher>[element];
+            else chain = new <EventDispatcherStarling>[element];
             
             while ((element = element.parent) != null)
                 chain[int(length++)] = element;
@@ -191,9 +191,9 @@ package starling.events
         {
             if (bubbles || hasEventListener(type)) 
             {
-                var event:Event = Event.fromPool(type, bubbles, data);
+                var event:EventStarling = EventStarling.fromPool(type, bubbles, data);
                 dispatchEvent(event);
-                Event.toPool(event);
+                EventStarling.toPool(event);
             }
         }
         

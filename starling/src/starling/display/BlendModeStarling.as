@@ -12,7 +12,7 @@ package starling.display
 {
     import flash.display3D.Context3DBlendFactor;
     
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
     
     /** A class that provides constant values for visual blend mode effects. 
      *   
@@ -34,7 +34,7 @@ package starling.display
      *  
      *  @see flash.display3D.Context3DBlendFactor
      */
-    public class BlendMode
+    public class BlendModeStarling
     {
         private static var sBlendFactors:Array = [ 
             // no premultiplied alpha
@@ -62,7 +62,7 @@ package starling.display
         // predifined modes
         
         /** @private */
-        public function BlendMode() { throw new AbstractClassError(); }
+        public function BlendModeStarling() { throw new AbstractClassErrorStarling(); }
         
         /** Inherits the blend mode from this display object's parent. */
         public static const AUTO:String = "auto";

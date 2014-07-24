@@ -10,13 +10,13 @@
 
 package starling.textures
 {
-    import starling.errors.AbstractClassError;
+    import starling.errors.AbstractClassErrorStarling;
 
     /** A class that provides constant values for the possible smoothing algorithms of a texture. */ 
-    public class TextureSmoothing
+    public class TextureSmoothingStarling
     {
         /** @private */
-        public function TextureSmoothing() { throw new AbstractClassError(); }
+        public function TextureSmoothingStarling() { throw new AbstractClassErrorStarling(); }
         
         /** No smoothing, also called "Nearest Neighbor". Pixels will scale up as big rectangles. */
         public static const NONE:String      = "none";

@@ -20,12 +20,12 @@ package starling.textures
     import flash.utils.ByteArray;
     import flash.utils.getQualifiedClassName;
     
-    import starling.core.Starling;
-    import starling.errors.AbstractClassError;
-    import starling.errors.MissingContextError;
-    import starling.utils.Color;
-    import starling.utils.VertexData;
-    import starling.utils.getNextPowerOfTwo;
+    import starling.core.StarlingStarling;
+    import starling.errors.AbstractClassErrorStarling;
+    import starling.errors.MissingContextErrorStarling;
+    import starling.utils.ColorStarling;
+    import starling.utils.VertexDataStarling;
+    import starling.utils.getNextPowerOfTwoStarling;
 
     /** <p>A texture stores the information that represents an image. It cannot be added to the
      *  display list directly; instead it has to be mapped onto a display object. In Starling, 
@@ -96,19 +96,19 @@ package starling.textures
      *  been recreated (but is still empty). If you use the "AssetManager" class to manage
      *  your textures, this will be done automatically.</p>
      *  
-     *  @see starling.display.Image
-     *  @see starling.utils.AssetManager
-     *  @see TextureAtlas
+     *  @see starling.display.ImageStarling
+     *  @see starling.utils.AssetManagerStarling
+     *  @see TextureAtlasStarling
      */ 
-    public class Texture
+    public class TextureStarling
     {
         /** @private */
-        public function Texture()
+        public function TextureStarling()
         {
             if (Capabilities.isDebugger && 
                 getQualifiedClassName(this) == "starling.textures::Texture")
             {
-                throw new AbstractClassError();
+                throw new AbstractClassErrorStarling();
             }
         }
         
@@ -128,12 +128,12 @@ package starling.textures
          *                  with ATF data.
          *  @param options: Specifies options about the texture settings, e.g. scale factor.
          */
-        public static function fromData(data:Object, options:TextureOptions=null):Texture
+        public static function fromData(data:Object, options:TextureOptionsStarling=null):TextureStarling
         {
-            var texture:Texture = null;
+            var texture:TextureStarling = null;
             
             if (data is Bitmap)  data = (data as Bitmap).bitmapData;
-            if (options == null) options = new TextureOptions();
+            if (options == null) options = new TextureOptionsStarling();
             
             if (data is Class)
             {
@@ -174,14 +174,14 @@ package starling.textures
         public static function fromEmbeddedAsset(assetClass:Class, mipMapping:Boolean=true,
                                                  optimizeForRenderToTexture:Boolean=false,
                                                  scale:Number=1, format:String="bgra",
-                                                 repeat:Boolean=false):Texture
+                                                 repeat:Boolean=false):TextureStarling
         {
-            var texture:Texture;
+            var texture:TextureStarling;
             var asset:Object = new assetClass();
             
             if (asset is Bitmap)
             {
-                texture = Texture.fromBitmap(asset as Bitmap, mipMapping, false, scale, format, repeat);
+                texture = TextureStarling.fromBitmap(asset as Bitmap, mipMapping, false, scale, format, repeat);
                 texture.root.onRestore = function():void
                 {
                     texture.root.uploadBitmap(new assetClass());
@@ -189,7 +189,7 @@ package starling.textures
             }
             else if (asset is ByteArray)
             {
-                texture = Texture.fromAtfData(asset as ByteArray, scale, mipMapping, null, repeat);
+                texture = TextureStarling.fromAtfData(asset as ByteArray, scale, mipMapping, null, repeat);
                 texture.root.onRestore = function():void
                 {
                     texture.root.uploadAtfData(new assetClass()); 
@@ -222,7 +222,7 @@ package starling.textures
         public static function fromBitmap(bitmap:Bitmap, generateMipMaps:Boolean=true,
                                           optimizeForRenderToTexture:Boolean=false,
                                           scale:Number=1, format:String="bgra",
-                                          repeat:Boolean=false):Texture
+                                          repeat:Boolean=false):TextureStarling
         {
             return fromBitmapData(bitmap.bitmapData, generateMipMaps, optimizeForRenderToTexture, 
                                   scale, format, repeat);
@@ -246,9 +246,9 @@ package starling.textures
         public static function fromBitmapData(data:BitmapData, generateMipMaps:Boolean=true,
                                               optimizeForRenderToTexture:Boolean=false,
                                               scale:Number=1, format:String="bgra",
-                                              repeat:Boolean=false):Texture
+                                              repeat:Boolean=false):TextureStarling
         {
-            var texture:Texture = Texture.empty(data.width / scale, data.height / scale, true, 
+            var texture:TextureStarling = TextureStarling.empty(data.width / scale, data.height / scale, true,
                                                 generateMipMaps, optimizeForRenderToTexture, scale,
                                                 format, repeat);
             
@@ -270,15 +270,15 @@ package starling.textures
          *  asynchronously. It can only be used when the callback has been executed. This is the
          *  expected function definition: <code>function(texture:Texture):void;</code></p> */
         public static function fromAtfData(data:ByteArray, scale:Number=1, useMipMaps:Boolean=true, 
-                                           async:Function=null, repeat:Boolean=false):Texture
+                                           async:Function=null, repeat:Boolean=false):TextureStarling
         {
-            var context:Context3D = Starling.context;
-            if (context == null) throw new MissingContextError();
+            var context:Context3D = StarlingStarling.context;
+            if (context == null) throw new MissingContextErrorStarling();
             
-            var atfData:AtfData = new AtfData(data);
+            var atfData:AtfDataStarling = new AtfDataStarling(data);
             var nativeTexture:flash.display3D.textures.Texture = context.createTexture(
                 atfData.width, atfData.height, atfData.format, false);
-            var concreteTexture:ConcreteTexture = new ConcreteTexture(nativeTexture, atfData.format, 
+            var concreteTexture:ConcreteTextureStarling = new ConcreteTextureStarling(nativeTexture, atfData.format,
                 atfData.width, atfData.height, useMipMaps && atfData.numTextures > 1, 
                 false, false, scale, repeat);
             
@@ -303,14 +303,14 @@ package starling.textures
          */
         public static function fromColor(width:Number, height:Number, color:uint=0xffffffff,
                                          optimizeForRenderToTexture:Boolean=false, 
-                                         scale:Number=-1, format:String="bgra"):Texture
+                                         scale:Number=-1, format:String="bgra"):TextureStarling
         {
-            var texture:Texture = Texture.empty(width, height, true, false, 
+            var texture:TextureStarling = TextureStarling.empty(width, height, true, false,
                                                 optimizeForRenderToTexture, scale, format);
-            texture.root.clear(color, Color.getAlpha(color) / 255.0);
+            texture.root.clear(color, ColorStarling.getAlpha(color) / 255.0);
             texture.root.onRestore = function():void
             {
-                texture.root.clear(color, Color.getAlpha(color) / 255.0);
+                texture.root.clear(color, ColorStarling.getAlpha(color) / 255.0);
             };
             
             return texture;
@@ -335,20 +335,20 @@ package starling.textures
          */
         public static function empty(width:Number, height:Number, premultipliedAlpha:Boolean=true,
                                      mipMapping:Boolean=true, optimizeForRenderToTexture:Boolean=false,
-                                     scale:Number=-1, format:String="bgra", repeat:Boolean=false):Texture
+                                     scale:Number=-1, format:String="bgra", repeat:Boolean=false):TextureStarling
         {
-            if (scale <= 0) scale = Starling.contentScaleFactor;
+            if (scale <= 0) scale = StarlingStarling.contentScaleFactor;
             
             var actualWidth:int, actualHeight:int;
             var nativeTexture:flash.display3D.textures.TextureBase;
-            var context:Context3D = Starling.context;
+            var context:Context3D = StarlingStarling.context;
             
-            if (context == null) throw new MissingContextError();
+            if (context == null) throw new MissingContextErrorStarling();
             
             var origWidth:Number  = width  * scale;
             var origHeight:Number = height * scale;
             var useRectTexture:Boolean = !mipMapping && !repeat &&
-                Starling.current.profile != "baselineConstrained" &&
+                StarlingStarling.current.profile != "baselineConstrained" &&
                 "createRectangleTexture" in context && format.indexOf("compressed") == -1;
             
             if (useRectTexture)
@@ -363,14 +363,14 @@ package starling.textures
             }
             else
             {
-                actualWidth  = getNextPowerOfTwo(origWidth);
-                actualHeight = getNextPowerOfTwo(origHeight);
+                actualWidth  = getNextPowerOfTwoStarling(origWidth);
+                actualHeight = getNextPowerOfTwoStarling(origHeight);
                 
                 nativeTexture = context.createTexture(actualWidth, actualHeight, format,
                                                       optimizeForRenderToTexture);
             }
             
-            var concreteTexture:ConcreteTexture = new ConcreteTexture(nativeTexture, format,
+            var concreteTexture:ConcreteTextureStarling = new ConcreteTextureStarling(nativeTexture, format,
                 actualWidth, actualHeight, mipMapping, premultipliedAlpha,
                 optimizeForRenderToTexture, scale, repeat);
             
@@ -379,7 +379,7 @@ package starling.textures
             if (actualWidth - origWidth < 0.001 && actualHeight - origHeight < 0.001)
                 return concreteTexture;
             else
-                return new SubTexture(concreteTexture, new Rectangle(0, 0, width, height), true);
+                return new SubTextureStarling(concreteTexture, new Rectangle(0, 0, width, height), true);
         }
         
         /** Creates a texture that contains a region (in pixels) of another texture. The new
@@ -393,10 +393,10 @@ package starling.textures
          *  @param rotated: If true, the SubTexture will show the parent region rotated by
          *                  90 degrees (CCW).
          */
-        public static function fromTexture(texture:Texture, region:Rectangle=null,
-                                           frame:Rectangle=null, rotated:Boolean=false):Texture
+        public static function fromTexture(texture:TextureStarling, region:Rectangle=null,
+                                           frame:Rectangle=null, rotated:Boolean=false):TextureStarling
         {
-            return new SubTexture(texture, region, false, frame, rotated);
+            return new SubTextureStarling(texture, region, false, frame, rotated);
         }
         
         /** Converts texture coordinates and vertex positions of raw vertex data into the format 
@@ -405,7 +405,7 @@ package starling.textures
          *  might be working with a SubTexture or a texture frame. This method
          *  adjusts the texture and vertex coordinates accordingly.
          */
-        public function adjustVertexData(vertexData:VertexData, vertexID:int, count:int):void
+        public function adjustVertexData(vertexData:VertexDataStarling, vertexID:int, count:int):void
         {
             // override in subclass
         }
@@ -460,7 +460,7 @@ package starling.textures
         public function get base():TextureBase { return null; }
         
         /** The concrete texture the texture is based on. */
-        public function get root():ConcreteTexture { return null; }
+        public function get root():ConcreteTextureStarling { return null; }
         
         /** The <code>Context3DTextureFormat</code> of the underlying texture data. */
         public function get format():String { return Context3DTextureFormat.BGRA; }

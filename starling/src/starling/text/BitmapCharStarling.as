@@ -12,16 +12,16 @@ package starling.text
 {
     import flash.utils.Dictionary;
     
-    import starling.display.Image;
-    import starling.textures.Texture;
+    import starling.display.ImageStarling;
+    import starling.textures.TextureStarling;
 
     /** A BitmapChar contains the information about one char of a bitmap font.  
      *  <em>You don't have to use this class directly in most cases. 
      *  The TextField class contains methods that handle bitmap fonts for you.</em>    
      */ 
-    public class BitmapChar
+    public class BitmapCharStarling
     {
-        private var mTexture:Texture;
+        private var mTexture:TextureStarling;
         private var mCharID:int;
         private var mXOffset:Number;
         private var mYOffset:Number;
@@ -29,7 +29,7 @@ package starling.text
         private var mKernings:Dictionary;
         
         /** Creates a char with a texture and its properties. */
-        public function BitmapChar(id:int, texture:Texture, 
+        public function BitmapCharStarling(id:int, texture:TextureStarling,
                                    xOffset:Number, yOffset:Number, xAdvance:Number)
         {
             mCharID = id;
@@ -57,9 +57,9 @@ package starling.text
         }
         
         /** Creates an image of the char. */
-        public function createImage():Image
+        public function createImage():ImageStarling
         {
-            return new Image(mTexture);
+            return new ImageStarling(mTexture);
         }
         
         /** The unicode ID of the char. */
@@ -75,7 +75,7 @@ package starling.text
         public function get xAdvance():Number { return mXAdvance; }
         
         /** The texture of the character. */
-        public function get texture():Texture { return mTexture; }
+        public function get texture():TextureStarling { return mTexture; }
         
         /** The width of the character in points. */
         public function get width():Number { return mTexture.width; }

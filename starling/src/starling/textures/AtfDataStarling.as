@@ -14,7 +14,7 @@ package starling.textures
     import flash.utils.ByteArray;
 
     /** A parser for the ATF data format. */
-    public class AtfData
+    public class AtfDataStarling
     {
         private var mFormat:String;
         private var mWidth:int;
@@ -23,7 +23,7 @@ package starling.textures
         private var mData:ByteArray;
         
         /** Create a new instance by parsing the given byte array. */
-        public function AtfData(data:ByteArray)
+        public function AtfDataStarling(data:ByteArray)
         {
             if (!isAtfData(data)) throw new ArgumentError("Invalid ATF data");
             

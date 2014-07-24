@@ -8,7 +8,7 @@ package
 	import flash.events.Event;
 	import flash.utils.getDefinitionByName;
 	
-	import starling.utils.Color;
+	import starling.utils.ColorStarling;
 	
     // To show a Preloader while the SWF is being transferred from the server, 
     // set this class as your 'default application' and add the following 
@@ -78,7 +78,7 @@ package
                 y = Math.sin(angleDelta * i) * radius;
                 color = (i+1) / elements * 255;
                 
-                shape.graphics.beginFill(Color.rgb(color, color, color));
+                shape.graphics.beginFill(ColorStarling.rgb(color, color, color));
                 shape.graphics.drawCircle(x, y, innerRadius);
                 shape.graphics.endFill();
             }

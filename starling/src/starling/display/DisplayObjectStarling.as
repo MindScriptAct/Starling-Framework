@@ -18,41 +18,41 @@ package starling.display
     import flash.ui.MouseCursor;
     import flash.utils.getQualifiedClassName;
     
-    import starling.core.RenderSupport;
-    import starling.core.Starling;
-    import starling.errors.AbstractClassError;
-    import starling.errors.AbstractMethodError;
-    import starling.events.Event;
-    import starling.events.EventDispatcher;
-    import starling.events.TouchEvent;
-    import starling.filters.FragmentFilter;
-    import starling.utils.HAlign;
-    import starling.utils.MatrixUtil;
-    import starling.utils.VAlign;
+    import starling.core.RenderSupportStarling;
+    import starling.core.StarlingStarling;
+    import starling.errors.AbstractClassErrorStarling;
+    import starling.errors.AbstractMethodErrorStarling;
+    import starling.events.EventStarling;
+    import starling.events.EventDispatcherStarling;
+    import starling.events.TouchEventStarling;
+    import starling.filters.FragmentFilterStarling;
+    import starling.utils.HAlignStarling;
+    import starling.utils.MatrixUtilStarling;
+    import starling.utils.VAlignStarling;
     
     /** Dispatched when an object is added to a parent. */
-    [Event(name="added", type="starling.events.Event")]
+    [Event(name="added", type="starling.events.EventStarling")]
     
     /** Dispatched when an object is connected to the stage (directly or indirectly). */
-    [Event(name="addedToStage", type="starling.events.Event")]
+    [Event(name="addedToStage", type="starling.events.EventStarling")]
     
     /** Dispatched when an object is removed from its parent. */
-    [Event(name="removed", type="starling.events.Event")]
+    [Event(name="removed", type="starling.events.EventStarling")]
     
     /** Dispatched when an object is removed from the stage and won't be rendered any longer. */ 
-    [Event(name="removedFromStage", type="starling.events.Event")]
+    [Event(name="removedFromStage", type="starling.events.EventStarling")]
     
     /** Dispatched once every frame on every object that is connected to the stage. */ 
-    [Event(name="enterFrame", type="starling.events.EnterFrameEvent")]
+    [Event(name="enterFrame", type="starling.events.EnterFrameEventStarling")]
     
     /** Dispatched when an object is touched. Bubbles. */
-    [Event(name="touch", type="starling.events.TouchEvent")]
+    [Event(name="touch", type="starling.events.TouchEventStarling")]
     
     /** Dispatched when a key on the keyboard is released. */
-    [Event(name="keyUp", type="starling.events.KeyboardEvent")]
+    [Event(name="keyUp", type="starling.events.KeyboardEventStarling")]
     
     /** Dispatched when a key on the keyboard is pressed. */
-    [Event(name="keyDown", type="starling.events.KeyboardEvent")]
+    [Event(name="keyDown", type="starling.events.KeyboardEventStarling")]
     
     /**
      *  The DisplayObject class is the base class for all objects that are rendered on the 
@@ -118,11 +118,11 @@ package starling.display
      *  were accumulated before by different render methods (for performance reasons). Otherwise, 
      *  the z-ordering will be incorrect.</p> 
      * 
-     *  @see DisplayObjectContainer
-     *  @see Sprite
-     *  @see Stage 
+     *  @see DisplayObjectContainerStarling
+     *  @see SpriteStarling
+     *  @see StageStarling
      */
-    public class DisplayObject extends EventDispatcher
+    public class DisplayObjectStarling extends EventDispatcherStarling
     {
         private static const TWO_PI:Number = Math.PI * 2.0;
         
@@ -143,29 +143,29 @@ package starling.display
         private var mBlendMode:String;
         private var mName:String;
         private var mUseHandCursor:Boolean;
-        private var mParent:DisplayObjectContainer;  
+        private var mParent:DisplayObjectContainerStarling;
         private var mTransformationMatrix:Matrix;
         private var mOrientationChanged:Boolean;
-        private var mFilter:FragmentFilter;
+        private var mFilter:FragmentFilterStarling;
         
         /** Helper objects. */
-        private static var sAncestors:Vector.<DisplayObject> = new <DisplayObject>[];
+        private static var sAncestors:Vector.<DisplayObjectStarling> = new <DisplayObjectStarling>[];
         private static var sHelperRect:Rectangle = new Rectangle();
         private static var sHelperMatrix:Matrix  = new Matrix();
         
         /** @private */ 
-        public function DisplayObject()
+        public function DisplayObjectStarling()
         {
             if (Capabilities.isDebugger && 
                 getQualifiedClassName(this) == "starling.display::DisplayObject")
             {
-                throw new AbstractClassError();
+                throw new AbstractClassErrorStarling();
             }
             
             mX = mY = mPivotX = mPivotY = mRotation = mSkewX = mSkewY = 0.0;
             mScaleX = mScaleY = mAlpha = 1.0;            
             mVisible = mTouchable = true;
-            mBlendMode = BlendMode.AUTO;
+            mBlendMode = BlendModeStarling.AUTO;
             mTransformationMatrix = new Matrix();
             mOrientationChanged = mUseHandCursor = false;
         }
@@ -188,11 +188,11 @@ package starling.display
         /** Creates a matrix that represents the transformation from the local coordinate system 
          *  to another. If you pass a 'resultMatrix', the result will be stored in this matrix
          *  instead of creating a new object. */ 
-        public function getTransformationMatrix(targetSpace:DisplayObject, 
+        public function getTransformationMatrix(targetSpace:DisplayObjectStarling,
                                                 resultMatrix:Matrix=null):Matrix
         {
-            var commonParent:DisplayObject;
-            var currentObject:DisplayObject;
+            var commonParent:DisplayObjectStarling;
+            var currentObject:DisplayObjectStarling;
             
             if (resultMatrix) resultMatrix.identity();
             else resultMatrix = new Matrix();
@@ -281,15 +281,15 @@ package starling.display
         /** Returns a rectangle that completely encloses the object as it appears in another 
          *  coordinate system. If you pass a 'resultRectangle', the result will be stored in this 
          *  rectangle instead of creating a new object. */ 
-        public function getBounds(targetSpace:DisplayObject, resultRect:Rectangle=null):Rectangle
+        public function getBounds(targetSpace:DisplayObjectStarling, resultRect:Rectangle=null):Rectangle
         {
-            throw new AbstractMethodError();
+            throw new AbstractMethodErrorStarling();
         }
         
         /** Returns the object that is found topmost beneath a point in local coordinates, or nil if 
          *  the test fails. If "forTouch" is true, untouchable and invisible objects will cause
          *  the test to fail. */
-        public function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObject
+        public function hitTest(localPoint:Point, forTouch:Boolean=false):DisplayObjectStarling
         {
             // on a touch test, invisible or untouchable objects cause the test to fail
             if (forTouch && (!mVisible || !mTouchable)) return null;
@@ -305,7 +305,7 @@ package starling.display
         public function localToGlobal(localPoint:Point, resultPoint:Point=null):Point
         {
             getTransformationMatrix(base, sHelperMatrix);
-            return MatrixUtil.transformCoords(sHelperMatrix, localPoint.x, localPoint.y, resultPoint);
+            return MatrixUtilStarling.transformCoords(sHelperMatrix, localPoint.x, localPoint.y, resultPoint);
         }
         
         /** Transforms a point from global (stage) coordinates to the local coordinate system.
@@ -315,16 +315,16 @@ package starling.display
         {
             getTransformationMatrix(base, sHelperMatrix);
             sHelperMatrix.invert();
-            return MatrixUtil.transformCoords(sHelperMatrix, globalPoint.x, globalPoint.y, resultPoint);
+            return MatrixUtilStarling.transformCoords(sHelperMatrix, globalPoint.x, globalPoint.y, resultPoint);
         }
         
         /** Renders the display object with the help of a support object. Never call this method
          *  directly, except from within another render method.
          *  @param support Provides utility functions for rendering.
          *  @param parentAlpha The accumulated alpha value from the object's parent up to the stage. */
-        public function render(support:RenderSupport, parentAlpha:Number):void
+        public function render(support:RenderSupportStarling, parentAlpha:Number):void
         {
-            throw new AbstractMethodError();
+            throw new AbstractMethodErrorStarling();
         }
         
         /** Indicates if an object occupies any visible area. (Which is the case when its 'alpha', 
@@ -341,24 +341,24 @@ package starling.display
             var bounds:Rectangle = getBounds(this);
             mOrientationChanged = true;
             
-            if (hAlign == HAlign.LEFT)        mPivotX = bounds.x;
-            else if (hAlign == HAlign.CENTER) mPivotX = bounds.x + bounds.width / 2.0;
-            else if (hAlign == HAlign.RIGHT)  mPivotX = bounds.x + bounds.width; 
+            if (hAlign == HAlignStarling.LEFT)        mPivotX = bounds.x;
+            else if (hAlign == HAlignStarling.CENTER) mPivotX = bounds.x + bounds.width / 2.0;
+            else if (hAlign == HAlignStarling.RIGHT)  mPivotX = bounds.x + bounds.width;
             else throw new ArgumentError("Invalid horizontal alignment: " + hAlign);
             
-            if (vAlign == VAlign.TOP)         mPivotY = bounds.y;
-            else if (vAlign == VAlign.CENTER) mPivotY = bounds.y + bounds.height / 2.0;
-            else if (vAlign == VAlign.BOTTOM) mPivotY = bounds.y + bounds.height;
+            if (vAlign == VAlignStarling.TOP)         mPivotY = bounds.y;
+            else if (vAlign == VAlignStarling.CENTER) mPivotY = bounds.y + bounds.height / 2.0;
+            else if (vAlign == VAlignStarling.BOTTOM) mPivotY = bounds.y + bounds.height;
             else throw new ArgumentError("Invalid vertical alignment: " + vAlign);
         }
         
         // internal methods
         
         /** @private */
-        internal function setParent(value:DisplayObjectContainer):void 
+        internal function setParent(value:DisplayObjectContainerStarling):void
         {
             // check for a recursion
-            var ancestor:DisplayObject = value;
+            var ancestor:DisplayObjectStarling = value;
             while (ancestor != this && ancestor != null)
                 ancestor = ancestor.mParent;
             
@@ -390,9 +390,9 @@ package starling.display
         
         // stage event handling
         
-        public override function dispatchEvent(event:Event):void
+        public override function dispatchEvent(event:EventStarling):void
         {
-            if (event.type == Event.REMOVED_FROM_STAGE && stage == null)
+            if (event.type == EventStarling.REMOVED_FROM_STAGE && stage == null)
                 return; // special check to avoid double-dispatch of RfS-event.
             else
                 super.dispatchEvent(event);
@@ -408,10 +408,10 @@ package starling.display
         
         public override function addEventListener(type:String, listener:Function):void
         {
-            if (type == Event.ENTER_FRAME && !hasEventListener(type))
+            if (type == EventStarling.ENTER_FRAME && !hasEventListener(type))
             {
-                addEventListener(Event.ADDED_TO_STAGE, addEnterFrameListenerToStage);
-                addEventListener(Event.REMOVED_FROM_STAGE, removeEnterFrameListenerFromStage);
+                addEventListener(EventStarling.ADDED_TO_STAGE, addEnterFrameListenerToStage);
+                addEventListener(EventStarling.REMOVED_FROM_STAGE, removeEnterFrameListenerFromStage);
                 if (this.stage) addEnterFrameListenerToStage();
             }
             
@@ -422,20 +422,20 @@ package starling.display
         {
             super.removeEventListener(type, listener);
             
-            if (type == Event.ENTER_FRAME && !hasEventListener(type))
+            if (type == EventStarling.ENTER_FRAME && !hasEventListener(type))
             {
-                removeEventListener(Event.ADDED_TO_STAGE, addEnterFrameListenerToStage);
-                removeEventListener(Event.REMOVED_FROM_STAGE, removeEnterFrameListenerFromStage);
+                removeEventListener(EventStarling.ADDED_TO_STAGE, addEnterFrameListenerToStage);
+                removeEventListener(EventStarling.REMOVED_FROM_STAGE, removeEnterFrameListenerFromStage);
                 removeEnterFrameListenerFromStage();
             }
         }
         
         public override function removeEventListeners(type:String=null):void
         {
-            if ((type == null || type == Event.ENTER_FRAME) && hasEventListener(Event.ENTER_FRAME))
+            if ((type == null || type == EventStarling.ENTER_FRAME) && hasEventListener(EventStarling.ENTER_FRAME))
             {
-                removeEventListener(Event.ADDED_TO_STAGE, addEnterFrameListenerToStage);
-                removeEventListener(Event.REMOVED_FROM_STAGE, removeEnterFrameListenerFromStage);
+                removeEventListener(EventStarling.ADDED_TO_STAGE, addEnterFrameListenerToStage);
+                removeEventListener(EventStarling.REMOVED_FROM_STAGE, removeEnterFrameListenerFromStage);
                 removeEnterFrameListenerFromStage();
             }
 
@@ -444,12 +444,12 @@ package starling.display
         
         private function addEnterFrameListenerToStage():void
         {
-            Starling.current.stage.addEnterFrameListener(this);
+            StarlingStarling.current.stage.addEnterFrameListener(this);
         }
         
         private function removeEnterFrameListenerFromStage():void
         {
-            Starling.current.stage.removeEnterFrameListener(this);
+            StarlingStarling.current.stage.removeEnterFrameListener(this);
         }
         
         // properties
@@ -496,7 +496,7 @@ package starling.display
                 {
                     mTransformationMatrix.identity();
                     mTransformationMatrix.scale(mScaleX, mScaleY);
-                    MatrixUtil.skew(mTransformationMatrix, mSkewX, mSkewY);
+                    MatrixUtilStarling.skew(mTransformationMatrix, mSkewX, mSkewY);
                     mTransformationMatrix.rotate(mRotation);
                     mTransformationMatrix.translate(mX, mY);
                     
@@ -557,12 +557,12 @@ package starling.display
             mUseHandCursor = value;
             
             if (mUseHandCursor)
-                addEventListener(TouchEvent.TOUCH, onTouch);
+                addEventListener(TouchEventStarling.TOUCH, onTouch);
             else
-                removeEventListener(TouchEvent.TOUCH, onTouch);
+                removeEventListener(TouchEventStarling.TOUCH, onTouch);
         }
         
-        private function onTouch(event:TouchEvent):void
+        private function onTouch(event:TouchEventStarling):void
         {
             Mouse.cursor = event.interactsWith(this) ? MouseCursor.BUTTON : MouseCursor.AUTO;
         }
@@ -717,7 +717,7 @@ package starling.display
         
         /** The blend mode determines how the object is blended with the objects underneath. 
          *   @default auto
-         *   @see starling.display.BlendMode */ 
+         *   @see starling.display.BlendModeStarling */
         public function get blendMode():String { return mBlendMode; }
         public function set blendMode(value:String):void { mBlendMode = value; }
         
@@ -732,16 +732,16 @@ package starling.display
          *  performance reasons). Furthermore, when you set this property to 'null' or
          *  assign a different filter, the previous filter is NOT disposed automatically
          *  (since you might want to reuse it). */
-        public function get filter():FragmentFilter { return mFilter; }
-        public function set filter(value:FragmentFilter):void { mFilter = value; }
+        public function get filter():FragmentFilterStarling { return mFilter; }
+        public function set filter(value:FragmentFilterStarling):void { mFilter = value; }
         
         /** The display object container that contains this display object. */
-        public function get parent():DisplayObjectContainer { return mParent; }
+        public function get parent():DisplayObjectContainerStarling { return mParent; }
         
         /** The topmost object in the display tree the object is part of. */
-        public function get base():DisplayObject
+        public function get base():DisplayObjectStarling
         {
-            var currentObject:DisplayObject = this;
+            var currentObject:DisplayObjectStarling = this;
             while (currentObject.mParent) currentObject = currentObject.mParent;
             return currentObject;
         }
@@ -749,12 +749,12 @@ package starling.display
         /** The root object the display object is connected to (i.e. an instance of the class 
          *  that was passed to the Starling constructor), or null if the object is not connected
          *  to the stage. */
-        public function get root():DisplayObject
+        public function get root():DisplayObjectStarling
         {
-            var currentObject:DisplayObject = this;
+            var currentObject:DisplayObjectStarling = this;
             while (currentObject.mParent)
             {
-                if (currentObject.mParent is Stage) return currentObject;
+                if (currentObject.mParent is StageStarling) return currentObject;
                 else currentObject = currentObject.parent;
             }
             
@@ -763,6 +763,6 @@ package starling.display
         
         /** The stage the display object is connected to, or null if it is not connected 
          *  to the stage. */
-        public function get stage():Stage { return this.base as Stage; }
+        public function get stage():StageStarling { return this.base as StageStarling; }
     }
 }

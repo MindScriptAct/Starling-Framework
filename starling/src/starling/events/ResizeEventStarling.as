@@ -21,16 +21,16 @@ package starling.events
      *  the additional screen estate, update the values of <code>stage.stageWidth</code> and 
      *  <code>stage.stageHeight</code> as well.</p>
      *  
-     *  @see starling.display.Stage
-     *  @see starling.core.Starling
+     *  @see starling.display.StageStarling
+     *  @see starling.core.StarlingStarling
      */
-    public class ResizeEvent extends Event
+    public class ResizeEventStarling extends EventStarling
     {
         /** Event type for a resized Flash player. */
         public static const RESIZE:String = "resize";
         
         /** Creates a new ResizeEvent. */
-        public function ResizeEvent(type:String, width:int, height:int, bubbles:Boolean=false)
+        public function ResizeEventStarling(type:String, width:int, height:int, bubbles:Boolean=false)
         {
         	super(type, bubbles, new Point(width, height));
         }

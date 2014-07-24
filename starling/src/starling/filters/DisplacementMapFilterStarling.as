@@ -20,10 +20,10 @@ package starling.filters
     import flash.geom.Matrix3D;
     import flash.geom.Point;
     
-    import starling.core.RenderSupport;
-    import starling.core.Starling;
-    import starling.textures.Texture;
-    import starling.utils.formatString;
+    import starling.core.RenderSupportStarling;
+    import starling.core.StarlingStarling;
+    import starling.textures.TextureStarling;
+    import starling.utils.formatStringStarling;
     
     /** The DisplacementMapFilter class uses the pixel values from the specified texture (called
      *  the displacement map) to perform a displacement of an object. You can use this filter 
@@ -38,9 +38,9 @@ package starling.filters
      *  <p>Where <code>componentX(x, y)</code> gets the componentX property color value from the 
      *  map texture at <code>(x - mapPoint.x, y - mapPoint.y)</code>.</p>
      */
-    public class DisplacementMapFilter extends FragmentFilter
+    public class DisplacementMapFilterStarling extends FragmentFilterStarling
     {
-        private var mMapTexture:Texture;
+        private var mMapTexture:TextureStarling;
         private var mMapPoint:Point;
         private var mComponentX:uint;
         private var mComponentY:uint;
@@ -59,7 +59,7 @@ package starling.filters
             new <Number>[0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0];
         
         /** Creates a new displacement map filter that uses the provided map texture. */
-        public function DisplacementMapFilter(mapTexture:Texture, mapPoint:Point=null, 
+        public function DisplacementMapFilterStarling(mapTexture:TextureStarling, mapPoint:Point=null,
                                               componentX:uint=0, componentY:uint=0, 
                                               scaleX:Number=0.0, scaleY:Number=0.0,
                                               repeat:Boolean=false)
@@ -87,14 +87,14 @@ package starling.filters
         {
             // the texture coordinates for the map texture are uploaded via a separate buffer
             if (mMapTexCoordBuffer) mMapTexCoordBuffer.dispose();
-            mMapTexCoordBuffer = Starling.context.createVertexBuffer(4, 2);
+            mMapTexCoordBuffer = StarlingStarling.context.createVertexBuffer(4, 2);
             
-            var target:Starling = Starling.current;
-            var mapFlags:String = RenderSupport.getTextureLookupFlags(
+            var target:StarlingStarling = StarlingStarling.current;
+            var mapFlags:String = RenderSupportStarling.getTextureLookupFlags(
                                       mapTexture.format, mapTexture.mipMapping, mapTexture.repeat);
-            var inputFlags:String = RenderSupport.getTextureLookupFlags(
+            var inputFlags:String = RenderSupportStarling.getTextureLookupFlags(
                                         Context3DTextureFormat.BGRA, false, mRepeat);
-            var programName:String = formatString("DMF_m{0}_i{1}", mapFlags, inputFlags);
+            var programName:String = formatStringStarling("DMF_m{0}_i{1}", mapFlags, inputFlags);
             
             if (target.hasProgram(programName))
             {
@@ -132,7 +132,7 @@ package starling.filters
         }
         
         /** @private */
-        protected override function activate(pass:int, context:Context3D, texture:Texture):void
+        protected override function activate(pass:int, context:Context3D, texture:TextureStarling):void
         {
             // already set by super class:
             //
@@ -151,7 +151,7 @@ package starling.filters
         }
         
         /** @private */
-        override protected function deactivate(pass:int, context:Context3D, texture:Texture):void
+        override protected function deactivate(pass:int, context:Context3D, texture:TextureStarling):void
         {
             context.setVertexBufferAt(2, null);
             context.setTextureAt(1, null);
@@ -162,7 +162,7 @@ package starling.filters
             // matrix:
             // Maps RGBA values of map texture to UV-offsets in input texture.
 
-            var scale:Number = Starling.contentScaleFactor;
+            var scale:Number = StarlingStarling.contentScaleFactor;
             var columnX:int, columnY:int;
             
             for (var i:int=0; i<16; ++i)
@@ -222,8 +222,8 @@ package starling.filters
         public function set scaleY(value:Number):void { mScaleY = value; }
         
         /** The texture that will be used to calculate displacement. */
-        public function get mapTexture():Texture { return mMapTexture; }
-        public function set mapTexture(value:Texture):void
+        public function get mapTexture():TextureStarling { return mMapTexture; }
+        public function set mapTexture(value:TextureStarling):void
         {
             if (mMapTexture != value)
             {

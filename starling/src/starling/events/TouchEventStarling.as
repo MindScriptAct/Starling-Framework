@@ -10,10 +10,10 @@
 
 package starling.events
 {
-    import starling.core.starling_internal;
-    import starling.display.DisplayObject;
+    import starling.core.starling_internalStarling;
+    import starling.display.DisplayObjectStarling;
     
-    use namespace starling_internal;
+    use namespace starling_internalStarling;
     
     /** A TouchEvent is triggered either by touch or mouse input.  
      *  
@@ -50,10 +50,10 @@ package starling.events
      * 
      *  <code>var touch:Touch = touchEvent.getTouch(this);</code>
      *  
-     *  @see Touch
-     *  @see TouchPhase
+     *  @see TouchStarling
+     *  @see TouchPhaseStarling
      */ 
-    public class TouchEvent extends Event
+    public class TouchEventStarling extends EventStarling
     {
         /** Event type for touch or mouse input. */
         public static const TOUCH:String = "touch";
@@ -61,13 +61,13 @@ package starling.events
         private var mShiftKey:Boolean;
         private var mCtrlKey:Boolean;
         private var mTimestamp:Number;
-        private var mVisitedObjects:Vector.<EventDispatcher>;
+        private var mVisitedObjects:Vector.<EventDispatcherStarling>;
         
         /** Helper object. */
-        private static var sTouches:Vector.<Touch> = new <Touch>[];
+        private static var sTouches:Vector.<TouchStarling> = new <TouchStarling>[];
         
         /** Creates a new TouchEvent instance. */
-        public function TouchEvent(type:String, touches:Vector.<Touch>, shiftKey:Boolean=false, 
+        public function TouchEventStarling(type:String, touches:Vector.<TouchStarling>, shiftKey:Boolean=false,
                                    ctrlKey:Boolean=false, bubbles:Boolean=true)
         {
             super(type, bubbles, touches);
@@ -75,7 +75,7 @@ package starling.events
             mShiftKey = shiftKey;
             mCtrlKey = ctrlKey;
             mTimestamp = -1.0;
-            mVisitedObjects = new <EventDispatcher>[];
+            mVisitedObjects = new <EventDispatcherStarling>[];
             
             var numTouches:int=touches.length;
             for (var i:int=0; i<numTouches; ++i)
@@ -86,16 +86,16 @@ package starling.events
         /** Returns a list of touches that originated over a certain target. If you pass a
          *  'result' vector, the touches will be added to this vector instead of creating a new 
          *  object. */
-        public function getTouches(target:DisplayObject, phase:String=null,
-                                   result:Vector.<Touch>=null):Vector.<Touch>
+        public function getTouches(target:DisplayObjectStarling, phase:String=null,
+                                   result:Vector.<TouchStarling>=null):Vector.<TouchStarling>
         {
-            if (result == null) result = new <Touch>[];
-            var allTouches:Vector.<Touch> = data as Vector.<Touch>;
+            if (result == null) result = new <TouchStarling>[];
+            var allTouches:Vector.<TouchStarling> = data as Vector.<TouchStarling>;
             var numTouches:int = allTouches.length;
             
             for (var i:int=0; i<numTouches; ++i)
             {
-                var touch:Touch = allTouches[i];
+                var touch:TouchStarling = allTouches[i];
                 var correctTarget:Boolean = touch.isTouching(target);
                 var correctPhase:Boolean = (phase == null || phase == touch.phase);
                     
@@ -112,14 +112,14 @@ package starling.events
          *  @param phase    The phase the touch must be in, or null if you don't care.
          *  @param id       The ID of the requested touch, or -1 if you don't care.
          */
-        public function getTouch(target:DisplayObject, phase:String=null, id:int=-1):Touch
+        public function getTouch(target:DisplayObjectStarling, phase:String=null, id:int=-1):TouchStarling
         {
             getTouches(target, phase, sTouches);
             var numTouches:int = sTouches.length;
             
             if (numTouches > 0) 
             {
-                var touch:Touch = null;
+                var touch:TouchStarling = null;
                 
                 if (id < 0) touch = sTouches[0];
                 else
@@ -135,14 +135,14 @@ package starling.events
         }
         
         /** Indicates if a target is currently being touched or hovered over. */
-        public function interactsWith(target:DisplayObject):Boolean
+        public function interactsWith(target:DisplayObjectStarling):Boolean
         {
             var result:Boolean = false;
             getTouches(target, null, sTouches);
             
             for (var i:int=sTouches.length-1; i>=0; --i)
             {
-                if (sTouches[i].phase != TouchPhase.ENDED)
+                if (sTouches[i].phase != TouchPhaseStarling.ENDED)
                 {
                     result = true;
                     break;
@@ -158,17 +158,17 @@ package starling.events
         /** @private
          *  Dispatches the event along a custom bubble chain. During the lifetime of the event,
          *  each object is visited only once. */
-        internal function dispatch(chain:Vector.<EventDispatcher>):void
+        internal function dispatch(chain:Vector.<EventDispatcherStarling>):void
         {
             if (chain && chain.length)
             {
                 var chainLength:int = bubbles ? chain.length : 1;
-                var previousTarget:EventDispatcher = target;
-                setTarget(chain[0] as EventDispatcher);
+                var previousTarget:EventDispatcherStarling = target;
+                setTarget(chain[0] as EventDispatcherStarling);
                 
                 for (var i:int=0; i<chainLength; ++i)
                 {
-                    var chainElement:EventDispatcher = chain[i] as EventDispatcher;
+                    var chainElement:EventDispatcherStarling = chain[i] as EventDispatcherStarling;
                     if (mVisitedObjects.indexOf(chainElement) == -1)
                     {
                         var stopPropagation:Boolean = chainElement.invokeEvent(this);
@@ -187,7 +187,7 @@ package starling.events
         public function get timestamp():Number { return mTimestamp; }
         
         /** All touches that are currently available. */
-        public function get touches():Vector.<Touch> { return (data as Vector.<Touch>).concat(); }
+        public function get touches():Vector.<TouchStarling> { return (data as Vector.<TouchStarling>).concat(); }
         
         /** Indicates if the shift key was pressed when the event occurred. */
         public function get shiftKey():Boolean { return mShiftKey; }

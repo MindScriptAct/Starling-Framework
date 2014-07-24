@@ -15,18 +15,18 @@ package starling.textures
     import flash.geom.Point;
     import flash.geom.Rectangle;
     
-    import starling.utils.MatrixUtil;
-    import starling.utils.RectangleUtil;
-    import starling.utils.VertexData;
+    import starling.utils.MatrixUtilStarling;
+    import starling.utils.RectangleUtilStarling;
+    import starling.utils.VertexDataStarling;
 
     /** A SubTexture represents a section of another texture. This is achieved solely by 
      *  manipulation of texture coordinates, making the class very efficient. 
      *
      *  <p><em>Note that it is OK to create subtextures of subtextures.</em></p>
      */
-    public class SubTexture extends Texture
+    public class SubTextureStarling extends TextureStarling
     {
-        private var mParent:Texture;
+        private var mParent:TextureStarling;
         private var mOwnsParent:Boolean;
         private var mFrame:Rectangle;
         private var mRotated:Boolean;
@@ -50,7 +50,7 @@ package starling.textures
          *  @param rotated: If true, the SubTexture will show the parent region rotated by
          *                  90 degrees (CCW).
          */
-        public function SubTexture(parentTexture:Texture, region:Rectangle,
+        public function SubTextureStarling(parentTexture:TextureStarling, region:Rectangle,
                                    ownsParent:Boolean=false, frame:Rectangle=null,
                                    rotated:Boolean=false)
         {
@@ -88,10 +88,10 @@ package starling.textures
         }
         
         /** @inheritDoc */
-        public override function adjustVertexData(vertexData:VertexData, vertexID:int, count:int):void
+        public override function adjustVertexData(vertexData:VertexDataStarling, vertexID:int, count:int):void
         {
-            var startIndex:int = vertexID * VertexData.ELEMENTS_PER_VERTEX + VertexData.TEXCOORD_OFFSET;
-            var stride:int = VertexData.ELEMENTS_PER_VERTEX - 2;
+            var startIndex:int = vertexID * VertexDataStarling.ELEMENTS_PER_VERTEX + VertexDataStarling.TEXCOORD_OFFSET;
+            var stride:int = VertexDataStarling.ELEMENTS_PER_VERTEX - 2;
             
             adjustTexCoords(vertexData.rawData, startIndex, stride, count);
             
@@ -118,7 +118,7 @@ package starling.textures
                 count = (texCoords.length - startIndex - 2) / (stride + 2) + 1;
 
             var endIndex:int = startIndex + count * (2 + stride);
-            var texture:SubTexture = this;
+            var texture:SubTextureStarling = this;
             var u:Number, v:Number;
             
             sMatrix.identity();
@@ -126,7 +126,7 @@ package starling.textures
             while (texture)
             {
                 sMatrix.concat(texture.mTransformationMatrix);
-                texture = texture.parent as SubTexture;
+                texture = texture.parent as SubTextureStarling;
             }
             
             for (var i:int=startIndex; i<endIndex; i += 2 + stride)
@@ -134,7 +134,7 @@ package starling.textures
                 u = texCoords[    i   ];
                 v = texCoords[int(i+1)];
                 
-                MatrixUtil.transformCoords(sMatrix, u, v, sTexCoords);
+                MatrixUtilStarling.transformCoords(sMatrix, u, v, sTexCoords);
                 
                 texCoords[    i   ] = sTexCoords.x;
                 texCoords[int(i+1)] = sTexCoords.y;
@@ -142,7 +142,7 @@ package starling.textures
         }
         
         /** The texture which the subtexture is based on. */ 
-        public function get parent():Texture { return mParent; }
+        public function get parent():TextureStarling { return mParent; }
         
         /** Indicates if the parent texture is disposed when this object is disposed. */
         public function get ownsParent():Boolean { return mOwnsParent; }
@@ -157,13 +157,13 @@ package starling.textures
             var topLeft:Point = new Point();
             var bottomRight:Point = new Point();
             
-            MatrixUtil.transformCoords(mTransformationMatrix, 0.0, 0.0, topLeft);
-            MatrixUtil.transformCoords(mTransformationMatrix, 1.0, 1.0, bottomRight);
+            MatrixUtilStarling.transformCoords(mTransformationMatrix, 0.0, 0.0, topLeft);
+            MatrixUtilStarling.transformCoords(mTransformationMatrix, 1.0, 1.0, bottomRight);
             
             var clipping:Rectangle = new Rectangle(topLeft.x, topLeft.y,
                 bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
             
-            RectangleUtil.normalize(clipping);
+            RectangleUtilStarling.normalize(clipping);
             return clipping;
         }
         
@@ -177,7 +177,7 @@ package starling.textures
         public override function get base():TextureBase { return mParent.base; }
         
         /** @inheritDoc */
-        public override function get root():ConcreteTexture { return mParent.root; }
+        public override function get root():ConcreteTextureStarling { return mParent.root; }
         
         /** @inheritDoc */
         public override function get format():String { return mParent.format; }
